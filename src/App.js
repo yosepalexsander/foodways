@@ -1,11 +1,11 @@
 import './App.css';
-import Login from './components/form/Login';
+import RegisterModal from './components/modal/RegisterModal';
 
 
 function App() {
   return (
     <div className="App-header">
-      <Login />
+      <RegisterModal />
     </div>
   );
 }

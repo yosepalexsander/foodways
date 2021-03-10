@@ -1,17 +1,12 @@
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   form: {
     display: 'flex',
     flexDirection: 'column',
   },
   padding: {
-    padding: theme.spacing(2, 4, 3),
+    padding: theme.spacing(2, 4, 2),
   },
   formControl: {
     width: "35ch"
@@ -20,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(2)
   },
   submitButton: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
     width: '100%'
   }
 }));
