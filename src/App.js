@@ -1,12 +1,8 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
-import CssBaseline from '@material-ui/core/CssBaseline';
-import PrivateRoute from './route/PrivateRoute';
-import Landing from './pages/Landing';
-import RestaurantDetail from './pages/RestaurantDetail';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import PrivateRoute from "./route/PrivateRoute";
+import Landing from "./pages/Landing";
+import ProductList from "./pages/ProductList";
 import RegisterModal from "./components/modal/RegisterModal";
 import LoginModal from "./components/modal/LoginModal";
 
@@ -16,10 +12,10 @@ function App() {
       <CssBaseline />
       <Router>
         <Switch>
-          <Route exact path="/" component={Landing}/>
+          <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={RegisterModal} />
           <Route exact path="/login" component={LoginModal} />
-          <PrivateRoute exact path="/restaurants/:id" component={RestaurantDetail} />
+          <PrivateRoute exact path="/restaurants/:id" component={ProductList} />
         </Switch>
       </Router>
     </div>
