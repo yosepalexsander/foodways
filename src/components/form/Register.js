@@ -1,110 +1,106 @@
-import { useState } from 'react';
-import clsx from 'clsx';
-import {
-  Button,
-  TextField,
-  Typography,
-  Paper,
-} from '@material-ui/core'
-
-import useStyles from './style';
+import { forwardRef, Fragment, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { Button, TextField, Typography, Paper } from "@material-ui/core";
 
 const roles = [
   {
-    value: 'user',
-    label: 'As User'
+    value: "user",
+    label: "As User",
   },
   {
-    value: 'partner',
-    label: 'As Partner'
-  }
+    value: "partner",
+    label: "As Partner",
+  },
 ];
 
-const Register = () => {
-  const styles = useStyles()
+const Register = forwardRef((props, ref) => {
   const [values, setValues] = useState({
-    email: '',
-    password: '',
-    fullName: '',
-    gender: '',
-    phoneNumber: '',
-    role: ''
-  })
+    email: "",
+    password: "",
+    fullName: "",
+    gender: "",
+    phoneNumber: "",
+    role: "",
+  });
+  const history = useHistory();
   const handleSubmit = (event) => {
-    event.preventDefault()
-    localStorage.setItem("new user data", JSON.stringify(values,2,null))
+    event.preventDefault();
+    localStorage.setItem("user data", JSON.stringify(values, 2, null));
     setValues({
-      email: '',
-      password: '',
-      fullName: '',
-      gender: '',
-      phoneNumber: '',
-      role: ''
-    })
-  }
-  const handleChange = (prop, event) => {
-    setValues({ ...values, [prop]: event.target.value });
+      email: "",
+      password: "",
+      fullName: "",
+      gender: "",
+      phoneNumber: "",
+      role: "",
+    });
+    history.push("/");
+  };
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
   };
   return (
-    <>
-      <Paper
-        ref={ref}
-        className={styles.padding}
-        elevation={2}
-        tabIndex={-1}>
+    <Fragment>
+      <Paper ref={ref} sx={{ p: [2, 4, 2] }} elevation={2} tabIndex={-1}>
         <Typography
           id="modal-title"
           variant="h3"
           color="primary"
-          className={styles.margin}
+          sx={{ mb: 2 }}
         >
           Register
         </Typography>
         <form
           id="modal-description"
-          className={styles.form}
-          onSubmit={handleSubmit}>
+          style={{ display: "flex", flexDirection: "column" }}
+          onSubmit={handleSubmit}
+        >
           <TextField
             id="inputEmail"
-            className={clsx(styles.margin, styles.formControl)}
-            onChange={(e) => handleChange('email', e)}
+            sx={{ mb: 2, width: "35ch" }}
+            onChange={handleChange}
             label="Email"
+            name="email"
             value={values.email}
             type="email"
             variant="outlined"
           />
           <TextField
             id="inputPassword"
-            className={clsx(styles.margin, styles.formControl)}
-            onChange={(e) => handleChange('password', e)}
+            sx={{ mb: 2, width: "35ch" }}
+            onChange={handleChange}
             label="Password"
+            name="password"
             value={values.password}
-            type='password'
+            type="password"
             variant="outlined"
           />
           <TextField
             id="inputFullName"
-            className={clsx(styles.margin, styles.formControl)}
-            onChange={(e) => handleChange('fullName', e)}
+            sx={{ mb: 2, width: "35ch" }}
+            onChange={handleChange}
             label="Full Name"
+            name="fullName"
             value={values.fullName}
             type="text"
             variant="outlined"
           />
           <TextField
             id="inputGender"
-            className={clsx(styles.margin, styles.formControl)}
-            onChange={(e) => handleChange('gender', e)}
+            sx={{ mb: 2, width: "35ch" }}
+            onChange={handleChange}
             label="Gender"
+            name="gender"
             value={values.gender}
             type="text"
             variant="outlined"
           />
           <TextField
             id="inputPhone"
-            className={clsx(styles.margin, styles.formControl)}
-            onChange={(e) => handleChange('phoneNumber', e)}
+            sx={{ mb: 2, width: "35ch" }}
+            onChange={handleChange}
             label="Phone"
+            name="phoneNumber"
             value={values.phoneNumber}
             type="text"
             variant="outlined"
@@ -112,35 +108,39 @@ const Register = () => {
           <TextField
             id="inputRole"
             select
-            className={clsx(styles.margin, styles.formControl)}
-            onChange={(e) => handleChange('role', e)}
+            sx={{ mb: 2, width: "35ch" }}
+            onChange={handleChange}
             label="Role"
+            name="role"
             value={values.role}
             variant="outlined"
             helperText="Please select your role"
             SelectProps={{ native: true }}
           >
-            {roles.map(option => (
-              <option
-                key={option.value}
-                value={option.value}>
+            {roles.map((option) => (
+              <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </TextField>
           <Button
-            className={clsx(styles.margin, styles.submitButton)}
+            sx={{ my: 2, width: "100%" }}
             variant="contained"
             color="secondary"
             type="submit"
-          >Register
+          >
+            Register
           </Button>
         </form>
-        <Typography variant="subtitle1" color="textSecondary" align="center">Already have an account? Click <strong><a href="/">Here</a></strong>
+        <Typography variant="subtitle1" color="textSecondary" align="center">
+          Already have an account? Click{" "}
+          <strong>
+            <Link to="/login">Here</Link>
+          </strong>
         </Typography>
       </Paper>
-    </>
-  )
-}
+    </Fragment>
+  );
+});
 
-export default Register
+export default Register;

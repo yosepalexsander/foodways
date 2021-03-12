@@ -1,102 +1,79 @@
-import React, { useState } from 'react'
-import clsx from 'clsx'
+import { forwardRef, Fragment, useState } from 'react'
+import {Link, useHistory} from 'react-router-dom';
 import {
   Button,
-  Container,
   FormControl,
   IconButton,
   InputLabel,
   InputAdornment,
-  Modal,
   OutlinedInput,
   Paper,
   TextField,
   Typography,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import useStyles from './style';
 
-function Login() {
-  const styles = useStyles();
-  const [open, setOpen] = useState(false);
+
+const Login = forwardRef((props, ref) => {
   const [values, setValues] = useState({
     username: '',
     password: '',
-    showPassword: false,
   });
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  const history = useHistory()
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    localStorage.setItem("username", values.username)
-    localStorage.setItem("password", values.password)
+    localStorage.setItem("user login", JSON.stringify(values))
+    history.push('/')
   }
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
   };
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
+    setShowPassword(!values.showPassword);
   };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
   return (
-    <div>
-      <Container>
-        <Button variant="contained" color="primary" onClick={handleOpen}>
-          Login
-      </Button>
-      </Container>
-      <Modal
-        disableEnforceFocus
-        disableAutoFocus
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-        className={styles.modal}
-        open={open}
-        onClose={handleClose}
-      >
-
+    <Fragment>
         <Paper
-          className={styles.padding}
+          ref={ref}
+          sx={{p: [2, 4, 2]}}
           elevation={2}
+          tabIndex={-1}
         >
           <Typography
             id="modal-title"
             variant="h3"
             color="primary"
-            className={styles.margin}>Login</Typography>
+            sx={{mb:2}}>Login</Typography>
           <form
             id="modal-description"
-            className={styles.form}
-            onSubmit={handleSubmit}>
-
+            style={{display: 'flex',flexDirection: 'column'}}
+            onSubmit={handleSubmit}
+            >
             <TextField
               id="inputUsername"
-              className={clsx(styles.margin, styles.formControl)}
-              onChange={handleChange('username')}
+              sx={{mb:2, width: "35ch"}}
+              onChange={e => handleChange(e)}
               label="Username"
               value={values.username}
+              name="username"
               type="text"
               variant="outlined"
             />
-            <FormControl variant="outlined" className={clsx(styles.margin, styles.formControl)}>
+            <FormControl variant="outlined" sx={{mb:2, width: "35ch"}}>
               <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
+                type={showPassword ? 'text' : 'password'}
                 value={values.password}
-                onChange={handleChange('password')}
+                name="password"
+                onChange={e => handleChange(e)}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -105,14 +82,14 @@ function Login() {
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 }
               />
             </FormControl>
             <Button
-              className={clsx(styles.margin, styles.submitButton)}
+              sx={{my:2, width:"100%"}}
               variant="contained"
               color="secondary"
               type="submit"
@@ -120,13 +97,12 @@ function Login() {
               </Button>
           </form>
           <Typography variant="subtitle1" color="textSecondary" align="center">Don't have an account? Click
-          <strong>Here</strong>
+            <Link to="/register"><strong>Here</strong></Link>
           </Typography>
         </Paper>
-      </Modal>
-    </div>
+    </Fragment>
 
   )
-}
+})
 
 export default Login;
