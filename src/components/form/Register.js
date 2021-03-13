@@ -1,6 +1,6 @@
 import { forwardRef, Fragment, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { Button, TextField, Typography, Paper } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { Button, Link, TextField, Typography, Paper } from "@material-ui/core";
 
 const roles = [
   {
@@ -14,6 +14,7 @@ const roles = [
 ];
 
 const Register = forwardRef((props, ref) => {
+  const { switchForm } = props;
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -134,9 +135,9 @@ const Register = forwardRef((props, ref) => {
         </form>
         <Typography variant="subtitle1" color="textSecondary" align="center">
           Already have an account? Click{" "}
-          <strong>
-            <Link to="/login">Here</Link>
-          </strong>
+          <Link onClick={switchForm} variant="subtitle1">
+            Here
+          </Link>
         </Typography>
       </Paper>
     </Fragment>

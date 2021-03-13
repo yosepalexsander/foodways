@@ -1,23 +1,25 @@
 import { Fragment } from "react";
+import { useHistory } from "react-router-dom";
 import { Card, CardContent, CardMedia, Typography } from "@material-ui/core";
 
 const styles = {
   root: {
     width: 250,
+    p: 1,
     cursor: "pointer",
   },
   cover: {
     height: 134,
   },
-  title: {
-    fontSize: 18,
-    lineHeight: "28.31px",
-  },
 };
 const CardVertical = ({ item }) => {
+  const history = useHistory();
+  const pushToProductList = (id) => {
+    history.push(`/restaurants/${id}`);
+  };
   return (
     <Fragment>
-      <Card sx={styles.root}>
+      <Card sx={styles.root} onClick={() => pushToProductList(item.id)}>
         <CardMedia
           sx={styles.cover}
           component="img"
@@ -25,9 +27,7 @@ const CardVertical = ({ item }) => {
           title={item.restaurant}
         />
         <CardContent>
-          <Typography variant="h4" sx={styles.title}>
-            {item.restaurant}
-          </Typography>
+          <Typography variant="h6">{item.restaurant}</Typography>
           <Typography variant="body2" color="textSecondary">
             {item.location}
           </Typography>

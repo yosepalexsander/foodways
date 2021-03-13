@@ -1,25 +1,17 @@
-import { useState, forwardRef } from 'react';
-import {useHistory} from 'react-router-dom';
-import {
-  Modal,
-} from '@material-ui/core';
-import Login from '../form/Login';
+import { forwardRef } from "react";
+import { Modal } from "@material-ui/core";
+import Login from "../form/Login";
 
 const styles = {
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
-}
+};
 
 const LoginModal = forwardRef((props, ref) => {
-  const [open, setOpen] = useState(true);
-  const history = useHistory();
-  const handleClose = () => {
-    setOpen(false)
-    history.push('/')
-  }
+  const { show, modalControl, switcher } = props;
 
   return (
     <div>
@@ -28,13 +20,13 @@ const LoginModal = forwardRef((props, ref) => {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
         sx={styles.modal}
-        open={open}
-        onClose={handleClose}
+        open={show}
+        onClose={modalControl}
       >
-        <Login />
+        <Login switchForm={switcher} />
       </Modal>
     </div>
-  )
-})
+  );
+});
 
 export default LoginModal;

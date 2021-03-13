@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
   components: {
@@ -7,18 +7,15 @@ const theme = createMuiTheme({
         body: {
           fontFamily: ["Cabin", "sans-serif"].join(","),
           fontWeight: 400,
-          backgroundColor: "#E5E5E5"
-        }
-      }
+          backgroundColor: "#E5E5E5",
+        },
+      },
     },
   },
   typography: {
-    fontFamily: [
-      'Cabin', 'sans-serif',
-    ].join(','),
+    fontFamily: ["Cabin", "sans-serif"].join(","),
     button: {
-      fontFamily: 
-      ['Cabin', 'sans-serif'].join(','),
+      fontFamily: ["Cabin", "sans-serif"].join(","),
       textTransform: "none",
       fontSize: "1rem",
     },
@@ -26,39 +23,52 @@ const theme = createMuiTheme({
       fontFamily: ["Abhaya Libre", "serif"].join(","),
       fontWeight: 800,
       lineHeight: "64.88px",
-      fontSize: "55px"
+      fontSize: "55px",
     },
     h2: {
-      fontFamily: ["Abhaya Libre", "serif"].join(",")
+      fontFamily: ["Abhaya Libre", "serif"].join(","),
+      fontSize: "47px",
     },
     h3: {
-      fontFamily: ["Abhaya Libre", "serif"].join(",")
+      fontFamily: ["Abhaya Libre", "serif"].join(","),
+      fontSize: "45px",
     },
     h4: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
       fontSize: "2rem",
-      lineHeight: "42.47px"
+      lineHeight: "42.47px",
     },
     h5: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
       fontSize: "1.75rem",
-      lineHeight: "28.31px"
+      lineHeight: "28.31px",
+    },
+    h6: {
+      fontFamily: ["Abhaya Libre", "serif"].join(","),
+      fontSize: "18px",
+      lineHeight: "21px",
+    },
+    overline: {
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "19px",
+      color: "#FF1515",
     },
   },
   palette: {
     primary: {
-      light: '#ffcd38',
-      main: '#FFC700',
-      dark: '#b28704',
-      contrastText: '#fff',
+      light: "#ffcd38",
+      main: "#FFC700",
+      dark: "#b28704",
+      contrastText: "#fff",
     },
     secondary: {
-      light: '#613D2B',
-      main: '#433434',
-      dark: '#972e0e',
-      contrastText: '#fff',
+      light: "#613D2B",
+      main: "#433434",
+      dark: "#972e0e",
+      contrastText: "#fff",
     },
   },
-})
+});
 
 export default theme;

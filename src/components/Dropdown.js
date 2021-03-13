@@ -29,25 +29,10 @@ const CustomMenu = withStyles((theme) => ({
   />
 ));
 
-const CustomMenuItem = withStyles((theme) => ({
-  root: {
-    "&:focus": {
-      backgroundColor: theme.palette.primary.dark,
-      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-        color: theme.palette.common.white,
-      },
-    },
-  },
-}))(MenuItem);
-
 const Dropdown = forwardRef((props, ref) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { photoProfile } = props;
+  const { photoProfile, logout } = props;
 
-  const handleLogout = (event) => {
-    localStorage.removeItem("user login");
-    localStorage.clear();
-  };
   return (
     <Fragment>
       <IconButton
@@ -68,7 +53,7 @@ const Dropdown = forwardRef((props, ref) => {
         getContentAnchorEl={null}
         onClose={() => setAnchorEl(null)}
       >
-        <CustomMenuItem>
+        <MenuItem>
           <ListItemIcon>
             <SvgIcon viewBox="0 0 40 40">
               <g clipPath="url(#clip0)">
@@ -89,8 +74,8 @@ const Dropdown = forwardRef((props, ref) => {
             </SvgIcon>
           </ListItemIcon>
           <ListItemText primary="Profile" />
-        </CustomMenuItem>
-        <CustomMenuItem onClick={handleLogout}>
+        </MenuItem>
+        <MenuItem onClick={logout}>
           <ListItemIcon>
             <SvgIcon viewBox="0 0 40 40">
               <g clipPath="url(#clip0)">
@@ -128,7 +113,7 @@ const Dropdown = forwardRef((props, ref) => {
             </SvgIcon>
           </ListItemIcon>
           <ListItemText primary="Logout" />
-        </CustomMenuItem>
+        </MenuItem>
       </CustomMenu>
     </Fragment>
   );
