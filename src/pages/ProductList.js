@@ -37,10 +37,9 @@ const ProductList = () => {
   }, []);
 
   const addProductToCart = (product) => {
-    console.log("add product", product);
     dispatch({
-      type: "ADD_TO_CART",
-      payload: product,
+      type: "ADD_PRODUCT",
+      payload: { ...product, restaurant: data.fullName },
     });
   };
   return (

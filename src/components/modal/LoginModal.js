@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Modal } from "@material-ui/core";
+import { Backdrop, Slide, Modal } from "@material-ui/core";
 import Login from "../form/Login";
 
 const styles = {
@@ -22,8 +22,15 @@ const LoginModal = forwardRef((props, ref) => {
         sx={styles.modal}
         open={show}
         onClose={modalControl}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
       >
-        <Login switchForm={switcher} />
+        <Slide in={show} direction="up">
+          <Login switchForm={switcher} />
+        </Slide>
       </Modal>
     </div>
   );

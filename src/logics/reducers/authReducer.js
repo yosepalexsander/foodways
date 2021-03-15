@@ -15,6 +15,9 @@ const authReducer = (state, action) => {
         user: null,
         isAuthenticated: false,
       };
+
+    default:
+      throw new Error("dispacth type doesn't provided");
   }
 };
 

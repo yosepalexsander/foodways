@@ -44,7 +44,7 @@ const Register = forwardRef((props, ref) => {
     <Fragment>
       <Paper ref={ref} sx={{ p: [2, 4, 2] }} elevation={2} tabIndex={-1}>
         <Typography
-          id="modal-title"
+          id="register-modal-title"
           variant="h3"
           color="primary"
           sx={{ mb: 2 }}
@@ -52,7 +52,7 @@ const Register = forwardRef((props, ref) => {
           Register
         </Typography>
         <form
-          id="modal-description"
+          id="register-modal-description"
           style={{ display: "flex", flexDirection: "column" }}
           onSubmit={handleSubmit}
         >
@@ -135,7 +135,11 @@ const Register = forwardRef((props, ref) => {
         </form>
         <Typography variant="subtitle1" color="textSecondary" align="center">
           Already have an account? Click{" "}
-          <Link onClick={switchForm} variant="subtitle1">
+          <Link
+            onClick={switchForm}
+            variant="subtitle1"
+            sx={{ cursor: "pointer" }}
+          >
             Here
           </Link>
         </Typography>

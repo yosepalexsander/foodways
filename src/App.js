@@ -8,6 +8,8 @@ import Header from "./components/partials/Header";
 import PrivateRoute from "./route/PrivateRoute";
 import Landing from "./pages/Landing";
 import ProductList from "./pages/ProductList";
+import Profile from "./pages/Profile";
+import Cart from "./pages/Cart";
 
 const styles = {
   container: {
@@ -28,6 +30,8 @@ function App() {
             <Container fixed sx={styles.container}>
               <Switch>
                 <Route exact path="/" component={Landing} />
+                <Route exact path="/user/:id" component={Profile} />
+                <PrivateRoute path="/user/:id/cart" component={Cart} />
                 <PrivateRoute
                   exact
                   path="/restaurants/:id"

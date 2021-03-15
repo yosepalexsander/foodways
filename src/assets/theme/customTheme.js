@@ -7,7 +7,7 @@ const theme = createMuiTheme({
         body: {
           fontFamily: ["Cabin", "sans-serif"].join(","),
           fontWeight: 400,
-          backgroundColor: "#E5E5E5",
+          background: "#E5E5E5",
         },
       },
     },
@@ -16,6 +16,7 @@ const theme = createMuiTheme({
     fontFamily: ["Cabin", "sans-serif"].join(","),
     button: {
       fontFamily: ["Cabin", "sans-serif"].join(","),
+      fontWeight: 800,
       textTransform: "none",
       fontSize: "1rem",
     },
@@ -45,6 +46,7 @@ const theme = createMuiTheme({
     },
     h6: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
+      fontWeight: 800,
       fontSize: "18px",
       lineHeight: "21px",
     },

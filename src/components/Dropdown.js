@@ -1,6 +1,7 @@
 import { forwardRef, Fragment, useState } from "react";
 import {
   Avatar,
+  Divider,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -9,6 +10,7 @@ import {
   SvgIcon,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import AddProductIcon from "./icons/AddProductIcon";
 const CustomMenu = withStyles((theme) => ({
   paper: {
     borderRadius: "10px",
@@ -31,7 +33,9 @@ const CustomMenu = withStyles((theme) => ({
 
 const Dropdown = forwardRef((props, ref) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { photoProfile, logout } = props;
+  const { photoProfile, isPartner, logoutHandler, userHandler } = props;
+
+  // logic to handle user role
 
   return (
     <Fragment>
@@ -53,7 +57,7 @@ const Dropdown = forwardRef((props, ref) => {
         getContentAnchorEl={null}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem>
+        <MenuItem onClick={userHandler}>
           <ListItemIcon>
             <SvgIcon viewBox="0 0 40 40">
               <g clipPath="url(#clip0)">
@@ -75,7 +79,16 @@ const Dropdown = forwardRef((props, ref) => {
           </ListItemIcon>
           <ListItemText primary="Profile" />
         </MenuItem>
-        <MenuItem onClick={logout}>
+        {isPartner && (
+          <MenuItem>
+            <ListItemIcon>
+              <AddProductIcon viewBox="0 0 40 45" color="inherit" />
+            </ListItemIcon>
+            <ListItemText primary="Add Product" />
+          </MenuItem>
+        )}
+        <Divider />
+        <MenuItem onClick={logoutHandler}>
           <ListItemIcon>
             <SvgIcon viewBox="0 0 40 40">
               <g clipPath="url(#clip0)">

@@ -1,13 +1,16 @@
 const cartReducer = (state, action) => {
-  const { type, payload } = action;
+  const {
+    type,
+    payload: { restaurant, ...product },
+  } = action;
   switch (type) {
-    case "ADD_TO_CART":
+    case "ADD_PRODUCT":
       const findProductById = state.carts.find(
-        (cart) => cart.id === payload.id
+        (cart) => cart.id === product.id
       );
       if (findProductById) {
         const updatedProduct = state.carts.map((cart) =>
-          cart.id === payload.id
+          cart.id === product.id
             ? {
                 ...cart,
                 qty: cart.qty + 1,
@@ -24,14 +27,29 @@ const cartReducer = (state, action) => {
         carts: [
           ...state.carts,
           {
-            ...payload,
+            ...product,
             qty: 1,
           },
         ],
+        currentRestaurant: restaurant,
       };
+    case "REMOVE_PRODUCT": {
+      const updatedProduct = state.carts.map((cart) =>
+        cart.id === product.id
+          ? {
+              ...cart,
+              qty: cart.qty - 1,
+            }
+          : cart
+      );
+      return {
+        ...state,
+        carts: updatedProduct,
+      };
+    }
     case "REMOVE_CART":
       const filteredProduct = state.carts.filter(
-        (cart) => cart.id !== payload.id
+        (cart) => cart.id !== product.id
       );
       return {
         ...state,
@@ -41,7 +59,7 @@ const cartReducer = (state, action) => {
       localStorage.setItem("user_cart", JSON.stringify(state, null, 2));
       break;
     default:
-      throw new Error();
+      throw new Error("dispacth type doesn't provided");
   }
 };
 

@@ -52,7 +52,7 @@ const Login = forwardRef((props, ref) => {
     <Fragment>
       <Paper ref={ref} sx={{ p: [2, 4, 2] }} elevation={2} tabIndex={-1}>
         <Typography
-          id="modal-title"
+          id="login-modal-title"
           variant="h3"
           color="primary"
           sx={{ mb: 2 }}
@@ -60,7 +60,7 @@ const Login = forwardRef((props, ref) => {
           Login
         </Typography>
         <form
-          id="modal-description"
+          id="login-modal-description"
           style={{ display: "flex", flexDirection: "column" }}
           onSubmit={handleSubmit}
         >
@@ -109,7 +109,11 @@ const Login = forwardRef((props, ref) => {
         </form>
         <Typography variant="subtitle1" color="textSecondary" align="center">
           Don't have an account? Click{" "}
-          <Link onClick={switchForm} variant="text">
+          <Link
+            onClick={switchForm}
+            variant="subtitle1"
+            sx={{ cursor: "pointer" }}
+          >
             Here
           </Link>
         </Typography>
