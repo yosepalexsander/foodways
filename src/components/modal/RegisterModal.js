@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Modal } from "@material-ui/core";
+import { Backdrop, Modal, Slide } from "@material-ui/core";
 import Register from "../form/Register";
 
 const styles = {
@@ -20,10 +20,18 @@ const RegisterModal = forwardRef((props, ref) => {
         aria-describedby="modal-description"
         sx={styles.modal}
         open={show}
-        keepMounted
         onClose={modalControl}
+        disableAutoFocus
+        disableEnforceFocus
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
       >
-        <Register switchForm={switcher} />
+        <Slide in={show} direction="up">
+          <Register switchForm={switcher} />
+        </Slide>
       </Modal>
     </div>
   );

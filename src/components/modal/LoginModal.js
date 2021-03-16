@@ -16,13 +16,14 @@ const LoginModal = forwardRef((props, ref) => {
   return (
     <div>
       <Modal
-        disableEnforceFocus
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
         sx={styles.modal}
         open={show}
         onClose={modalControl}
         closeAfterTransition
+        disableEnforceFocus
+        disableAutoFocus
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,

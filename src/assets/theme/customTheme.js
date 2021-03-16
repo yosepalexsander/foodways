@@ -11,6 +11,21 @@ const theme = createMuiTheme({
         },
       },
     },
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "fileInput" },
+          style: {
+            backgroundColor: "rgba(210,210,210,0.25)",
+            color: "#1F1F1F",
+            display: "flex",
+            justifyContent: "space-between",
+            border: "2px solid rgb(118,108,108)",
+            borderRadius: 5,
+          },
+        },
+      ],
+    },
   },
   typography: {
     fontFamily: ["Cabin", "sans-serif"].join(","),
@@ -68,6 +83,12 @@ const theme = createMuiTheme({
       light: "#613D2B",
       main: "#433434",
       dark: "#972e0e",
+      contrastText: "#fff",
+    },
+    success: {
+      light: "#0ACF83",
+      main: "#3BB54A",
+      dark: "#000",
       contrastText: "#fff",
     },
   },

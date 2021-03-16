@@ -70,7 +70,9 @@ const data = {
       password: "paspas",
       phoneNumber: "0909090909",
       role: "partner",
-      fotoprofil: "",
+      location: "",
+      fotoprofil:
+        "https://www.marketeers.com/wp-content/uploads/2018/09/w644.jpeg",
       products: [
         {
           id: 1,
@@ -129,6 +131,36 @@ const data = {
             "https://tastynesia.com/wp-content/uploads/2020/01/Resep-Ayam-Geprek-Sambal-Matah-1200x900.jpg",
         },
       ],
+      incomeTransaction: [
+        {
+          id: 1,
+          name: "Sugeng",
+          address: "Cileungsi",
+          productOrder: ["Paket Geprek", "Paket Geprek Keju"],
+          status: "Waiting Approve",
+        },
+        {
+          id: 2,
+          name: "Harit",
+          address: "Serang",
+          productOrder: ["Paket Geprek", "Paket Geprek Keju"],
+          status: "Success",
+        },
+        {
+          id: 3,
+          name: "Azis Gemes",
+          address: "Bekasi Timur",
+          productOrder: ["Paket Geprek", "Paket Geprek Keju"],
+          status: "Cancel",
+        },
+        {
+          id: 4,
+          name: "Si Monang",
+          address: "Tanjung Balai",
+          productOrder: ["Paket Geprek", "Paket Geprek Keju"],
+          status: "On The Way",
+        },
+      ],
     },
     {
       id: 2,
@@ -138,6 +170,7 @@ const data = {
       password: "paspas",
       phoneNumber: "0909090909",
       role: "user",
+      location: "",
       fotoprofil: fotocard,
     },
   ],

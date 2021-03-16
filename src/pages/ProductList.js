@@ -15,10 +15,10 @@ import { CartContext } from "../logics/contexts/cartContext";
 const styles = {
   root: {
     width: 250,
-    p: 1,
   },
   cover: {
     height: 134,
+    p: 1,
   },
 };
 const ProductList = () => {
@@ -51,10 +51,10 @@ const ProductList = () => {
           <Typography variant="h4" sx={{ mb: 4 }}>
             {data.fullName}, Menus
           </Typography>
-          <Grid container spacing={3} justifyContent="space-evenly">
+          <Grid container spacing={4} justifyContent="center">
             {data.products.map((item) => (
               <Grid key={item.id} item>
-                <Card sx={styles.root}>
+                <Card sx={styles.root} elevation={0}>
                   <CardMedia
                     sx={styles.cover}
                     component="img"
@@ -62,7 +62,7 @@ const ProductList = () => {
                     title={item.name}
                   />
                   <CardContent>
-                    <Typography variant="h6" sx={{ height: 50 }}>
+                    <Typography variant="h6" sx={{ height: 30 }}>
                       {item.name}
                     </Typography>
                     <Typography variant="overline" sx={{ color: "#FF1515" }}>
@@ -70,7 +70,7 @@ const ProductList = () => {
                     </Typography>
                     <Button
                       variant="contained"
-                      sx={{ width: "100%", mt: 2 }}
+                      sx={{ width: "100%", mt: 2, color: "secondary.main" }}
                       onClick={() => addProductToCart(item)}
                     >
                       Order

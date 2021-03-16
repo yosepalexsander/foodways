@@ -1,23 +1,26 @@
 import { Backdrop, Modal, Slide } from "@material-ui/core";
 import { forwardRef } from "react";
-import MapBox from "./MapBox";
+import MapBox from "../map/MapBox";
 
-const MapboxModal = forwardRef((props, ref) => {
+const MapboxModal = forwardRef(({ children, ...props }, ref) => {
+  const { show, modalControl } = props;
   return (
     <div>
       <Modal
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        open={open}
-        onClose={handleClose}
+        open={show}
+        onClose={modalControl}
+        disableEnforceFocus
+        disableAutoFocus
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Slide in={open} direction="up">
-          <MapBox ref={ref} />
+        <Slide in={show} direction="up" unmountOnExit>
+          <MapBox ref={ref}>{children}</MapBox>
         </Slide>
       </Modal>
     </div>

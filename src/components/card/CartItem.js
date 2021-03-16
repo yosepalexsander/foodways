@@ -20,13 +20,17 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     width: "100%",
+    height: 3,
     borderTop: `5px solid ${theme.palette.secondary.main}`,
     borderRadius: 3,
   },
 }));
+
 const CartItem = (props) => {
   const classes = useStyles();
+
   const { item, decrementQty, incrementQty, removeItem } = props;
+
   return (
     <Fragment>
       <Grid item xs container justifyContent="space-between" spacing={2}>
@@ -34,7 +38,7 @@ const CartItem = (props) => {
           <img src={item.imgUrl} alt={item.name} className={classes.imgSize} />
         </Grid>
         <Grid item container xs={12} sm>
-          <Grid item container direction="column" justifyContent="center">
+          <Grid item container direction="column" justifyContent="space-evenly">
             <Grid item>
               <Typography
                 variant="body1"
@@ -64,7 +68,7 @@ const CartItem = (props) => {
           container
           item
           direction="column"
-          justifyContent="center"
+          justifyContent="space-evenly"
           alignItems="center"
           xs={3}
         >

@@ -33,12 +33,12 @@ const cartReducer = (state, action) => {
         ],
         currentRestaurant: restaurant,
       };
-    case "REMOVE_PRODUCT": {
+    case "REMOVE_PRODUCT":
       const updatedProduct = state.carts.map((cart) =>
         cart.id === product.id
           ? {
               ...cart,
-              qty: cart.qty - 1,
+              qty: cart.qty <= 1 ? cart.qty : cart.qty - 1,
             }
           : cart
       );
@@ -46,7 +46,6 @@ const cartReducer = (state, action) => {
         ...state,
         carts: updatedProduct,
       };
-    }
     case "REMOVE_CART":
       const filteredProduct = state.carts.filter(
         (cart) => cart.id !== product.id
@@ -58,6 +57,13 @@ const cartReducer = (state, action) => {
     case "SAVE_TO_STORAGE":
       localStorage.setItem("user_cart", JSON.stringify(state, null, 2));
       break;
+
+    case "SUBMIT_CART":
+      return {
+        ...state,
+        carts: [],
+        currentRestaurant: restaurant,
+      };
     default:
       throw new Error("dispacth type doesn't provided");
   }

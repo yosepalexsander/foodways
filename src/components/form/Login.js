@@ -1,14 +1,12 @@
 import { forwardRef, Fragment, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { UserContext } from "../../logics/contexts/authContext";
 
 import {
   Button,
-  FormControl,
   IconButton,
-  InputLabel,
   InputAdornment,
   Link,
-  OutlinedInput,
   Paper,
   TextField,
   Typography,
@@ -19,18 +17,21 @@ import fakeData from "../../data/fakeData";
 
 const Login = forwardRef((props, ref) => {
   const { switchForm } = props;
-  const { dispatch } = useContext(UserContext);
   const { users } = fakeData;
+  const { dispatch } = useContext(UserContext);
   const [values, setValues] = useState({
     name: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-
+  const history = useHistory();
   const checkUser = () => {
     const user = users.find((user) => user.fullName === values.name);
     if (user) {
       dispatch({ type: "LOGIN", payload: user });
+      user.role === "partner" && history.push("/partner");
+    } else {
+      alert("Username or Password Incorret");
     }
   };
   const handleSubmit = (event) => {
@@ -42,7 +43,7 @@ const Login = forwardRef((props, ref) => {
   };
 
   const handleClickShowPassword = () => {
-    setShowPassword(!values.showPassword);
+    setShowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -66,25 +67,26 @@ const Login = forwardRef((props, ref) => {
         >
           <TextField
             id="inputUsername"
-            sx={{ mb: 2, width: "35ch" }}
+            sx={{ mb: 2, width: "350px" }}
             onChange={(e) => handleChange(e)}
             label="Username"
-            value={values.uname}
+            value={values.name}
             name="name"
             type="text"
             variant="outlined"
           />
-          <FormControl variant="outlined" sx={{ mb: 2, width: "35ch" }}>
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              value={values.password}
-              name="password"
-              onChange={(e) => handleChange(e)}
-              endAdornment={
+          <TextField
+            id="inputPassword"
+            sx={{ mb: 2, width: "350px" }}
+            onChange={(e) => handleChange(e)}
+            label="Password"
+            value={values.password}
+            name="password"
+            type={showPassword ? "text" : "password"}
+            variant="outlined"
+            InputProps={{
+              "aria-label": "password",
+              endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
@@ -95,9 +97,9 @@ const Login = forwardRef((props, ref) => {
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
-              }
-            />
-          </FormControl>
+              ),
+            }}
+          />
           <Button
             sx={{ my: 2, width: "100%" }}
             variant="contained"

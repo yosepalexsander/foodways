@@ -1,6 +1,8 @@
-import { forwardRef, Fragment, useState } from "react";
+import { forwardRef, Fragment, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Link, TextField, Typography, Paper } from "@material-ui/core";
+
+import { UserContext } from "../../logics/contexts/authContext";
 
 const roles = [
   {
@@ -15,6 +17,7 @@ const roles = [
 
 const Register = forwardRef((props, ref) => {
   const { switchForm } = props;
+  const { dispatch } = useContext(UserContext);
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -27,6 +30,7 @@ const Register = forwardRef((props, ref) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     localStorage.setItem("user data", JSON.stringify(values, 2, null));
+    // dispatch({ type: "REGISTER", payload: values });
     setValues({
       email: "",
       password: "",
@@ -35,6 +39,7 @@ const Register = forwardRef((props, ref) => {
       phoneNumber: "",
       role: "",
     });
+
     history.push("/");
   };
   const handleChange = (event) => {
