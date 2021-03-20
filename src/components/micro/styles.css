@@ -1,0 +1,22 @@
+.loading {
+  width: 100px;
+  height: 100px;
+  margin: 50vh auto 0;
+  position: relative;
+  animation-name: maju-mundur;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+}
+
+
+.loading-icon {
+  transform: scale(3);
+}
+@keyframes maju-mundur {
+  0% {left: -100px; color: #2e2d2b;;}
+  50% {
+    left:100px;
+    color: #5a564b;
+  }
+  100%{left:-200px; transform: rotateY(180deg); color: #2e2d2b;}
+}

@@ -7,7 +7,9 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Slide,
 } from "@material-ui/core";
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import AddProductIcon from "./icons/AddProductIcon";
 import ProfileIcon from "./icons/ProfileIcon";
 import LogoutIcon from "./icons/LogoutIcon";
@@ -20,13 +22,12 @@ const Dropdown = forwardRef((props, ref) => {
     logoutHandler,
     userHandler,
     addProductHandler,
+    dashboardHandler
   } = props;
 
   return (
     <Fragment>
       <IconButton
-        ref={ref}
-        aria-label="account of current user"
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={(event) => setAnchorEl(event.currentTarget)}
@@ -47,9 +48,9 @@ const Dropdown = forwardRef((props, ref) => {
           vertical: "top",
           horizontal: "center",
         }}
-        autoFocus={false}
+        TransitionComponent={Slide}
+        disableAutoFocusItem
         disablePortal
-        keepMounted
         onClose={() => setAnchorEl(null)}
       >
         <MenuItem onClick={userHandler}>
@@ -59,12 +60,20 @@ const Dropdown = forwardRef((props, ref) => {
           <ListItemText primary="Profile" />
         </MenuItem>
         {isPartner && (
-          <MenuItem onClick={addProductHandler}>
-            <ListItemIcon>
-              <AddProductIcon viewBox="0 0 40 40" color="inherit" />
-            </ListItemIcon>
-            <ListItemText primary="Add Product" />
-          </MenuItem>
+          <>
+            <MenuItem onClick={dashboardHandler}>
+              <ListItemIcon>
+                <DashboardIcon color="inherit" />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </MenuItem>
+            <MenuItem onClick={addProductHandler}>
+              <ListItemIcon>
+                <AddProductIcon viewBox="0 0 40 40" color="inherit" />
+              </ListItemIcon>
+              <ListItemText primary="Add Product" />
+            </MenuItem>
+          </>
         )}
         <Divider />
         <MenuItem onClick={logoutHandler}>

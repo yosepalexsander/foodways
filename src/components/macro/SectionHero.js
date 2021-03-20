@@ -2,6 +2,8 @@ import { Fragment } from "react";
 import { Box, Typography } from "@material-ui/core";
 import pizza from "../../assets/images/landingpage_pizza.png";
 
+import "./styles.css";
+
 const styles = {
   gridColored: {
     px: 3,
@@ -41,7 +43,7 @@ const SectionHero = () => {
           display="flex"
           flexDirection="row"
           justifyContent="space-evenly"
-          sx={styles.gridColored}
+          className="background"
         >
           <Box display="block" pt={8}>
             <Typography variant="h1" color="secondary">
@@ -56,11 +58,11 @@ const SectionHero = () => {
               justifyContent="flex-start"
               pt={4}
             >
-              <Box sx={styles.rule} />
+              <Box className="rule" />
               <Typography
                 variant="body2"
                 color="secondary"
-                sx={styles.description}
+                className="description"
               >
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy
@@ -68,9 +70,8 @@ const SectionHero = () => {
               </Typography>
             </Box>
           </Box>
-          <Box>
-            <img src={pizza} alt="pizza" sx={styles.imgSize} />
-          </Box>
+          <img src={pizza} alt="pizza"
+            className="image" />
         </Box>
       </section>
     </Fragment>

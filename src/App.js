@@ -15,6 +15,7 @@ import ProductList from "./pages/ProductList";
 import Cart from "./pages/customer/Cart";
 import Partner from "./pages/partner/Partner";
 import AddProduct from "./pages/partner/AddProduct";
+import EditProduct from "./pages/partner/EditProduct";
 
 const styles = {
   container: {
@@ -37,12 +38,20 @@ function App() {
                 <Switch>
                   <Route exact path="/" component={Landing} />
                   <PrivateRoute exact path="/user/:id" component={User} />
-                  <PrivateRoute path="/user/:id/edit" component={EditUser} />
-                  <PrivateRoute path="/user/:id/cart" component={Cart} />
+                  <PrivateRoute exact path="/user/:id/edit" component={EditUser} />
+                  <PrivateRoute exact path="/user/:id/cart" component={Cart} />
                   <PrivateRoute exact path="/partner" component={Partner} />
+                  <PrivateRoute exact path="/partner/:id" component={User} />
+                  <PrivateRoute exact path="/partner/:id/edit" component={EditUser} />
                   <PrivateRoute
+                    exact
                     path="/partner/:id/add-product"
                     component={AddProduct}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/partner/:id/edit-product"
+                    component={EditProduct}
                   />
                   <PrivateRoute
                     exact

@@ -5,24 +5,26 @@ import {
   Grid,
   Input,
   InputBase,
-  makeStyles,
   Typography,
 } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CustomMapIcon from "../icons/CustomMapIcon";
 import MapboxModal from "../modal/MapboxModal";
-import useStyles from "./styles";
+import "./styles.css"
 
 const EditProfile = () => {
-  const classes = useStyles();
   const {
     state: { user },
     dispatch,
   } = useContext(UserContext);
   const [values, setValues] = useState(user);
   const [showMapbox, setMapboxModal] = useState(false);
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.type === "file"
+        ? e.target.files[0] : e.target.value
+    });
   };
 
   const handleSubmit = (event) => {
@@ -32,7 +34,7 @@ const EditProfile = () => {
       payload: values,
     });
   };
-  console.log(user);
+
   return (
     <div>
       <Typography variant="h4" color="inherit" gutterBottom>
@@ -42,7 +44,7 @@ const EditProfile = () => {
         <Grid container>
           <Grid container item spacing={2} direction="column">
             <Grid container item spacing={2}>
-              <Grid item flexGrow={1}>
+              <Grid item xs={8} sm={9} lg={10}>
                 <InputBase
                   placeholder={
                     user.role === "partner" ? "Nama Partner" : "Full Name"
@@ -50,11 +52,11 @@ const EditProfile = () => {
                   name="fullName"
                   value={values.fullName}
                   onChange={handleChange}
-                  className={classes.input}
+                  className="input"
                   inputProps={{ "aria-label": "full name" }}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={4} sm={3} lg={2}>
                 <Input
                   accept="image/*"
                   id="icon-button-file"
@@ -63,10 +65,10 @@ const EditProfile = () => {
                 />
                 <label htmlFor="icon-button-file">
                   <Button
-                    className={classes.fileButton}
+                    className="fileButton"
                     variant="fileInput"
                     component="span"
-                    endIcon={<AttachFileIcon fontSize="medium" />}
+                    endIcon={<AttachFileIcon />}
                   >
                     Attach Image
                   </Button>
@@ -79,7 +81,7 @@ const EditProfile = () => {
                 name="email"
                 onChange={handleChange}
                 value={values.email}
-                className={classes.input}
+                className="input"
                 inputProps={{ "aria-label": "full name" }}
               />
             </Grid>
@@ -89,24 +91,24 @@ const EditProfile = () => {
                 name="phoneNumber"
                 value={values.phoneNumber}
                 onChange={handleChange}
-                className={classes.input}
+                className="input"
                 inputProps={{ "aria-label": "full name" }}
               />
             </Grid>
             <Grid container item spacing={2}>
-              <Grid item flexGrow={1}>
+              <Grid item xs={8} sm={9} lg={10}>
                 <InputBase
                   placeholder="location"
                   name="location"
                   value={values.location}
                   onChange={handleChange}
-                  className={classes.input}
+                  className="input"
                   inputProps={{ "aria-label": "full name" }}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={4} sm={3} lg={2}>
                 <Button
-                  className={classes.fileButton}
+                  className="fileButton"
                   color="secondary"
                   variant="contained"
                   onClick={() => setMapboxModal(true)}

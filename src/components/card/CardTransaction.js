@@ -66,7 +66,7 @@ const CardTransaction = ({ order }) => {
         </div>
         <div className={classes.column}>
           <div className={classes.content}>
-            <img src={brand} className={classes.brandIcon} />
+            <img src={brand} className={classes.brandIcon} alt="brand_logo" />
           </div>
           <div className={classes.status_success}>{order.status}</div>
         </div>

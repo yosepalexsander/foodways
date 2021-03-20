@@ -5,28 +5,29 @@ import { UserContext } from "../../logics/contexts/authContext";
 import {
   Button,
   IconButton,
+  InputBase,
   InputAdornment,
   Link,
   Paper,
-  TextField,
   Typography,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-
+import clsx from "clsx";
 import fakeData from "../../data/fakeData";
+import "./styles.css";
 
 const Login = forwardRef((props, ref) => {
   const { switchForm } = props;
   const { users } = fakeData;
   const { dispatch } = useContext(UserContext);
   const [values, setValues] = useState({
-    name: "",
+    email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
   const checkUser = () => {
-    const user = users.find((user) => user.fullName === values.name);
+    const user = users.find((user) => user.email === values.email);
     if (user) {
       dispatch({ type: "LOGIN", payload: user });
       user.role === "partner" && history.push("/partner");
@@ -51,7 +52,7 @@ const Login = forwardRef((props, ref) => {
   };
   return (
     <Fragment>
-      <Paper ref={ref} sx={{ p: [2, 4, 2] }} elevation={2} tabIndex={-1}>
+      <Paper ref={ref} sx={{ p: 2, width: 416 }} elevation={2} tabIndex={-1}>
         <Typography
           id="login-modal-title"
           variant="h3"
@@ -62,20 +63,44 @@ const Login = forwardRef((props, ref) => {
         </Typography>
         <form
           id="login-modal-description"
-          style={{ display: "flex", flexDirection: "column" }}
+          className="_form"
           onSubmit={handleSubmit}
         >
-          <TextField
+          <InputBase
             id="inputUsername"
-            sx={{ mb: 2, width: "350px" }}
-            onChange={(e) => handleChange(e)}
-            label="Username"
+            placeholder="Username"
+            name="email"
+            type="email"
             value={values.name}
-            name="name"
-            type="text"
-            variant="outlined"
+            onChange={handleChange}
+            className={clsx("input", "input-margin")}
+            inputProps={{ "aria-label": "email" }}
+            required
           />
-          <TextField
+          <InputBase
+            id="inputPassword"
+            placeholder="Password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            value={values.password}
+            onChange={handleChange}
+            className={clsx("input", "input-width")}
+            inputProps={{ "aria-label": "password" }}
+            required
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {/* <TextField
             id="inputPassword"
             sx={{ mb: 2, width: "350px" }}
             onChange={(e) => handleChange(e)}
@@ -99,9 +124,9 @@ const Login = forwardRef((props, ref) => {
                 </InputAdornment>
               ),
             }}
-          />
+          /> */}
           <Button
-            sx={{ my: 2, width: "100%" }}
+            className="submitButton"
             variant="contained"
             color="secondary"
             type="submit"
@@ -113,8 +138,9 @@ const Login = forwardRef((props, ref) => {
           Don't have an account? Click{" "}
           <Link
             onClick={switchForm}
+            color="textSecondary"
             variant="subtitle1"
-            sx={{ cursor: "pointer" }}
+            sx={{ cursor: "pointer", fontWeight: 800 }}
           >
             Here
           </Link>

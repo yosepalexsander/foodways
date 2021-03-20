@@ -2,25 +2,15 @@ import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 
 import {
-  Button,
-  Card,
-  CardMedia,
-  CardContent,
   Grid,
   Typography,
+  Grow,
 } from "@material-ui/core";
-import fakeData from "../data/fakeData";
-import priceFormatter from "../helpers/priceFormatter";
 import { CartContext } from "../logics/contexts/cartContext";
-const styles = {
-  root: {
-    width: 250,
-  },
-  cover: {
-    height: 134,
-    p: 1,
-  },
-};
+import CardVertical from "../components/card/CardVertical";
+import Loading from "../components/micro/Loading";
+import fakeData from "../data/fakeData";
+
 const ProductList = () => {
   const { dispatch } = useContext(CartContext);
   const [data, setData] = useState(null);
@@ -45,44 +35,27 @@ const ProductList = () => {
   return (
     <div>
       {loading ? (
-        <Typography variant="h3">Loading...</Typography>
+        <Loading />
       ) : (
         <section id="product-list">
           <Typography variant="h4" sx={{ mb: 4 }}>
             {data.fullName}, Menus
           </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            {data.products.map((item) => (
-              <Grid key={item.id} item>
-                <Card sx={styles.root} elevation={0}>
-                  <CardMedia
-                    sx={styles.cover}
-                    component="img"
-                    src={item.imgUrl}
-                    title={item.name}
-                  />
-                  <CardContent>
-                    <Typography variant="h6" sx={{ height: 30 }}>
-                      {item.name}
-                    </Typography>
-                    <Typography variant="overline" sx={{ color: "#FF1515" }}>
-                      {priceFormatter(item.price)}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      sx={{ width: "100%", mt: 2, color: "secondary.main" }}
-                      onClick={() => addProductToCart(item)}
-                    >
-                      Order
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
+          <Grid container spacing={4} justifyContent="space-evenly" sx={{ pb: 3 }}>
+            {data.products.map((item, index) => (
+              <Grow key={item.id} in={!loading}
+                style={{ transformOrigin: '0 0 0' }}
+                {...(loading ? {} : { timeout: 500 * index })}>
+                <Grid item>
+                  <CardVertical item={item} isFromProduct addProduct={addProductToCart} />
+                </Grid>
+              </Grow>
             ))}
           </Grid>
         </section>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 

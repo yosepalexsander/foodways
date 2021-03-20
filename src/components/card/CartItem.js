@@ -35,7 +35,7 @@ const CartItem = (props) => {
     <Fragment>
       <Grid item xs container justifyContent="space-between" spacing={2}>
         <Grid item>
-          <img src={item.imgUrl} alt={item.name} className={classes.imgSize} />
+          <img src={item.img} alt={item.name} className={classes.imgSize} />
         </Grid>
         <Grid item container xs={12} sm>
           <Grid item container direction="column" justifyContent="space-evenly">

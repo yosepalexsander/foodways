@@ -78,56 +78,56 @@ const data = {
           id: 1,
           name: "Paket Geprek",
           price: 15000,
-          imgUrl:
+          img:
             "https://www.marketeers.com/wp-content/uploads/2018/09/w644.jpeg",
         },
         {
           id: 2,
           name: "Paket Geprek Keju",
           price: 20000,
-          imgUrl:
+          img:
             "https://assets-pergikuliner.com/uploads/image/picture/827657/picture-1518685049.jpg",
         },
         {
           id: 3,
           name: "Paket Geprek Leleh",
           price: 25000,
-          imgUrl:
+          img:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD17PS9BULmZVFIUmFwxEqMbbvNExkUKTmKQ&usqp=CAU",
         },
         {
           id: 4,
           name: "Paket Sambel Matah",
           price: 15000,
-          imgUrl:
+          img:
             "https://tastynesia.com/wp-content/uploads/2020/01/Resep-Ayam-Geprek-Sambal-Matah-1200x900.jpg",
         },
         {
           id: 5,
           name: "Mie Ayam Geprek",
           price: 15000,
-          imgUrl:
+          img:
             "https://ecs7.tokopedia.net/img/cache/700/product-1/2019/3/22/5659208/5659208_45bd39cc-43b4-428d-a53d-4f22ba8e1a22_550_550.jpg",
         },
         {
           id: 6,
           name: "Mie Ayam Geprek Keju",
           price: 15000,
-          imgUrl:
+          img:
             "https://i1.wp.com/makassarkuliner.com/wp-content/uploads/2017/12/ayamgeprekmaster8-makassar-kuliner.jpg?resize=1000%2C667&ssl=1",
         },
         {
           id: 7,
           name: "Mie Ayam Leleh",
           price: 15000,
-          imgUrl:
+          img:
             "http://mhm.asia/wp-content/uploads/2017/05/mie-samyang-640x532.jpg",
         },
         {
           id: 8,
           name: "Mie Ayam Sambel Telur Asin",
           price: 15000,
-          imgUrl:
+          img:
             "https://tastynesia.com/wp-content/uploads/2020/01/Resep-Ayam-Geprek-Sambal-Matah-1200x900.jpg",
         },
       ],

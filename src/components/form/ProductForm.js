@@ -2,23 +2,29 @@ import { useState, useContext } from "react";
 import { Button, Input, InputBase, Grid } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { UserContext } from "../../logics/contexts/authContext";
-import useStyles from "./styles";
 
-const AddProductForm = () => {
-  const classes = useStyles();
+import "./styles.css";
+
+const AddProductForm = ({ isEdit }) => {
   const { dispatch } = useContext(UserContext);
   const [values, setValues] = useState({
     name: "",
     imgUrl: null,
     price: "",
   });
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-    console.log(event.target.value);
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.type === "file"
+        ? e.target.files[0] : e.target.value
+    });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const formData = new FormData();
+    formData.append("image", values.imgUrl);
+    console.log(formData)
     dispatch({
       type: "ADD_PRODUCT",
       payload: values,
@@ -26,9 +32,8 @@ const AddProductForm = () => {
     alert("Add Product Success");
     setTimeout(() => {
       setValues({ name: "", imgUrl: null, price: 0 });
-    }, 300);
+    }, 200);
   };
-  console.log(values);
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -40,21 +45,23 @@ const AddProductForm = () => {
                 name="name"
                 value={values.name}
                 onChange={handleChange}
-                className={classes.input}
-                inputProps={{ "aria-label": "full name" }}
+                className="input"
+                inputProps={{ "aria-label": "title" }}
               />
             </Grid>
             <Grid item xs={2}>
               <Input
                 accept="image/*"
                 id="icon-button-file"
+                name="imgUrl"
                 type="file"
+                onChange={handleChange}
                 multiple
                 sx={{ display: "none" }}
               />
               <label htmlFor="icon-button-file">
                 <Button
-                  className={classes.fileButton}
+                  className="fileButton"
                   variant="fileInput"
                   component="span"
                   endIcon={<AttachFileIcon fontSize="medium" />}
@@ -71,19 +78,19 @@ const AddProductForm = () => {
               onChange={handleChange}
               value={values.price}
               type="text"
-              className={classes.input}
-              inputProps={{ "aria-label": "full name" }}
+              className="input"
+              inputProps={{ "aria-label": "price" }}
             />
           </Grid>
           <Grid container justifyContent="flex-end" sx={{ mt: 8 }}>
             <Grid item>
               <Button
-                sx={{ width: 260, height: 40, float: "right" }}
+                sx={{ width: 260, height: 40 }}
                 variant="contained"
                 color="secondary"
                 type="submit"
               >
-                Save
+                Save {isEdit && (<>Changes</>)}
               </Button>
             </Grid>
           </Grid>

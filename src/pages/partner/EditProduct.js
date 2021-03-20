@@ -5,9 +5,9 @@ const AddProduct = () => {
   return (
     <div>
       <Typography variant="h4" color="inherit" gutterBottom>
-        Add Product
+        Edit Product
       </Typography>
-      <ProductForm />
+      <ProductForm isEdit />
     </div>
   );
 };

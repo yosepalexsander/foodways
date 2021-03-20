@@ -1,8 +1,11 @@
 import { forwardRef, Fragment, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { Button, Link, TextField, Typography, Paper } from "@material-ui/core";
+import { Button, InputBase, Link, NativeSelect, Typography, Paper } from "@material-ui/core";
 
 import { UserContext } from "../../logics/contexts/authContext";
+
+import clsx from "clsx";
+import "./styles.css";
 
 const roles = [
   {
@@ -47,7 +50,7 @@ const Register = forwardRef((props, ref) => {
   };
   return (
     <Fragment>
-      <Paper ref={ref} sx={{ p: [2, 4, 2] }} elevation={2} tabIndex={-1}>
+      <Paper ref={ref} sx={{ p: 2, width: 416 }} elevation={2} tabIndex={-1}>
         <Typography
           id="register-modal-title"
           variant="h3"
@@ -58,79 +61,84 @@ const Register = forwardRef((props, ref) => {
         </Typography>
         <form
           id="register-modal-description"
-          style={{ display: "flex", flexDirection: "column" }}
+          className="_form"
           onSubmit={handleSubmit}
         >
-          <TextField
+          <InputBase
             id="inputEmail"
-            sx={{ mb: 2, width: "35ch" }}
-            onChange={handleChange}
-            label="Email"
+            placeholder="Email"
             name="email"
-            value={values.email}
             type="email"
-            variant="outlined"
+            value={values.email}
+            onChange={handleChange}
+            className={clsx("input", "input-margin")}
+            inputProps={{ "aria-label": "email" }}
+            required
           />
-          <TextField
+          <InputBase
             id="inputPassword"
-            sx={{ mb: 2, width: "35ch" }}
-            onChange={handleChange}
-            label="Password"
+            placeholder="Password"
             name="password"
-            value={values.password}
             type="password"
-            variant="outlined"
+            value={values.password}
+            onChange={handleChange}
+            className={clsx("input", "input-margin")}
+            inputProps={{ "aria-label": "password" }}
+            required
           />
-          <TextField
+          <InputBase
             id="inputFullName"
-            sx={{ mb: 2, width: "35ch" }}
-            onChange={handleChange}
-            label="Full Name"
-            name="fullName"
+            placeholder="Full Name"
+            name="full name"
             value={values.fullName}
-            type="text"
-            variant="outlined"
-          />
-          <TextField
-            id="inputGender"
-            sx={{ mb: 2, width: "35ch" }}
             onChange={handleChange}
-            label="Gender"
+            className={clsx("input", "input-margin")}
+            inputProps={{ "aria-label": "full name" }}
+            required
+          />
+          <InputBase
+            id="inputGender"
+            placeholder="Gender"
             name="gender"
             value={values.gender}
-            type="text"
-            variant="outlined"
+            onChange={handleChange}
+            className={clsx("input", "input-margin")}
+            inputProps={{ "aria-label": "gender" }}
+            required
           />
-          <TextField
+          <InputBase
             id="inputPhone"
-            sx={{ mb: 2, width: "35ch" }}
-            onChange={handleChange}
-            label="Phone"
-            name="phoneNumber"
+            placeholder="Phone"
+            name="phone"
             value={values.phoneNumber}
-            type="text"
-            variant="outlined"
-          />
-          <TextField
-            id="inputRole"
-            select
-            sx={{ mb: 2, width: "35ch" }}
             onChange={handleChange}
-            label="Role"
-            name="role"
+            className={clsx("input", "input-margin")}
+            inputProps={{ "aria-label": "phone" }}
+            required
+          />
+          <NativeSelect
+            id="inputRole"
+            placeholder="Role"
             value={values.role}
-            variant="outlined"
-            helperText="Please select your role"
-            SelectProps={{ native: true }}
-          >
+            name={"role"}
+            onChange={handleChange}
+            inputProps={{ "aria-label": "phone" }}
+            className={clsx("input", "input-margin")}
+            required
+            input={
+              <InputBase
+                helperText="Please select your role"
+              />
+            }>
             {roles.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
-          </TextField>
+
+          </NativeSelect>
           <Button
-            sx={{ my: 2, width: "100%" }}
+            className="submitButton"
             variant="contained"
             color="secondary"
             type="submit"
@@ -142,8 +150,9 @@ const Register = forwardRef((props, ref) => {
           Already have an account? Click{" "}
           <Link
             onClick={switchForm}
+            color="textSecondary"
             variant="subtitle1"
-            sx={{ cursor: "pointer" }}
+            sx={{ cursor: "pointer", fontWeight: 800 }}
           >
             Here
           </Link>

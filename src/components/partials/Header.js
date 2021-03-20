@@ -8,43 +8,29 @@ import {
   SvgIcon,
   Toolbar,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { UserContext } from "../../logics/contexts/authContext";
 import { CartContext } from "../../logics/contexts/cartContext";
 import Dropdown from "../Dropdown";
 import RegisterModal from "../modal/RegisterModal";
 import LoginModal from "../modal/LoginModal";
 import brand from "../../assets/icons/brand_logo.png";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  imgSize: {
-    height: "40px",
-    width: "auto",
-  },
-  toolbarPadding: {
-    padding: theme.spacing(0, 8),
-  },
-  buttonSize: {
-    width: 100,
-    height: 30,
-  },
-}));
+
+import "./styles.css"
 
 const Header = () => {
-  const classes = useStyles();
+  const history = useHistory();
+  const location = useLocation();
+  const authenticated = location.state;
   const { state: userState, dispatch } = useContext(UserContext);
   const { isAuthenticated, user } = userState;
   const { state: cartState } = useContext(CartContext);
-  const history = useHistory();
   const [show1, setShow1] = useState(false); //register
   const [show2, setShow2] = useState(false); //login
 
+  useEffect(() => {
+    authenticated && setShow2(true);
+  }, [authenticated]);
   // Logic to handle Register and Login Modal
   const handleClose1 = () => {
     setShow1(false);
@@ -69,22 +55,26 @@ const Header = () => {
   };
 
   const goToProfile = (id) => {
+    if (user.role === 'partner') return history.push(`/partner/${id}`)
     history.push(`/user/${id}`);
   };
 
   const goToCart = (id) => {
-    history.push(`/user/${id}/cart`);
+    history.push(`/user/${id}/cart`, { username: user.fullName });
   };
   const goToAddProductPartner = (id) => {
     history.push(`/partner/${id}/add-product`);
   };
+  const goToDashboard = () => {
+    history.push("/partner");
+  };
   return (
     <>
       <AppBar position="fixed" elevation={0}>
-        <Toolbar className={classes.toolbarPadding} disableGutters>
-          <div className={classes.title}>
+        <Toolbar className="header-padding" disableGutters>
+          <div className="header-title">
             <Link to="/">
-              <img className={classes.imgSize} src={brand} alt="brand logo" />
+              <img className="header-brand" src={brand} alt="brand logo" />
             </Link>
           </div>
           {isAuthenticated ? (
@@ -108,13 +98,13 @@ const Header = () => {
                 userHandler={() => goToProfile(user.id)}
                 isPartner={user.role === "partner" ? true : false}
                 addProductHandler={() => goToAddProductPartner(user.id)}
+                dashboardHandler={() => goToDashboard(user.id)}
               />
             </Box>
           ) : (
             <div>
               <Button
-                className={classes.buttonSize}
-                sx={{ ml: 3 }}
+                className="header-button"
                 variant="contained"
                 color="secondary"
                 onClick={() => setShow1(true)}
@@ -122,8 +112,7 @@ const Header = () => {
                 Register
               </Button>
               <Button
-                className={classes.buttonSize}
-                sx={{ ml: 3 }}
+                className="header-button"
                 variant="contained"
                 color="secondary"
                 onClick={() => setShow2(true)}
