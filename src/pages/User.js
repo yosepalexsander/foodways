@@ -22,7 +22,7 @@ const Profile = () => {
   return (
     <div>
       <Grid container justifyContent="space-between">
-        <Grid container item direction="column" spacing={2} xs={6}>
+        <Grid container item direction="column" spacing={2} xs={6} sm={8}>
           <Grid item>
             <Typography variant="h4" color="inherit">
               My Profile
@@ -31,7 +31,7 @@ const Profile = () => {
           <Grid container item spacing={2}>
             <Grid item>
               <img
-                src={user.fotoprofil}
+                src={user.image}
                 alt="user"
                 style={{ width: "180px", height: "221px", objectFit: "cover" }}
               />
@@ -115,7 +115,7 @@ const Profile = () => {
             </Button>
           </Grid>
         </Grid>
-        <Grid container item direction="column" spacing={2} xs={4}>
+        <Grid container item direction="column" spacing={2} xs={6} sm={4}>
           {user.role === "user" ? (
             <>
               <Grid item>

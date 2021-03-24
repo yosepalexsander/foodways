@@ -5,7 +5,8 @@ export const CartContext = createContext();
 
 const initialState = {
   carts: [],
-  currentRestaurant: "",
+  restaurantId: null,
+  location: {}
 };
 export const CartContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);

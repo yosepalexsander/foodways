@@ -19,10 +19,17 @@ import EditProduct from "./pages/partner/EditProduct";
 
 const styles = {
   container: {
+    mt: 15,
     "@media (min-width: 600px)": {
-      mt: 15,
-      px: 8,
+      px: 2,
     },
+    "@media (min-width: 768px)": {
+      px: 4,
+    },
+    "@media (min-width: 900px)": {
+      px: 6,
+    },
+
   },
 };
 function App() {
@@ -50,12 +57,12 @@ function App() {
                   />
                   <PrivateRoute
                     exact
-                    path="/partner/:id/edit-product"
+                    path="/product/:id/edit"
                     component={EditProduct}
                   />
                   <PrivateRoute
                     exact
-                    path="/restaurants/:id"
+                    path="/restaurant/:id"
                     component={ProductList}
                   />
                 </Switch>

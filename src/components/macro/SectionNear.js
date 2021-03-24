@@ -16,10 +16,10 @@ const SectionNear = ({ near }) => {
         </Typography>
         <Grid container item spacing={2} justifyContent="space-between">
           {near.map((item, index) => (
-            <Grow in={isVisible}
+            <Grow key={item.id} in={isVisible}
               style={{ transformOrigin: '0 0 0' }}
               {...(isVisible ? { timeout: 400 * index } : {})}>
-              <Grid key={item.id} item>
+              <Grid item>
                 <CardVertical item={item} />
               </Grid>
             </Grow>

@@ -2,8 +2,8 @@ import { Backdrop, Modal, Slide } from "@material-ui/core";
 import { forwardRef } from "react";
 import MapBox from "../map/MapBox";
 
-const MapboxModal = forwardRef(({ children, ...props }, ref) => {
-  const { show, modalControl } = props;
+const MapboxModal = forwardRef((props, ref) => {
+  const { show, modalControl, page } = props;
   return (
     <div>
       <Modal
@@ -14,13 +14,14 @@ const MapboxModal = forwardRef(({ children, ...props }, ref) => {
         disableEnforceFocus
         disableAutoFocus
         closeAfterTransition
+        keepMounted
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
         <Slide in={show} direction="up" unmountOnExit>
-          <MapBox ref={ref}>{children}</MapBox>
+          <MapBox ref={ref} page={page} />
         </Slide>
       </Modal>
     </div>

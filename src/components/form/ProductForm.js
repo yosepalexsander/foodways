@@ -1,15 +1,17 @@
 import { useState, useContext } from "react";
-import { Button, Input, InputBase, Grid } from "@material-ui/core";
+import { Alert, Button, Input, InputBase, Grid, Snackbar, Slide } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
+import CheckIcon from "@material-ui/icons/Check";
 import { UserContext } from "../../logics/contexts/authContext";
 
 import "./styles.css";
 
 const AddProductForm = ({ isEdit }) => {
   const { dispatch } = useContext(UserContext);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [values, setValues] = useState({
-    name: "",
-    imgUrl: null,
+    title: "",
+    image: null,
     price: "",
   });
   const handleChange = (e) => {
@@ -23,15 +25,17 @@ const AddProductForm = ({ isEdit }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append("image", values.imgUrl);
-    console.log(formData)
+    formData.set("title", values.title);
+    formData.set("price", values.price);
+    formData.append("image", values.image, values.image.name);
+    console.log(formData.get("image"));
     dispatch({
       type: "ADD_PRODUCT",
       payload: values,
     });
-    alert("Add Product Success");
+    setAlertOpen(true);
     setTimeout(() => {
-      setValues({ name: "", imgUrl: null, price: 0 });
+      setValues({ name: "", image: null, price: 0 });
     }, 200);
   };
   return (
@@ -43,7 +47,7 @@ const AddProductForm = ({ isEdit }) => {
               <InputBase
                 placeholder="Title"
                 name="name"
-                value={values.name}
+                value={values.title}
                 onChange={handleChange}
                 className="input"
                 inputProps={{ "aria-label": "title" }}
@@ -53,7 +57,7 @@ const AddProductForm = ({ isEdit }) => {
               <Input
                 accept="image/*"
                 id="icon-button-file"
-                name="imgUrl"
+                name="image"
                 type="file"
                 onChange={handleChange}
                 multiple
@@ -96,6 +100,24 @@ const AddProductForm = ({ isEdit }) => {
           </Grid>
         </Grid>
       </form>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+        TransitionComponent={Slide}
+        TransitionProps={{ direction: "down" }}
+        open={alertOpen}
+        onClose={() => { setAlertOpen(false) }}
+        key=" top center"
+        autoHideDuration={6000}
+      >
+        <Alert
+          icon={<CheckIcon fontSize="inherit" />}
+          severity="success">
+          Product has successfully created - check it out!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

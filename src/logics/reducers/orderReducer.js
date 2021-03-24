@@ -12,7 +12,8 @@ const authReducer = (state, action) => {
             total: payload.total,
             status: "Waiting Approve",
             date: payload.date,
-            restaurant: payload.restaurant,
+            restaurantId: payload.restaurantId,
+            location: payload.location
           },
         ],
       };
@@ -35,9 +36,9 @@ const authReducer = (state, action) => {
       const updatedOrder = state.history.map((order) =>
         order.id === payload.id
           ? {
-              ...order,
-              status: "Cancel",
-            }
+            ...order,
+            status: "Cancel",
+          }
           : order
       );
       return {

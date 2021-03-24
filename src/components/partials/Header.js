@@ -60,7 +60,7 @@ const Header = () => {
   };
 
   const goToCart = (id) => {
-    history.push(`/user/${id}/cart`, { username: user.fullName });
+    history.push(`/user/${id}/cart`, { userId: user.id });
   };
   const goToAddProductPartner = (id) => {
     history.push(`/partner/${id}/add-product`);
@@ -93,7 +93,7 @@ const Header = () => {
                 </IconButton>
               )}
               <Dropdown
-                photoProfile={user.fotoprofil}
+                photoProfile={user.image}
                 logoutHandler={handleLogout}
                 userHandler={() => goToProfile(user.id)}
                 isPartner={user.role === "partner" ? true : false}

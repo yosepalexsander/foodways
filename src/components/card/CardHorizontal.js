@@ -32,7 +32,7 @@ const CardHorizontal = ({ item }) => {
         <CardMedia
           sx={styles.cover}
           component="img"
-          src={item.logo}
+          src={item.image}
           title={item.restaurant}
         />
         <CardContent>

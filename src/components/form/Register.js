@@ -111,6 +111,7 @@ const Register = forwardRef((props, ref) => {
             placeholder="Phone"
             name="phone"
             value={values.phoneNumber}
+            inputMode="numeric"
             onChange={handleChange}
             className={clsx("input", "input-margin")}
             inputProps={{ "aria-label": "phone" }}

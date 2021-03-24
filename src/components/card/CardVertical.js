@@ -4,28 +4,33 @@ import { Button, Card, CardContent, CardMedia, Typography } from "@material-ui/c
 
 import priceFormatter from "../../helpers/priceFormatter";
 
-const styles = {
-  cover: {
-    height: 134,
-    p: 1,
-  },
-};
 const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
   const history = useHistory();
   const pushToProductList = (id) => {
-    history.push(`/restaurants/${id}`);
+    history.push(`/restaurant/${id}`);
   };
+  const editProduct = (id) => {
+    history.push(`/product/${id}/edit`)
+  }
   return (
     <Fragment>
       <Card
-        sx={{ width: 250, cursor: isFromProduct ? "default" : "pointer" }}
+        sx={{
+          width: 250,
+          cursor: isFromProduct ? "default" : "pointer",
+          transition: "transform .2s ease-in",
+          '&:hover': {
+            transform: "scale(1.05)",
+            boxShadow: "0 3px 8px 2px rgba(0,0,0, 0.2)"
+          }
+        }}
         onClick={isFromProduct ? undefined : () => pushToProductList(item.id)}
         elevation={0}
       >
         <CardMedia
           sx={{ height: 134, p: 1 }}
           component="img"
-          src={item.img}
+          src={item.image}
           title={isFromProduct ? item.name : item.restaurant}
         />
         <CardContent>
@@ -38,7 +43,7 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
                 <Button
                   variant="contained"
                   sx={{ width: "100%", mt: 2, color: "secondary.main" }}
-                  onClick={() => props.editProduct(item.id)}
+                  onClick={() => editProduct(item.id)}
                 >
                   Edit
                 </Button>

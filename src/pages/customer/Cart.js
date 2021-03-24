@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 
@@ -32,11 +32,13 @@ const useStyles = makeStyles(
 
 const Cart = () => {
   const classes = useStyles();
-  const location = useLocation();
-  const username = location.state && location.state.username;
+  const locations = useLocation();
+  const userId = locations.state && locations.state.userId;
   const { dispatch: orderDispatch } = useContext(OrderContext);
   const { state, dispatch: cartDispatch } = useContext(CartContext);
-  const { currentRestaurant, carts } = state;
+  const { restaurantId, carts, location } = state;
+  const locationRef = useRef();
+  locationRef.current = location.name || "";
   const [show, setShow] = useState(false);
   const [isOrdered, setOrder] = useState(false);
 
@@ -61,17 +63,17 @@ const Cart = () => {
         product: carts,
         total: totalAmount,
         date: new Date().toLocaleString("id-ID", options),
-        restaurant: currentRestaurant,
-        user: username,
+        restaurantId,
+        userId,
+        location
       },
     });
     cartDispatch({
       type: "SUBMIT_CART",
-      payload: { restaurant: "" },
+      payload: { restaurantId: null, location: "" },
     });
     setOrder(true)
   };
-  console.log(isOrdered)
   return (
     <div>
       <div className={classes.container}>
@@ -80,10 +82,10 @@ const Cart = () => {
         ) : (
           <>
             <Typography variant="h4" color="inherit" gutterBottom>
-              {currentRestaurant}
+              Blabla
             </Typography>
             <p className={classes.font}>Delivery Location</p>
-            <CartSearchLocation clickSearch={() => setShow(true)} />
+            <CartSearchLocation clickSearch={() => setShow(true)} ref={locationRef} />
             <p className={classes.font}>Review Your Order</p>
             <Grid container justifyContent="space-between">
               <CartList cart={carts} dispatchAction={cartDispatch} />
@@ -93,7 +95,7 @@ const Cart = () => {
                 submitOrder={submitTransaction}
               />
             </Grid>
-            <MapboxModal show={show} modalControl={() => setShow(false)} />
+            <MapboxModal show={show} modalControl={() => setShow(false)} page="cart" />
           </>
         )}
       </div>

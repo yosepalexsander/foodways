@@ -6,7 +6,7 @@ import axios from "axios";
  */
 const getLocation = async (lng, lat) => {
   const response = await axios(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?types=address&access_token=${process.env.REACT_APP_MAPBOX}`
+    `http://api.positionstack.com/v1/reverse?access_key=${process.env.REACT_APP_MAP_API_KEY}&query=${lat},${lng}&limit=1`
   );
   return response.data;
 };

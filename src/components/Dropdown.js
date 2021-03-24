@@ -32,7 +32,7 @@ const Dropdown = forwardRef((props, ref) => {
         aria-haspopup="true"
         onClick={(event) => setAnchorEl(event.currentTarget)}
       >
-        <Avatar variant="circular" alt="user photo" src={photoProfile} />
+        <Avatar variant="circular" alt="user photo" src={photoProfile || ""} />
       </IconButton>
       <Menu
         id="menu-appbar"
@@ -55,7 +55,7 @@ const Dropdown = forwardRef((props, ref) => {
       >
         <MenuItem onClick={userHandler}>
           <ListItemIcon>
-            <ProfileIcon viewBox="0 0 40 40" color="inherit" />
+            <ProfileIcon viewBox="0 0 40 40" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="Profile" />
         </MenuItem>
@@ -63,7 +63,7 @@ const Dropdown = forwardRef((props, ref) => {
           <>
             <MenuItem onClick={dashboardHandler}>
               <ListItemIcon>
-                <DashboardIcon color="inherit" />
+                <DashboardIcon color="secondary" />
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </MenuItem>

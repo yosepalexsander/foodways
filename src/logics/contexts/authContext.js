@@ -7,6 +7,7 @@ export const UserContext = createContext();
 const initialState = {
   isAuthenticated: false,
   user: null,
+  location: {}
 };
 export const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);

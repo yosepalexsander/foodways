@@ -10,6 +10,11 @@ const SectionPopular = ({ popular }) => {
     threshold: 0.7
   })
 
+  // useEffect(() => {
+  //   return () => {
+  //     container
+  //   }
+  // }, [input])
   return (
     <Fragment>
       <section id="popular" ref={containerRef}>

@@ -20,19 +20,23 @@ const EditProfile = () => {
   const [values, setValues] = useState(user);
   const [showMapbox, setMapboxModal] = useState(false);
   const handleChange = (e) => {
+    console.log(e.target.files[0])
     setValues({
       ...values,
       [e.target.name]: e.target.type === "file"
         ? e.target.files[0] : e.target.value
     });
   };
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch({
-      type: "EDIT_PROFILE",
-      payload: values,
-    });
+    const formData = new FormData()
+    formData.set("fullName", values.fullName)
+    formData.set("phoneNumber", values.phoneNumber)
+    formData.append("image", values.image, values.image.name)
+    // dispatch({
+    //   type: "EDIT_PROFILE",
+    //   payload: values,
+    // });
   };
 
   return (
@@ -59,11 +63,13 @@ const EditProfile = () => {
               <Grid item xs={4} sm={3} lg={2}>
                 <Input
                   accept="image/*"
-                  id="icon-button-file"
+                  id="button-file"
+                  name="image"
+                  onChange={handleChange}
                   type="file"
                   sx={{ display: "none" }}
                 />
-                <label htmlFor="icon-button-file">
+                <label htmlFor="button-file">
                   <Button
                     className="fileButton"
                     variant="fileInput"
@@ -77,12 +83,13 @@ const EditProfile = () => {
             </Grid>
             <Grid item>
               <InputBase
+                disabled
                 placeholder="Email"
                 name="email"
                 onChange={handleChange}
                 value={values.email}
                 className="input"
-                inputProps={{ "aria-label": "full name" }}
+                inputProps={{ "aria-label": "email" }}
               />
             </Grid>
             <Grid item>
@@ -91,8 +98,9 @@ const EditProfile = () => {
                 name="phoneNumber"
                 value={values.phoneNumber}
                 onChange={handleChange}
+                inputMode="numeric"
                 className="input"
-                inputProps={{ "aria-label": "full name" }}
+                inputProps={{ "aria-label": "phone number" }}
               />
             </Grid>
             <Grid container item spacing={2}>
@@ -103,7 +111,7 @@ const EditProfile = () => {
                   value={values.location}
                   onChange={handleChange}
                   className="input"
-                  inputProps={{ "aria-label": "full name" }}
+                  inputProps={{ "aria-label": "location" }}
                 />
               </Grid>
               <Grid item xs={4} sm={3} lg={2}>
@@ -122,17 +130,17 @@ const EditProfile = () => {
                 />
               </Grid>
             </Grid>
-          </Grid>
-          <Grid container justifyContent="flex-end" sx={{ mt: 8 }}>
-            <Grid item>
-              <Button
-                sx={{ width: 260, height: 40, float: "right" }}
-                variant="contained"
-                color="secondary"
-                type="submit"
-              >
-                Save
+            <Grid container item justifyContent="flex-end" sx={{ mt: 8 }}>
+              <Grid item>
+                <Button
+                  sx={{ width: 260, height: 40 }}
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                >
+                  Save
               </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

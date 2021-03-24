@@ -6,15 +6,19 @@ const useElementOnViewport = (options) => {
   const callbackFunc = entries => {
     const [entry] = entries;
     setIsVisible(entry.isIntersecting)
+    console.log(isVisible)
   };
 
   useEffect(() => {
     const observer = new IntersectionObserver(callbackFunc, options)
     if (containerRef.current) observer.observe(containerRef.current)
     return () => {
-      if (containerRef.current) observer.unobserve(containerRef.current)
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current)
+      }
+      containerRef.current = null
     }
-  }, [containerRef, options])
+  }, [containerRef.current, options])
   return [containerRef, isVisible]
 }
 

@@ -4,37 +4,6 @@ import pizza from "../../assets/images/landingpage_pizza.png";
 
 import "./styles.css";
 
-const styles = {
-  gridColored: {
-    px: 3,
-    pb: 5,
-    "::before": {
-      content: '""',
-      position: "absolute",
-      width: "100%",
-      height: 558,
-      top: 0,
-      left: 0,
-      backgroundColor: "primary.main",
-      zIndex: -1,
-    },
-  },
-  imgSize: {
-    width: 408,
-    height: 393,
-  },
-  rule: {
-    backgroundColor: "secondary.main",
-    width: 150,
-    height: 3,
-    transform: "translateY(10px)",
-  },
-  description: {
-    maxWidth: 274,
-    lineHeight: "19.12px",
-    pl: 4,
-  },
-};
 const SectionHero = () => {
   return (
     <Fragment>

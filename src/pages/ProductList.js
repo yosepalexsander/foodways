@@ -19,7 +19,7 @@ const ProductList = () => {
 
   useEffect(() => {
     const { users } = fakeData;
-    const restaurant = users.find((user) => user.id === Number(id));
+    const restaurant = users.find((user) => user.id === parseInt(id, 10));
     if (restaurant) {
       setData(restaurant);
       setLoading(false);
@@ -29,7 +29,7 @@ const ProductList = () => {
   const addProductToCart = (product) => {
     dispatch({
       type: "ADD_PRODUCT",
-      payload: { ...product, restaurant: data.fullName },
+      payload: { ...product, restaurantId: data.id },
     });
   };
   return (

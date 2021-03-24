@@ -100,31 +100,6 @@ const Login = forwardRef((props, ref) => {
               </InputAdornment>
             }
           />
-          {/* <TextField
-            id="inputPassword"
-            sx={{ mb: 2, width: "350px" }}
-            onChange={(e) => handleChange(e)}
-            label="Password"
-            value={values.password}
-            name="password"
-            type={showPassword ? "text" : "password"}
-            variant="outlined"
-            InputProps={{
-              "aria-label": "password",
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          /> */}
           <Button
             className="submitButton"
             variant="contained"

@@ -1,7 +1,7 @@
-import { Fragment } from "react";
+import { forwardRef, Fragment } from "react";
 import { Button, Grid, InputBase, makeStyles } from "@material-ui/core";
 import CustomMapIcon from "../../components/icons/CustomMapIcon";
-
+import "./styles.css"
 const useStyles = makeStyles(
   (theme) => ({
     searchInput: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(
   }),
   { name: "SearchLocation" }
 );
-const CartSearchLocation = (props) => {
+const CartSearchLocation = forwardRef((props, ref) => {
   const { clickSearch } = props;
   const classes = useStyles();
   return (
@@ -26,7 +26,9 @@ const CartSearchLocation = (props) => {
       <Grid container spacing={2}>
         <Grid item flexGrow={1}>
           <InputBase
-            className={classes.searchInput}
+            className="searchInput"
+            name="location"
+            value={ref.current}
             placeholder="Search Location..."
             inputProps={{ "aria-label": "search" }}
           />
@@ -35,7 +37,7 @@ const CartSearchLocation = (props) => {
           <Button
             variant="contained"
             color="secondary"
-            className={classes.searchButton}
+            className="searchButton"
             onClick={clickSearch}
             endIcon={<CustomMapIcon />}
           >
@@ -45,6 +47,6 @@ const CartSearchLocation = (props) => {
       </Grid>
     </Fragment>
   );
-};
+});
 
 export default CartSearchLocation;

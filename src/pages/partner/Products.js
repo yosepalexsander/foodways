@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Typography, Grid, Grow } from "@material-ui/core";
+import { Grid, Grow } from "@material-ui/core";
 import CardVertical from "../../components/card/CardVertical";
 import Loading from "../../components/micro/Loading";
 import fakeData from "../../data/fakeData";
@@ -26,7 +26,7 @@ const Products = ({ id }) => {
             {data.products.map((item, index) => (
               <Grow key={item.id} in={!loading}
                 style={{ transformOrigin: '0 0 0' }}
-                {...(loading ? {} : { timeout: 500 * index })}>
+                {...(loading ? {} : { timeout: 200 * index })}>
                 <Grid item>
                   <CardVertical item={item} isFromProduct isPartner />
                 </Grid>
