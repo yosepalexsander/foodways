@@ -1,0 +1,28 @@
+.input {
+  background-color: rgba(210, 210, 210, 0.25);
+  padding: 0.5rem;
+  border: 2px solid rgb(118, 108, 108);
+  border-radius: 5px;
+  width: 100%;
+  height: 47px;
+}
+.input-margin {
+  margin-bottom: 1rem;
+}
+._form {
+  display: flex;
+  flex-direction: column;
+}
+.submitButton {
+  margin: 1rem 0 !important;
+  width: 100%;
+}
+.fileButton {
+  width: 100%;
+  height: 47px;
+}
+
+.orderButton {
+  width: 260;
+  height: 40;
+}
