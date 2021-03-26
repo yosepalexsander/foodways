@@ -8,10 +8,6 @@ import { createProduct, updateProduct } from "../../api/main";
 import "./styles.css";
 import ToastAlert from "../micro/ToastAlert";
 
-const Alert = forwardRef((props, ref) => {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 const AddProductForm = (props) => {
   const { isEdit } = props;
   const [alertOpen, setAlertOpen] = useState(false);
