@@ -6,7 +6,7 @@
 .title-bar {
   margin: 0;
   font-weight: 900;
-  font-size: 1.125rem;
+  font-size: 18px;
   line-height: 24.59px;
 }
 
@@ -17,10 +17,10 @@
   width: 50%;
   background-color: #ffffff;
   color: rgba(35, 55, 75, 0.9);
-  padding: 0.875rem;
+  padding: 14px;
   z-index: 5;
   border-radius: 4px;
-  bottom: 1rem;
+  bottom: 16px;
   left: 50%;
   display: inline-block;
   transform: translateX(-50%);
@@ -33,27 +33,27 @@
   width: 50%;
   background-color: #ffffff;
   color: #433434;
-  padding: 0.875rem;
+  padding: 14px;
   z-index: 5;
   border-radius: 4px;
-  top: 1rem;
-  right:  1rem;
+  top: 16px;
+  right: 16px;
 }
 
 .footer-bar {
-  margin-top: 2rem;
+  margin-top: 32px;
 }
 /*  */
 .marker {
   width: 20%;
-  margin-right: 1rem;
+  margin-right: 16px;
 }
 
 .location {
   width: 70%;
   display: flex;
   flex-direction: column;
-  margin-left: 1rem;
+  margin-left: 16px;
 }
 
 .flex {

@@ -14,8 +14,8 @@ const useElementOnViewport = (options) => {
     return () => {
       if (containerRef.current) {
         observer.unobserve(containerRef.current)
+        containerRef.current = null
       }
-      containerRef.current = null
     }
   }, [containerRef.current, options])
   return [containerRef, isVisible]

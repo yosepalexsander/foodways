@@ -1,6 +1,8 @@
-import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { useQuery } from "react-query";
+import { useParams, useLocation } from "react-router-dom";
 
+import icon_notfound from "../assets/icons/icon_notfound.svg";
 import {
   Grid,
   Typography,
@@ -13,47 +15,60 @@ import { getPartnerProducts } from "../api/main";
 
 const ProductList = () => {
   const { dispatch } = useContext(CartContext);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const location = useLocation();
+  const restaurant = location.state && location.state.restaurant
 
-  // const getProducts = async () => {
-  //   const { status, data } = await getPartnerProducts(id);
-  //   if (status === 200) {
-  //     setData(data.data.products);
-  //     setLoading(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getProducts();
-  // }, []);
+
+  const { isLoading, data: productData, error } = useQuery(["products", id], async () => {
+    const response = await getPartnerProducts(id);
+    return response.data.data;
+  });
 
   const addProductToCart = (product) => {
     dispatch({
       type: "ADD_PRODUCT",
-      payload: { ...product, restaurantId: data.id },
+      payload: { ...product, restaurantId: id },
     });
   };
+  if (error) return (<h1>Error occured: {error.response.data.message}</h1>)
+
   return (
     <div>
-      {loading ? (
+      {isLoading ? (
         <Loading />
       ) : (
         <section id="product-list">
           <Typography variant="h4" sx={{ mb: 4 }}>
-            {data.fullName}, Menus
+            {restaurant}, Menus
           </Typography>
-          <Grid container spacing={4} justifyContent="space-evenly" sx={{ pb: 3 }}>
-            {data.products.map((item, index) => (
-              <Grow key={item.id} in={!loading}
-                style={{ transformOrigin: '0 0 0' }}
-                {...(loading ? {} : { timeout: 500 * index })}>
-                <Grid item>
-                  <CardVertical item={item} isFromProduct addProduct={addProductToCart} />
-                </Grid>
-              </Grow>
-            ))}
-          </Grid>
+          {productData?.products.length <= 0 ? (
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+              <img src={icon_notfound}
+                alt="not found"
+                style={{
+                  width: "100%",
+                  maxWidth: "500px"
+                }} />
+            </div>
+          ) : (
+            <Grid container spacing={4} justifyContent="space-evenly" sx={{ pb: 3 }}>
+              {productData?.products.map((item, index) => (
+                <Grow key={item.id} in={!isLoading}
+                  style={{ transformOrigin: '0 0 0' }}
+                  {...(isLoading ? {} : { timeout: 500 * index })}>
+                  <Grid item>
+                    <CardVertical item={item} isFromProduct addProduct={addProductToCart} />
+                  </Grid>
+                </Grow>
+              ))}
+            </Grid>
+          )}
         </section>
       )
       }

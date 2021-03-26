@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { useMutation } from "react-query";
-import { Alert, Button, Input, InputBase, Grid, Snackbar, Slide } from "@material-ui/core";
+import { useParams } from "react-router-dom";
+import { Button, Input, InputBase, Grid } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
-import CheckIcon from "@material-ui/icons/Check";
-import { createProduct } from "../../api/main";
+import { createProduct, updateProduct } from "../../api/main";
 
 import "./styles.css";
+import ToastAlert from "../micro/ToastAlert";
 
-const AddProductForm = ({ isEdit }) => {
+const Alert = forwardRef((props, ref) => {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const AddProductForm = (props) => {
+  const { isEdit } = props;
   const [alertOpen, setAlertOpen] = useState(false);
+  const { id } = useParams();
   const [values, setValues] = useState({
     title: "",
     image: null,
     price: "",
   });
-  const isDisabled = () => {
-    return Object.keys(values).every(value => !value)
-  }
   const handleChange = (e) => {
     setValues({
       ...values,
@@ -24,7 +28,7 @@ const AddProductForm = ({ isEdit }) => {
         ? e.target.files[0] : e.target.value
     });
   };
-  const mutationProduct = useMutation(createProduct, {
+  const addProduct = useMutation(createProduct, {
     onError: () => {
       alert("oops, error occured");
     },
@@ -33,19 +37,34 @@ const AddProductForm = ({ isEdit }) => {
     }
   });
 
+  const editProduct = useMutation(body => updateProduct(id, body), {
+    onError: (error) => {
+      alert("oops, error occured: ", error);
+    },
+    onSuccess: () => {
+      setAlertOpen(true);
+    }
+  });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // if input file empty
     if (!values.image) {
-      mutationProduct.mutate(JSON.stringify(values, null, 2))
-    };
+      isEdit
+        ? editProduct.mutate(JSON.stringify(values))
+        : addProduct.mutate(JSON.stringify(values));
+    } else {
+      const formData = new FormData();
+      formData.set("title", values.title);
+      formData.set("price", values.price);
+      formData.append("image", values.image);
 
-    const formData = new FormData();
-    formData.set("title", values.title);
-    formData.set("price", values.price);
-    formData.append("image", values.image);
-
-    mutationProduct.mutate(formData);
-    setValues({ name: "", image: null, price: 0 });
+      isEdit
+        ? editProduct.mutate(formData)
+        : addProduct.mutate(formData);
+    }
+    setValues({ title: "", image: null, price: 0 });
   };
   return (
     <div>
@@ -55,9 +74,8 @@ const AddProductForm = ({ isEdit }) => {
             <Grid item flexGrow={1}>
               <InputBase
                 placeholder="Title"
-                name="name"
+                name="title"
                 value={values.title}
-                error={!values.title && values.title.length < 8 ? true : false}
                 onChange={handleChange}
                 className="input"
                 required
@@ -71,20 +89,16 @@ const AddProductForm = ({ isEdit }) => {
                 name="image"
                 type="file"
                 onChange={handleChange}
-                error={!values.image ? true : false}
                 sx={{ display: "none" }}
                 required
-                inputProps={{
-                  "aria-label": "image",
-                  helperText: `${!values.image ? "image must be not empty" : ""}`
-                }}
+                inputProps={{ "aria-label": "image" }}
               />
               <label htmlFor="icon-button-file">
                 <Button
                   className="fileButton"
                   variant="fileInput"
                   component="span"
-                  endIcon={<AttachFileIcon fontSize="medium" />}
+                  endIcon={<AttachFileIcon />}
                 >
                   Attach Image
                 </Button>
@@ -109,7 +123,7 @@ const AddProductForm = ({ isEdit }) => {
                 variant="contained"
                 color="secondary"
                 type="submit"
-                disabled={() => isDisabled()}
+                disabled={!values.price || !values.title ? true : false}
               >
                 Save {isEdit && (<>Changes</>)}
               </Button>
@@ -117,24 +131,9 @@ const AddProductForm = ({ isEdit }) => {
           </Grid>
         </Grid>
       </form>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center"
-        }}
-        TransitionComponent={Slide}
-        TransitionProps={{ direction: "down" }}
-        open={alertOpen}
-        onClose={() => { setAlertOpen(false) }}
-        key=" top center"
-        autoHideDuration={6000}
-      >
-        <Alert
-          icon={<CheckIcon fontSize="inherit" />}
-          severity="success">
-          Product has successfully created - check it out!
-        </Alert>
-      </Snackbar>
+      <ToastAlert alertOpen={alertOpen} alertControl={() => setAlertOpen(false)}>
+        Product has successfully {isEdit ? <>updated</> : <>created</>} - check it out!
+      </ToastAlert>
     </div>
   );
 };

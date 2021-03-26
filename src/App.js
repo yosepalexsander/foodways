@@ -31,7 +31,7 @@ const styles = {
       px: 4,
     },
     "@media (min-width: 900px)": {
-      px: 6,
+      px: 10,
     },
 
   },
@@ -72,7 +72,13 @@ function App() {
       });
     }
   };
-  const client = new QueryClient();
+  const client = new QueryClient({
+    defaultOptions: {
+      queries: {
+        cacheTime: 7200 * 1000 // 2 hours cache in memory 
+      }
+    }
+  });
   return (
     <div>
       <CssBaseline />

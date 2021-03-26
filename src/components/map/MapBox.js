@@ -10,7 +10,7 @@ import "./mapbox.css";
 import DeliveryBar from "./infobar/DeliveryBar";
 
 mapboxgl.workerClass = MapboxWorker;
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX;
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 const styles = {
   paper: {
     position: "relative",

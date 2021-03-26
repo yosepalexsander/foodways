@@ -1,20 +1,12 @@
 import { Fragment } from "react";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
-import CartItem from "../card/CartItem";
-const useStyles = makeStyles(
-  (theme) => ({
-    divider: {
-      width: "100%",
-      borderTop: `2px solid ${theme.palette.secondary.main}`,
-      borderRadius: 2,
-    },
-  }),
-  { name: "CartList" }
-);
+import CartItem from "../micro/CartItem";
+
+import "./styles.css";
+
 const CartList = (props) => {
   const { cart, dispatchAction } = props;
-  const classes = useStyles();
 
   /** Logic to handle product in cart context
    * @param  product
@@ -32,7 +24,7 @@ const CartList = (props) => {
   return (
     <Fragment>
       <Grid item container xs={7} direction="column">
-        <hr className={classes.divider} />
+        <hr className="divider" />
         {cart.map((product) => (
           <div key={product.id}>
             <Grid container item>
@@ -43,7 +35,7 @@ const CartList = (props) => {
                 removeItem={removeProduct}
               />
             </Grid>
-            <hr className={classes.divider} />
+            <hr className="divider" />
           </div>
         ))}
       </Grid>

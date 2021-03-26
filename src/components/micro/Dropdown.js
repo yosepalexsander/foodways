@@ -2,17 +2,19 @@ import { forwardRef, Fragment, useState } from "react";
 import {
   Avatar,
   Divider,
+  Grow,
   IconButton,
   ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
-  Slide,
 } from "@material-ui/core";
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import AddProductIcon from "./icons/AddProductIcon";
-import ProfileIcon from "./icons/ProfileIcon";
-import LogoutIcon from "./icons/LogoutIcon";
+import AddProductIcon from "../icons/AddProductIcon";
+import ProfileIcon from "../icons/ProfileIcon";
+import LogoutIcon from "../icons/LogoutIcon";
+
+import avatar_default from "../../assets/images/avatar_default.jpeg";
 
 const Dropdown = forwardRef((props, ref) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -24,6 +26,7 @@ const Dropdown = forwardRef((props, ref) => {
     addProductHandler,
     dashboardHandler
   } = props;
+  const userPhoto = photoProfile.split("/")[-1] !== null ? photoProfile : avatar_default;
 
   return (
     <Fragment>
@@ -32,7 +35,7 @@ const Dropdown = forwardRef((props, ref) => {
         aria-haspopup="true"
         onClick={(event) => setAnchorEl(event.currentTarget)}
       >
-        <Avatar variant="circular" alt="user photo" src={photoProfile || ""} />
+        <Avatar variant="circular" alt="user photo" src={userPhoto} />
       </IconButton>
       <Menu
         id="menu-appbar"
@@ -48,7 +51,7 @@ const Dropdown = forwardRef((props, ref) => {
           vertical: "top",
           horizontal: "center",
         }}
-        TransitionComponent={Slide}
+        TransitionComponent={Grow}
         disableAutoFocusItem
         disablePortal
         onClose={() => setAnchorEl(null)}

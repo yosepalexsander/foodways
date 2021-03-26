@@ -27,15 +27,12 @@ const Login = forwardRef((props, ref) => {
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
 
-  const loginUser = useMutation(formData => {
-    return userLogin(formData)
-  }, {
+  const loginUser = useMutation(userLogin, {
     onSuccess: ({ data }) => {
-      console.log(data.data.user)
       dispatch({ type: "LOGIN", payload: data.data.user });
+      setAuthToken(data.data.user.token);
       data.data.user.role === "partner" ?
         history.push("/partner") : history.push("/")
-      setAuthToken(data.data.user.token);
     },
     onError: (error) => {
       alert(error.response.data.message);
@@ -90,7 +87,7 @@ const Login = forwardRef((props, ref) => {
             type={showPassword ? "text" : "password"}
             value={values.password}
             onChange={handleChange}
-            className={clsx("input", "input-width")}
+            className={clsx("input", "input-margin")}
             inputProps={{ "aria-label": "password" }}
             required
             endAdornment={

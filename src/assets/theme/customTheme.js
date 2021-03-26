@@ -1,6 +1,6 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
-const theme = createMuiTheme({
+let theme = createMuiTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
@@ -21,7 +21,7 @@ const theme = createMuiTheme({
             display: "flex",
             justifyContent: "space-between",
             border: "2px solid rgb(118,108,108)",
-            borderRadius: 5,
+            borderRadius: "5px",
           },
         },
       ],
@@ -33,13 +33,13 @@ const theme = createMuiTheme({
       fontFamily: ["Cabin", "sans-serif"].join(","),
       fontWeight: 800,
       textTransform: "none",
-      fontSize: "1rem",
+      fontSize: "16px",
     },
     h1: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
       fontWeight: 800,
-      lineHeight: "64.88px",
       fontSize: "55px",
+      lineHeight: 1.18,
     },
     h2: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
@@ -51,24 +51,24 @@ const theme = createMuiTheme({
     },
     h4: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
-      fontSize: "2rem",
-      lineHeight: "42.47px",
+      fontSize: "32px",
+      lineHeight: 1.32,
     },
     h5: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
-      fontSize: "1.75rem",
-      lineHeight: "28.31px",
+      fontSize: "28px",
+      lineHeight: 1.01,
     },
     h6: {
       fontFamily: ["Abhaya Libre", "serif"].join(","),
       fontWeight: 800,
       fontSize: "18px",
-      lineHeight: "21px",
+      lineHeight: 1.167,
     },
     overline: {
       fontWeight: 400,
       fontSize: "14px",
-      lineHeight: "19px",
+      lineHeight: 1.36,
       color: "#FF1515",
     },
   },
@@ -94,4 +94,5 @@ const theme = createMuiTheme({
   },
 });
 
+theme = responsiveFontSizes(theme);
 export default theme;

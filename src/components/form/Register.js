@@ -1,7 +1,7 @@
 import { forwardRef, Fragment, useState, useContext } from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
-import { Button, InputBase, Link, NativeSelect, Typography, Paper } from "@material-ui/core";
+import { Button, FormHelperText, InputBase, Link, NativeSelect, Typography, Paper } from "@material-ui/core";
 import { setAuthToken, userRegister } from "../../api/main";
 import { UserContext } from "../../logics/contexts/authContext";
 
@@ -21,6 +21,10 @@ const roles = [
 
 const Register = forwardRef((props, ref) => {
   const { switchForm } = props;
+  const notValidPattern = {
+    pass: /[A-Za-z0-9]{1,7}/,
+    phone: /[0-9]{1,10}/,
+  };
   const { dispatch } = useContext(UserContext);
   const [values, setValues] = useState({
     email: "",
@@ -30,15 +34,21 @@ const Register = forwardRef((props, ref) => {
     phone: "",
     role: "",
   });
+  const history = useHistory();
   const isNotValid = (values) => {
     if ((values.email.length < 10)
       || (values.password.length < 8)
       || (values.fullName.length < 8)
-      || (values.phone.length < 11)) return true
+      || (values.phone.length < 11)
+      || (!values.role)) return true
     return false
   }
   let disabled = isNotValid(values);
-  const history = useHistory();
+
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
+    disabled = isNotValid(values);
+  };
   const registerUser = useMutation(formData => {
     return userRegister(formData);
   }, {
@@ -56,10 +66,6 @@ const Register = forwardRef((props, ref) => {
     event.preventDefault();
     registerUser.mutate(JSON.stringify(values, null, 2))
   };
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-    disabled = isNotValid(values)
-  };
   return (
     <Fragment>
       <Paper ref={ref} sx={{ p: 2, width: 416 }} elevation={2} tabIndex={-1}>
@@ -67,7 +73,7 @@ const Register = forwardRef((props, ref) => {
           id="register-modal-title"
           variant="h3"
           color="primary"
-          sx={{ mb: 2 }}
+          sx={{ mb: 1 }}
         >
           Register
         </Typography>
@@ -95,12 +101,11 @@ const Register = forwardRef((props, ref) => {
             value={values.password}
             onChange={handleChange}
             className={clsx("input", "input-margin")}
-            inputProps={{
-              "aria-label": "password",
-              pattern: "[A-Za-z0-9]{8,}"
-            }}
+            inputProps={{ "aria-label": "password" }}
             required
           />
+          {notValidPattern.pass.test(values.password) && (<span className="input-error">
+            Password characther length must be 8 or more</span>)}
           <InputBase
             id="inputFullName"
             placeholder="Full Name"
@@ -108,10 +113,7 @@ const Register = forwardRef((props, ref) => {
             value={values.fullName}
             onChange={handleChange}
             className={clsx("input", "input-margin")}
-            inputProps={{
-              "aria-label": "full name",
-              pattern: ".{8,40}"
-            }}
+            inputProps={{ "aria-label": "full name" }}
             required
           />
           <InputBase
@@ -121,10 +123,7 @@ const Register = forwardRef((props, ref) => {
             value={values.gender}
             onChange={handleChange}
             className={clsx("input", "input-margin")}
-            inputProps={{
-              "aria-label": "gender",
-              pattern: "[A-Za-z]{4,6}"
-            }}
+            inputProps={{ "aria-label": "gender" }}
             required
           />
           <InputBase
@@ -140,27 +139,27 @@ const Register = forwardRef((props, ref) => {
             }}
             required
           />
+          {notValidPattern.phone.test(values.phone) && (<span className="input-error">
+            Character must be 11 length or more with numeric value </span>)}
           <NativeSelect
             id="inputRole"
             placeholder="Role"
             value={values.role}
             name={"role"}
             onChange={handleChange}
-            inputProps={{ "aria-label": "phone" }}
+            inputProps={{ "aria-label": "role" }}
             className={clsx("input", "input-margin")}
             required
             input={
-              <InputBase
-                helpertext="Please select your role"
-              />
+              <InputBase />
             }>
             {roles.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
-
           </NativeSelect>
+          <FormHelperText id="inputRole" component="span">Please select your role.</FormHelperText>
           <Button
             className="submitButton"
             variant="contained"

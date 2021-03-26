@@ -1,4 +1,5 @@
-import { forwardRef, Fragment, useContext } from "react";
+import { forwardRef, Fragment, useContext, useState } from "react";
+import { useQuery } from "react-query";
 import {
   Table,
   TableBody,
@@ -10,11 +11,14 @@ import {
   Button,
   Typography,
 } from "@material-ui/core";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import { UserContext } from "../../logics/contexts/authContext";
+import Loading from '../micro/Loading';
+
+import { getPartnerTransactions } from "../../api/main";
+import icon_notfound from "../../assets/icons/icon_notfound.svg";
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
@@ -35,20 +39,41 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const useStyles = makeStyles((theme) => ({
-  table: {
-    minWidth: 800,
-  },
-  flex: {
-    display: "flex",
-    justifyContent: "space-evenly",
-  },
-}));
 const TableIncomeTransaction = forwardRef((props, ref) => {
-  const classes = useStyles();
-  const {
-    state: { user },
-  } = useContext(UserContext);
+  const { id } = props;
+
+  const { isLoading, data: transactionData, isError, error } = useQuery("transactions", async () => {
+    const response = await getPartnerTransactions(id);
+    return response.data;
+  }, { cacheTime: 3600 * 1000 })
+
+  if (isLoading) return <Loading />
+  if (isError)
+    return (
+      <Typography textAlign="center" variant="h5">
+        {error.response.data.message}
+      </Typography>
+    )
+
+  if (transactionData?.data.transactions.length <= 0)
+    return (
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+        <img src={icon_notfound}
+          alt="not found"
+          style={{
+            width: "100%",
+            maxWidth: "500px"
+          }} />
+        <Typography textAlign="center" component="p">
+          You don't have any transaction {":("}, let's promote your products to get customer interest
+        </Typography>
+      </div>
+    )
   return (
     <Fragment>
       <TableContainer component={Paper} elevation={0}>
@@ -64,41 +89,43 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {user.incomeTransaction.map((item, index) => (
-              <StyledTableRow key={item.id}>
+            {transactionData?.data.transactions.map((transaction, index) => (
+              <StyledTableRow key={transaction.id}>
                 <StyledTableCell align="left">{index}</StyledTableCell>
-                <StyledTableCell>{item.name}</StyledTableCell>
-                <StyledTableCell align="left">{item.address}</StyledTableCell>
+                <StyledTableCell>{transaction.userOrder.fullName}</StyledTableCell>
+                <StyledTableCell align="left">{transaction.userOrder.location || ""}</StyledTableCell>
                 <StyledTableCell align="left">
-                  {item.productOrder}
+                  <Typography variant="body2" noWrap color="inherit">
+                    {transaction.orders.map(order => order.title).join(', ')}
+                  </Typography>
                 </StyledTableCell>
-                {item.status === "Success" ? (
+                {transaction.status === "success" ? (
                   <>
                     <StyledTableCell align="left">
                       <Typography variant="body2" color="success.main">
-                        {item.status}
+                        {transaction.status}
                       </Typography>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <CheckCircleIcon sx={{ color: "success.main" }} />
                     </StyledTableCell>
                   </>
-                ) : item.status === "Cancel" ? (
+                ) : transaction.status === "cancel" ? (
                   <>
                     <StyledTableCell align="left">
                       <Typography variant="body2" color="error">
-                        {item.status}
+                        {transaction.status}
                       </Typography>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <CancelIcon color="error" />
                     </StyledTableCell>
                   </>
-                ) : item.status === "On The Way" ? (
+                ) : transaction.status === "on the way" ? (
                   <>
                     <StyledTableCell align="left">
                       <Typography variant="body2" color="inherit">
-                        {item.status}
+                        {transaction.status}
                       </Typography>
                     </StyledTableCell>
                     <StyledTableCell align="center">
@@ -109,11 +136,11 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
                   <>
                     <StyledTableCell align="left">
                       <Typography variant="body2" color="primary">
-                        {item.status}
+                        {transaction.status}
                       </Typography>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <div className={classes.flex}>
+                      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                         <Button
                           variant="contained"
                           color="error"

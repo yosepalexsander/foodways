@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import { useQuery } from "react-query";
 import {
   AppBar,
   Badge,
@@ -9,19 +8,21 @@ import {
   SvgIcon,
   Toolbar,
 } from "@material-ui/core";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { setAuthToken } from "../../api/main";
 import { UserContext } from "../../logics/contexts/authContext";
 import { CartContext } from "../../logics/contexts/cartContext";
-import Dropdown from "../Dropdown";
+
+import Dropdown from "../micro/Dropdown";
 import RegisterModal from "../modal/RegisterModal";
 import LoginModal from "../modal/LoginModal";
+
 import brand from "../../assets/icons/brand_logo.png";
 
 import "./styles.css"
 
 const Header = () => {
   const history = useHistory();
-  const location = useLocation();
   const { state: userState, dispatch } = useContext(UserContext);
   const { isAuthenticated, user } = userState;
   const { state: cartState } = useContext(CartContext);
@@ -29,14 +30,14 @@ const Header = () => {
   const [show2, setShow2] = useState(false); //login
 
   useEffect(() => {
-    if (!location.state?.authenticated) {
+    if (!isAuthenticated) {
       setShow2(true)
     }
     return () => {
       setShow1(false)
       setShow2(false)
     }
-  }, [location.state]);
+  }, [isAuthenticated]);
   // Logic to handle Register and Login Modal
   const handleClose1 = () => {
     setShow1(false);
@@ -57,6 +58,7 @@ const Header = () => {
   /** handle logout logic on click */
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
+    setAuthToken();
     history.push("/");
   };
 

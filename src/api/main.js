@@ -4,9 +4,15 @@ const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL
 });
 
-const CONFIG = {
+const JSONCONFIG = {
   headers: {
     "Content-Type": "application/json",
+  }
+};
+
+const MULTIPARTCONFIG = {
+  headers: {
+    "Content-Type": "multipart/form-data",
   }
 };
 
@@ -24,11 +30,11 @@ export const checkAuth = async function () {
   return response
 };
 export const userRegister = async function (body) {
-  const response = await instance.post("/register", body, CONFIG)
+  const response = await instance.post("/register", body, JSONCONFIG)
   return response
 };
 export const userLogin = async function (body) {
-  const response = await instance.post("/login", body, CONFIG)
+  const response = await instance.post("/login", body, JSONCONFIG)
   return response
 };
 
@@ -38,7 +44,11 @@ export const getUserDetail = async function (id) {
   return response
 };
 export const updateUser = async function (id, body) {
-  const response = await instance.put(`/user/${id}`, body)
+  if (typeof body === "object") {
+    const response = await instance.put(`/user/${id}`, body, MULTIPARTCONFIG)
+    return response
+  }
+  const response = await instance.put(`/user/${id}`, body, JSONCONFIG)
   return response
 };
 export const deleteUser = async function (id) {
@@ -47,6 +57,11 @@ export const deleteUser = async function (id) {
 };
 
 // Product endpoint
+
+export const getProducts = async function () {
+  const response = await instance.get(`/products`)
+  return response
+};
 export const getPartnerProducts = async function (partnerId) {
   const response = await instance.get(`/products/${partnerId}`)
   return response
@@ -60,7 +75,11 @@ export const createProduct = async function (body) {
   return response
 };
 export const updateProduct = async function (id, body) {
-  const response = await instance.put(`/product/${id}`, body)
+  if (typeof body === "object") {
+    const response = await instance.put(`/user/${id}`, body, MULTIPARTCONFIG)
+    return response
+  }
+  const response = await instance.put(`/user/${id}`, body, JSONCONFIG)
   return response
 };
 export const deleteProduct = async function (id) {
@@ -82,11 +101,11 @@ export const getTransactionDetail = async function (id) {
   return response
 };
 export const createTransaction = async function (body) {
-  const response = await instance.post("/transaction", body, CONFIG)
+  const response = await instance.post("/transaction", body, JSONCONFIG)
   return response
 };
 export const updateTransaction = async function (id, body) {
-  const response = await instance.put(`/transaction/${id}`, body, CONFIG)
+  const response = await instance.put(`/transaction/${id}`, body, JSONCONFIG)
   return response
 };
 export const deleteTransaction = async function (id) {

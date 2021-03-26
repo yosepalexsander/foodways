@@ -1,15 +1,16 @@
-import { useContext, useState, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { useMutation } from "react-query";
+// import { useLocation } from "react-router-dom";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 
 import { CartContext } from "../../logics/contexts/cartContext";
-import { OrderContext } from "../../logics/contexts/orderContext";
-
-import CartTotal from "../../components/micro/CartTotal";
+import CartList from "../../components/macro/CartList";
 import CartEmpty from "../../components/micro/CartEmpty";
+import CartTotal from "../../components/micro/CartTotal";
 import CartSearchLocation from "../../components/micro/CartSearchLocation";
-import CartList from "../../components/micro/CartList";
 import MapboxModal from "../../components/modal/MapboxModal";
+
+import { createTransaction } from "../../api/main";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -32,16 +33,24 @@ const useStyles = makeStyles(
 
 const Cart = () => {
   const classes = useStyles();
-  const locations = useLocation();
-  const userId = locations.state && locations.state.userId;
-  const { dispatch: orderDispatch } = useContext(OrderContext);
   const { state, dispatch: cartDispatch } = useContext(CartContext);
-  const { restaurantId, carts, location } = state;
-  const locationRef = useRef();
-  locationRef.current = location.name || "";
+  const { restaurantId, carts, location: userLocation } = state;
   const [show, setShow] = useState(false);
-  const [isOrdered, setOrder] = useState(false);
+  const [isOrdered, setIsOrdered] = useState(false);
+  const [location, setLocation] = useState(userLocation.name || "");
 
+  useEffect(() => {
+    setLocation(userLocation.name)
+  }, [userLocation.name]);
+
+  const makeTransaction = useMutation(createTransaction, {
+    onSuccess: () => {
+      setIsOrdered(true)
+    },
+    onError: (error) => {
+      alert("Oopss, error occured: ", error)
+    }
+  })
   const totalAmount = carts.reduce((amount, item) => {
     const totalAmountPerProduct = item.price * item.qty;
     return amount + totalAmountPerProduct;
@@ -51,41 +60,35 @@ const Cart = () => {
   }, 0);
 
   const submitTransaction = () => {
-    const options = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    orderDispatch({
-      type: "ORDER_PENDING",
-      payload: {
-        product: carts,
-        total: totalAmount,
-        date: new Date().toLocaleString("id-ID", options),
-        restaurantId,
-        userId,
-        location
-      },
-    });
+    const body = {
+      restaurant_id: restaurantId,
+      products: carts.map(product => ({
+        id: product.id,
+        qty: product.qty
+      }))
+    }
+
+    makeTransaction.mutate(JSON.stringify(body, null, 2))
     cartDispatch({
       type: "SUBMIT_CART",
       payload: { restaurantId: null, location: "" },
     });
-    setOrder(true)
   };
   return (
     <div>
       <div className={classes.container}>
         {carts.length <= 0 ? (
-          <CartEmpty isOrdered={isOrdered} />
+          <CartEmpty isOrdered={isOrdered} isProcess={makeTransaction?.isLoading} />
         ) : (
           <>
             <Typography variant="h4" color="inherit" gutterBottom>
               Blabla
             </Typography>
             <p className={classes.font}>Delivery Location</p>
-            <CartSearchLocation clickSearch={() => setShow(true)} ref={locationRef} />
+            <CartSearchLocation
+              clickSearch={() => setShow(true)}
+              location={location || ""}
+              handleChange={(e) => setLocation(e.target.value)} />
             <p className={classes.font}>Review Your Order</p>
             <Grid container justifyContent="space-between">
               <CartList cart={carts} dispatchAction={cartDispatch} />

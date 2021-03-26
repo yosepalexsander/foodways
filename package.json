@@ -44,7 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@material-ui/codemod": "^4.5.0"
-  }
+  "devDependencies": {}
 }

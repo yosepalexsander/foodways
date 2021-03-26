@@ -27,10 +27,19 @@
 
 #hero .description {
   max-width: 274px;
-  line-height: 19.12px !important;
+  line-height: 1.36;
   padding-left: 32px;
 }
 
 #popular .title {
   padding: 24px 0;
+}
+
+#user-transaction {
+  overflow: auto;
+  max-height: 393px;
+  flex-wrap: nowrap;
+}
+#user-transaction img {
+  width: 100%;
 }

@@ -18,7 +18,7 @@ const SectionNear = ({ near }) => {
           {near.map((item, index) => (
             <Grow key={item.id} in={isVisible}
               style={{ transformOrigin: '0 0 0' }}
-              {...(isVisible ? { timeout: 400 * index } : {})}>
+              {...(isVisible ? { timeout: 400 } : {})}>
               <Grid item>
                 <CardVertical item={item} />
               </Grid>

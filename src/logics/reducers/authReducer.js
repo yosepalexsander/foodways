@@ -8,10 +8,12 @@ const authReducer = (state, action) => {
         ...state,
         user: {
           id: payload.id,
-          fullName: payload.fullName,
-          role: payload.role
+          image: payload.image,
+          role: payload.role,
+          location: {},
         },
         isAuthenticated: true,
+        isLoading: false
       };
     case "AUTH_ERROR":
     case "LOGOUT":
@@ -20,13 +22,21 @@ const authReducer = (state, action) => {
         ...state,
         user: null,
         isAuthenticated: false,
+        isLoading: false
       };
     case "EDIT_PROFILE":
       return {
         ...state,
         user: payload,
       };
-
+    case "ADD_LOCATION":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          location: { ...payload.location },
+        }
+      }
     case "ADD_PRODUCT":
       return {
         ...state,

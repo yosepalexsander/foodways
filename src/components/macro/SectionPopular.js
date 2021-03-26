@@ -20,7 +20,7 @@ const SectionPopular = ({ popular }) => {
           {popular.map((item, index) => (
             <Grow key={item.id} in={isVisible}
               style={{ transformOrigin: '0 0 0' }}
-              {...(isVisible ? { timeout: 200 * index } : {})}>
+              {...(isVisible ? { timeout: 400 } : {})}>
               <Grid item>
                 <CardHorizontal item={item} />
               </Grid>

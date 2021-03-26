@@ -7,7 +7,7 @@ import priceFormatter from "../../helpers/priceFormatter";
 const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
   const history = useHistory();
   const pushToProductList = (id) => {
-    history.push(`/restaurant/${id}`);
+    history.push(`/restaurant/${id}`, { restaurant: item.restaurant });
   };
   const editProduct = (id) => {
     history.push(`/product/${id}/edit`)
@@ -16,9 +16,9 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
     <Fragment>
       <Card
         sx={{
-          width: 250,
+          width: "250px",
           cursor: isFromProduct ? "default" : "pointer",
-          transition: "transform .2s ease-in",
+          transition: "transform .4s ease-in-out",
           '&:hover': {
             transform: "scale(1.05)",
             boxShadow: "0 3px 8px 2px rgba(0,0,0, 0.2)"
@@ -36,8 +36,8 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
         <CardContent>
           {isFromProduct ?
             (<>
-              <Typography variant="h6" sx={{ height: 30 }} gutterBottom>
-                {item.name}
+              <Typography variant="h6" sx={{ height: "30px" }} gutterBottom>
+                {item.title}
               </Typography>
               {isPartner ? (
                 <Button

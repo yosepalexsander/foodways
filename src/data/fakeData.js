@@ -8,7 +8,7 @@ import fotocard from "../assets/images/fotocard.png";
 const data = {
   near: [
     {
-      id: 1,
+      id: 8,
       restaurant: "Geprek Bensu",
       image: "https://www.marketeers.com/wp-content/uploads/2018/09/w644.jpeg",
       location: "0.2 KM",
@@ -63,7 +63,7 @@ const data = {
   ],
   users: [
     {
-      id: 1,
+      id: 6,
       email: "geprekBensu@gmail.com",
       fullName: "Geprek Bensu",
       gender: "male",

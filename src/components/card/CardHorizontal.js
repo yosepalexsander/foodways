@@ -5,11 +5,11 @@ const styles = {
   root: {
     display: "flex",
     alignItems: "center",
-    width: 250,
-    height: 95,
+    width: "250px",
+    height: "95px",
     p: 1,
     cursor: "pointer",
-    transition: "transform .2s ease-in",
+    transition: "transform .4s ease-in-out",
     '&:hover': {
       transform: "scale(1.05)",
       boxShadow: "0 3px 8px 2px rgba(0,0,0, 0.2)"
@@ -19,17 +19,17 @@ const styles = {
     flex: "1 0 auto",
   },
   cover: {
-    width: 65,
+    width: "65px",
   },
   title: {
-    fontSize: "1.5rem",
-    lineHeight: "28.31px",
+    fontSize: "24px",
+    lineHeight: 1.17,
   },
 };
 const CardHorizontal = ({ item }) => {
   const history = useHistory();
   const handleClick = () => {
-    history.push(`/restaurant/${item.id}`);
+    history.push(`/restaurant/${item.id}`, { restaurant: item.restaurant });
   };
   return (
     <div>
