@@ -26,8 +26,8 @@ const AddProductForm = (props) => {
     });
   };
   const addProduct = useMutation(createProduct, {
-    onError: () => {
-      alert("oops, error occured");
+    onError: (error) => {
+      alert("oops, error occured: ", error);
     },
     onSuccess: () => {
       setAlertOpen(true);
@@ -73,6 +73,7 @@ const AddProductForm = (props) => {
                 name="title"
                 value={values.title}
                 onChange={handleChange}
+                color="secondary"
                 required
                 InputProps={{ "aria-label": "title", placeholder: "Title" }}
               />
@@ -84,6 +85,7 @@ const AddProductForm = (props) => {
                 name="image"
                 type="file"
                 onChange={handleChange}
+                color="secondary"
                 sx={{ display: "none" }}
                 inputProps={{ "aria-label": "image" }}
               />
@@ -105,6 +107,7 @@ const AddProductForm = (props) => {
               onChange={handleChange}
               value={values.price}
               type="text"
+              color="secondary"
               required
               InputProps={{ "aria-label": "price", placeholder: "Price" }}
             />

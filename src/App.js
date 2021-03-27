@@ -19,7 +19,10 @@ import Partner from "./pages/partner/Partner";
 import AddProduct from "./pages/partner/AddProduct";
 import EditProduct from "./pages/partner/EditProduct";
 
+import Loading from "./components/micro/Loading";
+
 import { checkAuth, setAuthToken } from "./api/main";
+import { StarRateOutlined } from "@material-ui/icons";
 
 const styles = {
   container: {
@@ -31,10 +34,10 @@ const styles = {
       px: 4,
     },
     "@media (min-width: 900px)": {
-      px: 4,
+      px: 8,
     },
     "@media (min-width: 1200px)": {
-      px: 8,
+      px: 15,
     },
   },
 };
@@ -45,16 +48,15 @@ if (localStorage.getItem("token")) {
 }
 
 function App() {
-  const { dispatch } = useContext(UserContext);
+  const { state, dispatch } = useContext(UserContext);
   useEffect(() => {
     checkUserAuthentication();
   }, []);
-
   const checkUserAuthentication = async () => {
     try {
       const { status, data } = await checkAuth();
 
-      if (status === 401) {
+      if (status !== 200) {
         return dispatch({
           type: "AUTH_ERROR",
         });
@@ -64,13 +66,11 @@ function App() {
       payload.token = localStorage.getItem("token");
 
       dispatch({
-        type: "LOGIN",
+        type: "LOGIN_SUCCESS",
         payload,
       });
     } catch (error) {
-      dispatch({
-        type: "AUTH_ERROR",
-      });
+      dispatch({ type: "AUTH_ERROR" });
     }
   };
   const client = new QueryClient({
@@ -80,6 +80,22 @@ function App() {
       }
     }
   });
+
+  if (state.isLoading) return (
+    <div style={{
+      position: "absolute",
+      display: "flex",
+      alignItems: "center",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      zIndex: 1100,
+      background: "#e5e5e5"
+    }}>
+      <Loading />
+    </div>)
+
   return (
     <div>
       <CssBaseline />
@@ -88,7 +104,7 @@ function App() {
           <OrderContextProvider>
             <Router>
               <Header />
-              <Container fixed sx={styles.container}>
+              <Container maxWidth="lg" sx={styles.container}>
                 <Switch>
                   <Route exact path="/" component={Landing} />
                   <PrivateRoute exact path="/user/:id" component={User} />

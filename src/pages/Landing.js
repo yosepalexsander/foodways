@@ -1,5 +1,5 @@
-import { Grid } from "@material-ui/core";
 import { useQuery } from "react-query";
+import { Grid } from "@material-ui/core";
 import SectionHero from "../components/macro/SectionHero";
 import SectionPopular from "../components/macro/SectionPopular";
 import SectionNear from "../components/macro/SectionNear";
@@ -16,6 +16,7 @@ const styles = {
 const Landing = () => {
   const { near, popular } = fakeData;
   // const {isLoading, data: restaurantData, isError, error} = useQuery("getRestaurants", )
+
   return (
     <>
       <SectionHero />

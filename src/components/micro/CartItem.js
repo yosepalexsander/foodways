@@ -26,7 +26,7 @@ const CartItem = (props) => {
               {item.name}
             </Typography>
           </Grid>
-          <Grid item container spacing={2} alignItems="center">
+          <Grid item container spacing={1} alignItems="center">
             <Grid item>
               <IconButton onClick={() => decrementQty(item)} size="small">
                 <RemoveRoundedIcon />
@@ -58,7 +58,7 @@ const CartItem = (props) => {
         </Grid>
         <Grid item>
           <IconButton onClick={() => removeItem(item)} size="small">
-            <DeleteIcon />
+            <DeleteIcon viewBox="0 0 24 24" />
           </IconButton>
         </Grid>
       </Grid>

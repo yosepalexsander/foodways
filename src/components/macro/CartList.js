@@ -23,7 +23,7 @@ const CartList = (props) => {
   };
   return (
     <Fragment>
-      <Grid item container xs={7} direction="column">
+      <Grid id="cart-list" item container xs={7} direction="column" flexWrap="nowrap">
         <hr className="divider" />
         {cart.map((product) => (
           <div key={product.id}>

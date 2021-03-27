@@ -24,7 +24,7 @@ import "./styles.css"
 const Header = () => {
   const history = useHistory();
   const location = useLocation();
-  const locationState = location.state && location.state?.isAuthenticated;
+  const locationState = location.state && location.state.isAuthenticated;
   const { state: userState, dispatch } = useContext(UserContext);
   const { isAuthenticated, user } = userState;
   const { state: cartState } = useContext(CartContext);
@@ -63,7 +63,6 @@ const Header = () => {
     setAuthToken();
     history.push("/");
   };
-
   const goToProfile = (id) => {
     if (user.role === 'partner') return history.push(`/partner/${id}`)
     history.push(`/user/${id}`);

@@ -1,8 +1,8 @@
 const authReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
-    case "REGISTER":
-    case "LOGIN":
+    case "REGISTER_SUCCESS":
+    case "LOGIN_SUCCESS":
       localStorage.setItem("token", payload.token);
       return {
         ...state,
@@ -22,7 +22,7 @@ const authReducer = (state, action) => {
         ...state,
         user: null,
         isAuthenticated: false,
-        isLoading: true
+        isLoading: false
       };
     case "EDIT_PROFILE":
       return {
@@ -37,24 +37,8 @@ const authReducer = (state, action) => {
           location: { ...payload.location },
         }
       }
-    case "ADD_PRODUCT":
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          products: [
-            ...state.user.products,
-            {
-              id: Math.random() * 50,
-              price: parseInt(payload.price),
-              ...payload,
-            },
-          ],
-        },
-      };
-
     default:
-      throw new Error("dispacth type doesn't provided");
+      throw new Error("dispacth type doesn't provided: ", type);
   }
 };
 

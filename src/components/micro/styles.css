@@ -10,20 +10,26 @@
   z-index: 1100;
   background: #e5e5e5;
 } */
-.loading {
+.loading-wrapper {
+  width: 400px;
+  height: 400px;
   position: relative;
   margin: auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 300px;
+}
+
+.loading {
+  position: relative;
+  margin: 0 auto 50px;
   animation-name: maju-mundur;
   animation-duration: 5s;
   animation-iteration-count: infinite;
 }
 .loading-icon {
-  transform: scale(5);
+  transform: scale(4);
 }
 @keyframes maju-mundur {
   0% {
@@ -35,7 +41,7 @@
     color: #5a564b;
   }
   100% {
-    left: -200px;
+    left: -100px;
     transform: rotateY(180deg);
     color: #433434;
   }
@@ -68,7 +74,8 @@
 
 #cart-item .qty {
   padding: 0 8px;
-  background: rgba(246, 230, 218, 0.1);
+  background: rgba(248, 169, 215, 0.671);
+  width: 35px;
   border-radius: 5px;
   text-align: center;
 }
@@ -79,9 +86,23 @@
   object-fit: cover;
 }
 
+#cart-total {
+  height: 240px;
+}
+#cart-total .orderButton {
+  margin-top: 24px;
+  width: 260px;
+  height: 40px;
+}
+
 .divider {
   width: 100%;
   border-top: 2px solid #433434;
   border-radius: 3px;
 }
+
+.marginBottom {
+  margin-bottom: 24px;
+}
+
 /*  */

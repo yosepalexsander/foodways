@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import icon_notfound from "../../assets/icons/icon_notfound.svg";
 
 const NotFound = ({ children }) => {
@@ -19,4 +20,8 @@ const NotFound = ({ children }) => {
   )
 }
 
-export default NotFound
+NotFound.propTypes = {
+  children: PropTypes.node
+}
+
+export default NotFound;

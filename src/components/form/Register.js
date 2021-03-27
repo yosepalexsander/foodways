@@ -1,4 +1,5 @@
-import { forwardRef, Fragment, useContext, useState } from "react";
+import PropTypes from "prop-types";
+import { forwardRef, Fragment, useContext } from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import { Button, Link, Typography, Paper } from "@material-ui/core";
@@ -37,11 +38,9 @@ const Register = forwardRef((props, ref) => {
       registerUser.mutate(JSON.stringify(value, null, 2))
     }
   });
-  const registerUser = useMutation(formData => {
-    return userRegister(formData);
-  }, {
+  const registerUser = useMutation(formData => userRegister(formData), {
     onSuccess: ({ data }) => {
-      dispatch({ type: "REGISTER", payload: data.data.user });
+      dispatch({ type: "REGISTER_SUCCESS", payload: data.data.user });
       if (data.data.user.role === "partner") return history.push("/partner");
       history.push("/");
       setAuthToken(data.data.user.token);
@@ -58,7 +57,7 @@ const Register = forwardRef((props, ref) => {
           id="register-modal-title"
           variant="h3"
           color="primary"
-          sx={{ mb: 1 }}
+          sx={{ mb: 2 }}
         >
           Register
         </Typography>
@@ -73,28 +72,24 @@ const Register = forwardRef((props, ref) => {
               name="email"
               type="email"
               inputProps={{ "aria-label": "email", placeholder: "Email" }}
-              required
             />
             <FormikInput
               id="inputPassword"
               name="password"
               type="password"
               inputProps={{ "aria-label": "password", placeholder: "Password" }}
-              required
             />
             <FormikInput
               className={formik.touched.email}
               id="inputFullName"
               name="fullName"
               inputProps={{ "aria-label": "full name", placeholder: "Full Name" }}
-              required
             />
             <FormikInput
               className={formik.touched.email}
               id="inputGender"
               name="gender"
               inputProps={{ "aria-label": "gender", placeholder: "Gender" }}
-              required
             />
             <FormikInput
               className={formik.touched.email}
@@ -105,7 +100,6 @@ const Register = forwardRef((props, ref) => {
                 inputMode: "numeric",
                 placeholder: "Phone"
               }}
-              required
             />
 
             <FormikInput
@@ -117,7 +111,6 @@ const Register = forwardRef((props, ref) => {
               SelectProps={{
                 native: true,
               }}
-              required
             >
               {roles.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -152,4 +145,7 @@ const Register = forwardRef((props, ref) => {
   );
 });
 
+Register.propTypes = {
+  switchForm: PropTypes.func
+};
 export default Register;

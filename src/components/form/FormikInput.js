@@ -9,13 +9,14 @@ const FormikInput = ({ inputProps, ...props }) => {
   const handleFocus = () => setDidFocus(true);
   const showFeedback = (!!didFocus && field.value.trim().length > 2) || meta.touched;
 
-
   return (
     <Fragment>
       <CustomTextField
         id={props.id}
+        type={props.type}
         className={showFeedback ? (meta.error ? "invalid" : "valid") : ''}
         {...field}
+        color="secondary"
         onFocus={handleFocus}
         helperText={meta.error}
         error={Boolean(meta.error)}

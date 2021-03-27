@@ -7,7 +7,6 @@ import {
   Button,
   Grid,
   Input,
-  CustomTextField,
   Typography,
 } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
@@ -100,6 +99,7 @@ const EditProfile = () => {
                   name="fullName"
                   value={values.fullName}
                   onChange={handleChange}
+                  color="secondary"
                   InputProps={{
                     "aria-label": "full name",
                     placeholder: user.role === "partner" ? "Nama Partner" : "Full Name"
@@ -114,6 +114,7 @@ const EditProfile = () => {
                   onChange={handleChange}
                   type="file"
                   sx={{ display: "none" }}
+                  color="secondary"
                   inputProps={{ "aria-label": "image" }}
                 />
                 <label htmlFor="input-file">
@@ -135,6 +136,7 @@ const EditProfile = () => {
                 value={values.email}
                 disabled
                 onChange={handleChange}
+                color="secondary"
                 InputProps={{ "aria-label": "email", placeholder: "Email" }}
               />
             </Grid>
@@ -145,6 +147,7 @@ const EditProfile = () => {
                 value={values.phone}
                 onChange={handleChange}
                 inputMode="numeric"
+                color="secondary"
                 InputProps={{ "aria-label": "phone number", placeholder: "Phone" }}
               />
             </Grid>
@@ -155,6 +158,7 @@ const EditProfile = () => {
                   name="location"
                   value={values.location}
                   onChange={handleChange}
+                  color="secondary"
                   InputProps={{ "aria-label": "location", placeholder: "Location" }}
                 />
               </Grid>

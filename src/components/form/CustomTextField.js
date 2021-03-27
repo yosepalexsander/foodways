@@ -2,6 +2,7 @@ import { TextField } from "@material-ui/core";
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 
 const CustomTextField = styled(TextField)({
+  width: "100%",
   ' & .MuiFormHelperText-root': {
     marginLeft: 5
   },

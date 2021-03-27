@@ -1,22 +1,20 @@
+import PropTypes from "prop-types";
 import { forwardRef, Fragment, useState, useContext } from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../../logics/contexts/authContext";
 import { setAuthToken, userLogin } from "../../api/main";
-import CustomTextField from "./CustomInput";
+import CustomTextField from "./CustomTextField";
 
 import {
   Button,
   IconButton,
-  InputBase,
   InputAdornment,
   Link,
   Paper,
   Typography,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import clsx from "clsx"
-import "./styles.css";
 
 const Login = forwardRef((props, ref) => {
   const { switchForm } = props;
@@ -30,7 +28,7 @@ const Login = forwardRef((props, ref) => {
 
   const loginUser = useMutation(userLogin, {
     onSuccess: ({ data }) => {
-      dispatch({ type: "LOGIN", payload: data.data.user });
+      dispatch({ type: "LOGIN_SUCCESS", payload: data.data.user });
       setAuthToken(data.data.user.token);
       data.data.user.role === "partner" ?
         history.push("/partner") : history.push("/")
@@ -76,6 +74,7 @@ const Login = forwardRef((props, ref) => {
             type="email"
             value={values.email}
             onChange={handleChange}
+            color="secondary"
             InputProps={{
               "aria-label": "email",
               placeholder: "Email"
@@ -88,6 +87,7 @@ const Login = forwardRef((props, ref) => {
             type={showPassword ? "text" : "password"}
             value={values.password}
             onChange={handleChange}
+            color="secondary"
             InputProps={{
               "aria-label": "password",
               placeholder: "Password",
@@ -131,4 +131,7 @@ const Login = forwardRef((props, ref) => {
   );
 });
 
+Login.propTypes = {
+  switchForm: PropTypes.func
+};
 export default Login;

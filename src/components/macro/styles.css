@@ -43,3 +43,8 @@
 #user-transaction img {
   width: 100%;
 }
+
+#cart-list {
+  overflow: auto;
+  height: 235px;
+}

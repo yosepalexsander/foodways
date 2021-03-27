@@ -44,18 +44,21 @@ const StyledTableCell = withStyles((theme) => ({
 const TableIncomeTransaction = forwardRef((props, ref) => {
   const { id } = props;
   const [alertOpen, setAlertOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
 
   const { isLoading, data: transactionData, isError, error, refetch } = useQuery(["transactions", id], async () => {
     const response = await getPartnerTransactions(id);
     return response.data;
   }, {
-    onSuccess: (data) => {
-      let userLocation = data.transactions.map(async transaction => {
+    onSuccess: async (data) => {
+      let locationName = await data.data.transactions.map(async transaction => {
         if (transaction.userOrder.location) {
-          const data = await getLocation(transaction.userOrder.location.split(','))
+          const [lng, lat] = transaction.userOrder.location.split(',')
+          const data = await getLocation(lng, lat)
           return data
         }
       })
+      setUserLocation(locationName)
     }
   });
 

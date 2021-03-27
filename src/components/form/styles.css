@@ -1,18 +1,3 @@
-.input {
-  background-color: rgba(210, 210, 210, 0.25);
-  padding: 8px;
-  border: 2px solid rgb(118, 108, 108);
-  border-radius: 5px;
-  width: 100%;
-  height: 47px;
-}
-.input-margin {
-  margin-top: 16px;
-}
-.input-error {
-  color: #ee1010;
-  font-size: 12px;
-}
 ._form {
   display: flex;
   flex-direction: column;

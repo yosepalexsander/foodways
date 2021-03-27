@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { forwardRef, Fragment, useState } from "react";
 import {
   Avatar,
@@ -90,4 +91,13 @@ const Dropdown = forwardRef((props, ref) => {
   );
 });
 
+
+Dropdown.propTypes = {
+  photoProfile: PropTypes.string,
+  isPartner: PropTypes.bool,
+  logoutHandler: PropTypes.func.isRequired,
+  userHandler: PropTypes.func.isRequired,
+  addProductHandler: PropTypes.func.isRequired,
+  dashboardHandler: PropTypes.func.isRequired
+}
 export default Dropdown;
