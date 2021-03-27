@@ -17,6 +17,9 @@
   display: flex;
   flex-direction: column;
 }
+._form .MuiTextField-root {
+  margin-bottom: 14px;
+}
 .submitButton {
   margin: 16px 0 !important;
   width: 100%;
@@ -29,4 +32,14 @@
 .orderButton {
   width: 260;
   height: 40;
+}
+
+.valid .MuiInputBase-root input + fieldset,
+.valid .MuiInputBase-root input:focus + fieldset {
+  border-color: green;
+}
+
+.invalid .MuiInputBase-root input + fieldset,
+.invalid .MuiInputBase-root input:focus + fieldset {
+  border-color: red;
 }

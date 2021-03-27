@@ -22,7 +22,7 @@ const authReducer = (state, action) => {
         ...state,
         user: null,
         isAuthenticated: false,
-        isLoading: false
+        isLoading: true
       };
     case "EDIT_PROFILE":
       return {

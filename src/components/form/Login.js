@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../../logics/contexts/authContext";
 import { setAuthToken, userLogin } from "../../api/main";
+import CustomTextField from "./CustomInput";
 
 import {
   Button,
@@ -69,39 +70,41 @@ const Login = forwardRef((props, ref) => {
           className="_form"
           onSubmit={handleSubmit}
         >
-          <InputBase
-            id="inputUsername"
-            placeholder="Username"
+          <CustomTextField
+            id="inputEmail"
             name="email"
             type="email"
             value={values.email}
             onChange={handleChange}
-            className={clsx("input", "input-margin")}
-            inputProps={{ "aria-label": "email" }}
+            InputProps={{
+              "aria-label": "email",
+              placeholder: "Email"
+            }}
             required
           />
-          <InputBase
+          <CustomTextField
             id="inputPassword"
-            placeholder="Password"
             name="password"
             type={showPassword ? "text" : "password"}
             value={values.password}
             onChange={handleChange}
-            className={clsx("input", "input-margin")}
-            inputProps={{ "aria-label": "password" }}
+            InputProps={{
+              "aria-label": "password",
+              placeholder: "Password",
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
             required
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
           />
           <Button
             className="submitButton"

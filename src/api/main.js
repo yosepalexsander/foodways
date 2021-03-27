@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://waysfood.herokuapp.com/api/v1"
+  baseURL: process.env.REACT_APP_API_URL
 });
 
 const JSONCONFIG = {

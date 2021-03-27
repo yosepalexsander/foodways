@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useParams, useLocation } from "react-router-dom";
-
-import icon_notfound from "../assets/icons/icon_notfound.svg";
 import {
   Grid,
   Typography,
@@ -12,6 +10,7 @@ import { CartContext } from "../logics/contexts/cartContext";
 import CardVertical from "../components/card/CardVertical";
 import Loading from "../components/micro/Loading";
 import { getPartnerProducts } from "../api/main";
+import NotFound from "../components/micro/NotFound";
 
 const ProductList = () => {
   const { dispatch } = useContext(CartContext);
@@ -43,19 +42,11 @@ const ProductList = () => {
             {restaurant}, Menus
           </Typography>
           {productData?.products.length <= 0 ? (
-            <div style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}>
-              <img src={icon_notfound}
-                alt="not found"
-                style={{
-                  width: "100%",
-                  maxWidth: "500px"
-                }} />
-            </div>
+            <NotFound>
+              <Typography textAlign="center" component="p">
+                This Restaurant Hasn't Add Any Product
+              </Typography>
+            </NotFound>
           ) : (
             <Grid container spacing={4} justifyContent="space-evenly" sx={{ pb: 3 }}>
               {productData?.products.map((item, index) => (

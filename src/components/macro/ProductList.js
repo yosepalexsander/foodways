@@ -1,11 +1,10 @@
 import { useQuery } from "react-query";
-import { Grid, Grow } from "@material-ui/core";
-
-import icon_notfound from "../../assets/icons/icon_notfound.svg";
+import { Grid, Grow, Typography } from "@material-ui/core";
 import CardVertical from "../card/CardVertical";
 import Loading from "../micro/Loading";
 
 import { getPartnerProducts } from "../../api/main";
+import NotFound from "../micro/NotFound";
 
 const ProductList = ({ id }) => {
   const { isLoading, data: productData, error } = useQuery(["products", id], async () => {
@@ -20,7 +19,11 @@ const ProductList = ({ id }) => {
       <section id="product-list">
         {productData?.products.length <= 0 ?
           (
-            <img src={icon_notfound} alt="not found" style={{ "width": "100%", textAlign: "center" }} />
+            <NotFound>
+              <Typography textAlign="center" component="p">
+                You don't have any product, let's add one!
+              </Typography>
+            </NotFound>
           ) : (
             <Grid container spacing={3} justifyContent="space-evenly" sx={{ pb: 3 }}>
               {productData?.products.map((item, index) => (

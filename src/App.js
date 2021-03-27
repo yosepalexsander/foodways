@@ -31,20 +31,21 @@ const styles = {
       px: 4,
     },
     "@media (min-width: 900px)": {
-      px: 10,
+      px: 4,
     },
-
+    "@media (min-width: 1200px)": {
+      px: 8,
+    },
   },
 };
 
 //token initialization on axios instance headers every app refresh
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
+if (localStorage.getItem("token")) {
+  setAuthToken(localStorage.getItem("token"));
 }
 
 function App() {
   const { dispatch } = useContext(UserContext);
-
   useEffect(() => {
     checkUserAuthentication();
   }, []);
@@ -60,7 +61,7 @@ function App() {
       }
 
       let payload = data.data.user;
-      payload.token = localStorage.token;
+      payload.token = localStorage.getItem("token");
 
       dispatch({
         type: "LOGIN",

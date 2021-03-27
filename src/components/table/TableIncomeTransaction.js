@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, useContext, useState } from "react";
+import { forwardRef, Fragment, useState } from "react";
 import { useQuery } from "react-query";
 import {
   Table,
@@ -16,17 +16,19 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import Loading from '../micro/Loading';
+import NotFound from "../micro/NotFound";
+import ToastAlert from "../micro/ToastAlert";
 
-import { getPartnerTransactions } from "../../api/main";
-import icon_notfound from "../../assets/icons/icon_notfound.svg";
+import { getPartnerTransactions, updateTransaction } from "../../api/main";
+import getLocation from "../../api/mapApi";
 
-const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles({
   root: {
     "& td, & th": {
       border: "2px solid rgb(130,130,130)",
     },
   },
-}))(TableRow);
+})(TableRow);
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -41,11 +43,31 @@ const StyledTableCell = withStyles((theme) => ({
 
 const TableIncomeTransaction = forwardRef((props, ref) => {
   const { id } = props;
+  const [alertOpen, setAlertOpen] = useState(false);
 
-  const { isLoading, data: transactionData, isError, error } = useQuery("transactions", async () => {
+  const { isLoading, data: transactionData, isError, error, refetch } = useQuery(["transactions", id], async () => {
     const response = await getPartnerTransactions(id);
     return response.data;
-  }, { cacheTime: 3600 * 1000 })
+  }, {
+    onSuccess: (data) => {
+      let userLocation = data.transactions.map(async transaction => {
+        if (transaction.userOrder.location) {
+          const data = await getLocation(transaction.userOrder.location.split(','))
+          return data
+        }
+      })
+    }
+  });
+
+  const onClickUpdate = async (id, transactionStatus) => {
+    const { status, data } = await updateTransaction(id, JSON.stringify({ status: transactionStatus }));
+    if (status !== 200) {
+      alert("Oops error occured", data.message);
+      return;
+    };
+    setAlertOpen(true);
+    refetch();
+  };
 
   if (isLoading) return <Loading />
   if (isError)
@@ -57,22 +79,11 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
 
   if (transactionData?.data.transactions.length <= 0)
     return (
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}>
-        <img src={icon_notfound}
-          alt="not found"
-          style={{
-            width: "100%",
-            maxWidth: "500px"
-          }} />
+      <NotFound>
         <Typography textAlign="center" component="p">
-          You don't have any transaction {":("}, let's promote your products to get customer interest
-        </Typography>
-      </div>
+          You don't have any transaction, let's promote your products to get customer interest
+      </Typography>
+      </NotFound>
     )
   return (
     <Fragment>
@@ -145,18 +156,15 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
                           variant="contained"
                           color="error"
                           sx={{ width: 80, height: 20 }}
+                          onClick={() => onClickUpdate(transaction.id, "cancel")}
                         >
                           Cancel
                         </Button>
                         <Button
                           variant="contained"
                           color="success"
-                          sx={{
-                            width: 80,
-                            height: 20,
-                            fontSize: 14,
-                            fontWeight: 400,
-                          }}
+                          onClick={() => onClickUpdate(transaction.id, "success")}
+                          sx={{ width: 80, height: 20, fontSize: 14, fontWeight: 400 }}
                         >
                           Approve
                         </Button>
@@ -169,6 +177,9 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <ToastAlert alertOpen={alertOpen} alertControl={() => setAlertOpen(false)}>
+        Transaction has succesfully updated!
+      </ToastAlert>
     </Fragment>
   );
 });

@@ -8,7 +8,7 @@ import {
   SvgIcon,
   Toolbar,
 } from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { setAuthToken } from "../../api/main";
 import { UserContext } from "../../logics/contexts/authContext";
 import { CartContext } from "../../logics/contexts/cartContext";
@@ -23,6 +23,8 @@ import "./styles.css"
 
 const Header = () => {
   const history = useHistory();
+  const location = useLocation();
+  const locationState = location.state && location.state?.isAuthenticated;
   const { state: userState, dispatch } = useContext(UserContext);
   const { isAuthenticated, user } = userState;
   const { state: cartState } = useContext(CartContext);
@@ -30,14 +32,14 @@ const Header = () => {
   const [show2, setShow2] = useState(false); //login
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!locationState) {
       setShow2(true)
     }
     return () => {
       setShow1(false)
       setShow2(false)
     }
-  }, [isAuthenticated]);
+  }, [locationState]);
   // Logic to handle Register and Login Modal
   const handleClose1 = () => {
     setShow1(false);

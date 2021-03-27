@@ -1,12 +1,13 @@
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import { useParams } from "react-router-dom";
-import { Button, Input, InputBase, Grid } from "@material-ui/core";
+import { Button, Input, Grid } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { createProduct, updateProduct } from "../../api/main";
 
-import "./styles.css";
 import ToastAlert from "../micro/ToastAlert";
+import CustomTextField from "./CustomTextField";
+import "./styles.css";
 
 const AddProductForm = (props) => {
   const { isEdit } = props;
@@ -68,14 +69,12 @@ const AddProductForm = (props) => {
         <Grid container direction="column" spacing={2}>
           <Grid container item spacing={2}>
             <Grid item flexGrow={1}>
-              <InputBase
-                placeholder="Title"
+              <CustomTextField
                 name="title"
                 value={values.title}
                 onChange={handleChange}
-                className="input"
                 required
-                inputProps={{ "aria-label": "title" }}
+                InputProps={{ "aria-label": "title", placeholder: "Title" }}
               />
             </Grid>
             <Grid item xs={2}>
@@ -86,7 +85,6 @@ const AddProductForm = (props) => {
                 type="file"
                 onChange={handleChange}
                 sx={{ display: "none" }}
-                required
                 inputProps={{ "aria-label": "image" }}
               />
               <label htmlFor="icon-button-file">
@@ -102,14 +100,13 @@ const AddProductForm = (props) => {
             </Grid>
           </Grid>
           <Grid item>
-            <InputBase
-              placeholder="Price"
+            <CustomTextField
               name="price"
               onChange={handleChange}
               value={values.price}
               type="text"
-              className="input"
-              inputProps={{ "aria-label": "price" }}
+              required
+              InputProps={{ "aria-label": "price", placeholder: "Price" }}
             />
           </Grid>
           <Grid container justifyContent="flex-end" sx={{ mt: 8 }}>

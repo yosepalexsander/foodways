@@ -7,7 +7,7 @@ import {
   Button,
   Grid,
   Input,
-  InputBase,
+  CustomTextField,
   Typography,
 } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
@@ -18,6 +18,7 @@ import { updateUser, getUserDetail } from "../../api/main";
 import ToastAlert from "../micro/ToastAlert";
 
 import "./styles.css"
+import CustomTextField from "./CustomTextField";
 
 const EditProfile = () => {
   const location = useLocation();
@@ -94,28 +95,28 @@ const EditProfile = () => {
           <Grid container item spacing={2} direction="column">
             <Grid container item spacing={2}>
               <Grid item xs={8} sm={9} lg={10}>
-                <InputBase
-                  placeholder={
-                    user.role === "partner" ? "Nama Partner" : "Full Name"
-                  }
+                <CustomTextField
+                  id="fullName"
                   name="fullName"
                   value={values.fullName}
                   onChange={handleChange}
-                  className="input"
-                  inputProps={{ "aria-label": "full name" }}
+                  InputProps={{
+                    "aria-label": "full name",
+                    placeholder: user.role === "partner" ? "Nama Partner" : "Full Name"
+                  }}
                 />
               </Grid>
               <Grid item xs={4} sm={3} lg={2}>
                 <Input
                   accept="image/*"
-                  id="button-file"
+                  id="input-file"
                   name="image"
                   onChange={handleChange}
                   type="file"
                   sx={{ display: "none" }}
                   inputProps={{ "aria-label": "image" }}
                 />
-                <label htmlFor="button-file">
+                <label htmlFor="input-file">
                   <Button
                     className="fileButton"
                     variant="fileInput"
@@ -128,36 +129,33 @@ const EditProfile = () => {
               </Grid>
             </Grid>
             <Grid item>
-              <InputBase
-                disabled
-                placeholder="Email"
+              <CustomTextField
+                id="email"
                 name="email"
-                onChange={handleChange}
                 value={values.email}
-                className="input"
-                inputProps={{ "aria-label": "email" }}
+                disabled
+                onChange={handleChange}
+                InputProps={{ "aria-label": "email", placeholder: "Email" }}
               />
             </Grid>
             <Grid item>
-              <InputBase
-                placeholder="Phone"
+              <CustomTextField
+                id="phone"
                 name="phone"
                 value={values.phone}
                 onChange={handleChange}
                 inputMode="numeric"
-                className="input"
-                inputProps={{ "aria-label": "phone number" }}
+                InputProps={{ "aria-label": "phone number", placeholder: "Phone" }}
               />
             </Grid>
             <Grid container item spacing={2} justifyContent="space-between">
               <Grid item xs={8} sm={9}>
-                <InputBase
-                  placeholder="location"
+                <CustomTextField
+                  id="location"
                   name="location"
                   value={values.location}
                   onChange={handleChange}
-                  className="input"
-                  inputProps={{ "aria-label": "location" }}
+                  InputProps={{ "aria-label": "location", placeholder: "Location" }}
                 />
               </Grid>
               <Grid item xs={4} sm={3} lg={2}>

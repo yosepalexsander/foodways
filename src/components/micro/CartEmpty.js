@@ -15,7 +15,7 @@ const CartEmpty = (props) => {
             <img src={order_success} alt="order success" className="image" />
           </Grid>
           <Grid item>
-            <Typography variant="body1" textAlign="center" sx={{ fontFamily: "Cabin, sans-serif" }}>
+            <Typography variant="h6" gutterBottom textAlign="center" sx={{ fontFamily: "Cabin, sans-serif" }}>
               You order is success, check your transaction history in your profile {":)"}
             </Typography>
           </Grid>
