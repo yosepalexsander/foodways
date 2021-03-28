@@ -22,14 +22,16 @@ const styles = {
     width: "65px",
   },
   title: {
-    fontSize: "24px",
+    fontSize: "24px !important",
     lineHeight: 1.17,
   },
 };
 const CardHorizontal = ({ item }) => {
   const history = useHistory();
+  const imgUrlArr = item.image.split('/')
+  const userPhoto = imgUrlArr[imgUrlArr.length - 1] !== "null" ? item.image : avatar_default;
   const handleClick = () => {
-    history.push(`/restaurant/${item.id}`, { restaurant: item.restaurant });
+    history.push(`/restaurant/${item.id}`, { restaurant: item.fullName });
   };
   return (
     <div>
@@ -37,12 +39,12 @@ const CardHorizontal = ({ item }) => {
         <CardMedia
           sx={styles.cover}
           component="img"
-          src={item.image}
-          title={item.restaurant}
+          src={userPhoto}
+          title={item.fullName}
         />
         <CardContent>
-          <Typography variant="h5" sx={styles.title}>
-            {item.restaurant}
+          <Typography variant="h6" sx={styles.title}>
+            {item.fullName}
           </Typography>
         </CardContent>
       </Card>

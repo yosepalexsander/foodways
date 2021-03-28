@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { Button, Input, Grid } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
@@ -12,6 +12,7 @@ import "./styles.css";
 const AddProductForm = (props) => {
   const { isEdit } = props;
   const [alertOpen, setAlertOpen] = useState(false);
+  const queryClient = useQueryClient();
   const { id } = useParams();
   const [values, setValues] = useState({
     title: "",
@@ -31,6 +32,7 @@ const AddProductForm = (props) => {
     },
     onSuccess: () => {
       setAlertOpen(true);
+      queryClient.invalidateQueries(["products", id]);
     }
   });
 
@@ -40,6 +42,7 @@ const AddProductForm = (props) => {
     },
     onSuccess: () => {
       setAlertOpen(true);
+      queryClient.invalidateQueries(["products", id]);
     }
   });
 

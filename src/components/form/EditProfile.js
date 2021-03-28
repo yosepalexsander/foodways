@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useLocation } from "react-router-dom";
 
 import { UserContext } from "../../logics/contexts/authContext";
@@ -15,11 +15,12 @@ import CustomMapIcon from "../icons/CustomMapIcon";
 import MapboxModal from "../modal/MapboxModal";
 import { updateUser, getUserDetail } from "../../api/main";
 import ToastAlert from "../micro/ToastAlert";
-
-import "./styles.css"
 import CustomTextField from "./CustomTextField";
 
+import "./styles.css"
+
 const EditProfile = () => {
+  const queryClient = useQueryClient();
   const location = useLocation();
   const user = location.state && location.state.user;
   const { dispatch, state: { user: userContext } } = useContext(UserContext);
@@ -57,6 +58,7 @@ const EditProfile = () => {
         }
       });
       setAlertOpen(true);
+      queryClient.invalidateQueries(["userDetail", user.id]);
     },
     onError: (error) => {
       alert("ERROR: ", error)
@@ -67,7 +69,7 @@ const EditProfile = () => {
     if (values.image) {
       const formData = new FormData();
       formData.set("fullName", values.fullName);
-      formData.set("location", userContext.location.geolocation || values.location);
+      formData.set("location", userContext.location.geolocation || values.location || "");
       formData.set("phone", values.phone);
       formData.append("image", values.image, values.image.name);
       editUser.mutate(formData);

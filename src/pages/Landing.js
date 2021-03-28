@@ -3,8 +3,9 @@ import { Grid } from "@material-ui/core";
 import SectionHero from "../components/macro/SectionHero";
 import SectionPopular from "../components/macro/SectionPopular";
 import SectionNear from "../components/macro/SectionNear";
+import Loading from "../components/micro/Loading";
 
-import fakeData from "../data/fakeData";
+import { getPartnerUsers } from "../api/main";
 
 const styles = {
   padding: {
@@ -14,11 +15,18 @@ const styles = {
 };
 
 const Landing = () => {
-  const { near, popular } = fakeData;
-  // const {isLoading, data: restaurantData, isError, error} = useQuery("getRestaurants", )
+  const { isLoading, data: restaurantData, isError, error } = useQuery("getRestaurants",
+    async () => {
+      const { data } = await getPartnerUsers()
+      const popular = data.data.users.filter(user => user.role === "partner");
+      return popular;
+    }
+  )
 
+  if (isLoading) return <Loading />
+  if (isError) return <h4>{error.response.data.message}</h4>
   return (
-    <>
+    <div>
       <SectionHero />
       <Grid
         container
@@ -26,10 +34,10 @@ const Landing = () => {
         direction="column"
         sx={styles.padding}
       >
-        <SectionPopular popular={popular} />
-        <SectionNear near={near} />
+        <SectionPopular popular={restaurantData} />
+        <SectionNear near={restaurantData} />
       </Grid>
-    </>
+    </div>
   );
 };
 

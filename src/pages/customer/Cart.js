@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 
 import { CartContext } from "../../logics/contexts/cartContext";
+import { UserContext } from "../../logics/contexts/authContext";
 
 import CartList from "../../components/macro/CartList";
 import CartEmpty from "../../components/micro/CartEmpty";
@@ -33,9 +34,10 @@ const useStyles = makeStyles(
 
 const Cart = () => {
   const classes = useStyles();
-  const { state, dispatch: cartDispatch } = useContext(CartContext);
   const queryClient = useQueryClient();
-  const { restaurantId, carts, location: userLocation } = state;
+  const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
+  const { state: { user } } = useContext(UserContext);
+  const { restaurantId, carts, location: userLocation } = cartState;
   const [show, setShow] = useState(false);
   const [isOrdered, setIsOrdered] = useState(false);
   const [location, setLocation] = useState(userLocation.name || "");
@@ -48,7 +50,7 @@ const Cart = () => {
     onSuccess: () => {
       setIsOrdered(true)
       queryClient.invalidateQueries(["transactions", restaurantId]);
-      queryClient.invalidateQueries("userDetail");
+      queryClient.invalidateQueries(["userDetail", user.id]);
       cartDispatch({ type: "SUBMIT_CART" })
     },
     onError: (error) => {

@@ -16,12 +16,16 @@ const CartEmpty = (props) => {
           </Grid>
           <Grid item>
             <Typography variant="h6" gutterBottom textAlign="center" sx={{ fontFamily: "Cabin, sans-serif" }}>
-              You order is success, check your transaction history in your profile {":)"}
+              Your order is success, check your transaction history in your profile {":)"}
             </Typography>
           </Grid>
         </Fragment>
       ) : isProcess ? (
-        <Loading />
+        <Loading>
+          <Typography variant="h6" gutterBottom textAlign="center" sx={{ fontFamily: "Cabin, sans-serif" }}>
+            Your order is in process, please wait...
+            </Typography>
+        </Loading>
       )
         : (
           <Fragment>

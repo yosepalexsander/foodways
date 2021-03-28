@@ -1,9 +1,11 @@
+import PropTypes from "prop-types";
 import { Button, Grid, Typography } from "@material-ui/core";
 import avatar_default from "../../assets/images/avatar_default.jpeg";
 
 const UserProfile = (props) => {
   const { profile, onClickEdit } = props;
-  const userPhoto = profile.image.split("/")[-1] !== undefined ? profile.image : avatar_default;
+  const imgUrlArr = profile.image.split('/')
+  const userPhoto = imgUrlArr[imgUrlArr.length - 1] !== "null" ? profile.image : avatar_default;
   return (
     <Grid container item direction="column" spacing={2} xs={6} sm={8}>
       <Grid container item spacing={2}>
@@ -96,4 +98,8 @@ const UserProfile = (props) => {
   )
 }
 
-export default UserProfile
+UserProfile.propTypes = {
+  profile: PropTypes.object.isRequired,
+  onClickEdit: PropTypes.func.isRequired
+}
+export default UserProfile;

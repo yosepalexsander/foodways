@@ -5,8 +5,18 @@ import axios from "axios";
  * @param {longitude, latitude} params
  */
 const getLocation = async (lng, lat) => {
+  const response = await axios.get(
+    `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?types=poi&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`
+  );
+  return response.data;
+};
+/**
+ *
+ * @param {loc1, loc2} params
+ */
+const getDirections = async (loc1, loc2) => {
   const response = await axios(
-    `http://api.positionstack.com/v1/reverse?access_key=${process.env.REACT_APP_GEOCODING_API_KEY}&query=${lat},${lng}&limit=1`
+    `https://api.mapbox.com/directions/v5/mapbox/driving-traffic/${loc1[0]},${loc1[1]};${loc2[0]},${loc2[1]}?geometries=geojson&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`
   );
   return response.data;
 };

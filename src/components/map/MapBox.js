@@ -30,15 +30,31 @@ const MapBox = forwardRef((props, ref) => {
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
+    let maps;
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        maps = setupMap([position.coords.longitude, position.coords.latitude]);
+      },
+      function () {
+        maps = setupMap([lng, lat]);
+      }, {
+      enableHighAccuracy: true
+    });
+
+    return () => maps.remove();
+  }, []);
+
+  const setupMap = (center) => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
+      center: center,
       zoom: zoom,
     });
-
+    const nav = new mapboxgl.NavigationControl();
+    map.addControl(nav);
     const marker = new mapboxgl.Marker({ color: "red", draggable: true })
-      .setLngLat([lng, lat])
+      .setLngLat(center)
       .addTo(map);
 
     marker.on("dragend", async () => {
@@ -49,8 +65,9 @@ const MapBox = forwardRef((props, ref) => {
       const data = await getLocation(markLng, markLat);
       setLocation(data);
     });
-    return () => map.remove();
-  }, []);
+
+    return map
+  }
   return (
     <Paper ref={ref} tabIndex={-1} sx={styles.paper}>
       <DeliveryBar location={location} geolocation={[lng, lat]} page={page} />

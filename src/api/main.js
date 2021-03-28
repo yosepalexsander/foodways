@@ -39,6 +39,10 @@ export const userLogin = async function (body) {
 };
 
 // User endpoint
+export const getPartnerUsers = async function (id) {
+  const response = await instance.get(`/users`)
+  return response
+};
 export const getUserDetail = async function (id) {
   const response = await instance.get(`/user/${id}`)
   return response

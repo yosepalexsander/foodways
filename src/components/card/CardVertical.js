@@ -2,12 +2,15 @@ import { Fragment } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Card, CardContent, CardMedia, Typography } from "@material-ui/core";
 
+import avatar_default from "../../assets/images/avatar_default.jpeg";
 import priceFormatter from "../../helpers/priceFormatter";
 
 const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
   const history = useHistory();
+  const imgUrlArr = item.image.split('/')
+  const userPhoto = imgUrlArr[imgUrlArr.length - 1] !== "null" ? item.image : avatar_default;
   const pushToProductList = (id) => {
-    history.push(`/restaurant/${id}`, { restaurant: item.restaurant });
+    history.push(`/restaurant/${id}`, { restaurant: item.fullName });
   };
   const editProduct = (id) => {
     history.push(`/product/${id}/edit`)
@@ -30,8 +33,8 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
         <CardMedia
           sx={{ height: 134, p: 1 }}
           component="img"
-          src={item.image}
-          title={isFromProduct ? item.name : item.restaurant}
+          src={userPhoto}
+          title={isFromProduct ? item.title : item.name}
         />
         <CardContent>
           {isFromProduct ?
@@ -66,10 +69,10 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
             (
               <>
                 <Typography variant="h6" gutterBottom>
-                  {item.restaurant}
+                  {item.fullName}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {item.location}
+                  {item.location || "unknown"}
                 </Typography>
               </>
             )}

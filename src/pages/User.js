@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { Fragment } from "react";
 import { useHistory, useRouteMatch, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
@@ -11,18 +11,15 @@ import UserProfile from "../components/macro/UserProfile";
 import UserTransaction from "../components/macro/UserTransaction";
 
 const Profile = () => {
-  // const [transaction, setTransaction] = useState(null);
-  // const [transactionLoading, setTransactionLoading] = useState(true);
-  // const [transactionError, setTransactionError] = useState(false);
   const route = useHistory();
   const { url } = useRouteMatch();
   const { id } = useParams();
   const getTransactions = async (role) => {
     if (role === "partner") {
-      const { status, data } = await getPartnerTransactions(id);
+      const { data } = await getPartnerTransactions(id);
       return data.data.transactions
     } else if (role === "user") {
-      const { status, data } = await getCustomerTransactions();
+      const { data } = await getCustomerTransactions();
       return data.data.transactions
     }
   };

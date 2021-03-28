@@ -17,7 +17,7 @@ const SelectDelivery = (props) => {
         payload: {
           location: {
             geolocation: geolocation.join(','),
-            name: location.data[0].label
+            name: location.features[0].place_name
           }
         }
       })
@@ -27,7 +27,7 @@ const SelectDelivery = (props) => {
         payload: {
           location: {
             geolocation: geolocation.join(','),
-            name: location.data[0].label
+            name: location.features[0].place_name
           }
         }
       })
@@ -45,17 +45,17 @@ const SelectDelivery = (props) => {
             <img src={icon_marker} alt="marker" />
           </div>
           <div className="location">
-            {location && (
+            {(location && location.features.length >= 1) && (
               <>
                 <Typography
                   variant="body2"
                   sx={{ fontWeight: 900 }}
                   gutterBottom
                 >
-                  {location.data[0].name}
+                  {location.features[0].text}
                 </Typography>
                 <Typography variant="caption">
-                  {location.data[0].label}
+                  {location.features[0].place_name}
                 </Typography>
               </>
             )}

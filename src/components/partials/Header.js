@@ -69,7 +69,7 @@ const Header = () => {
   };
 
   const goToCart = (id) => {
-    history.push(`/user/${id}/cart`, { userId: user.id });
+    history.push(`/user/${id}/cart`);
   };
   const goToAddProductPartner = (id) => {
     history.push(`/partner/${id}/add-product`);
