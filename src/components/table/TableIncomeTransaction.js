@@ -44,23 +44,24 @@ const StyledTableCell = withStyles((theme) => ({
 const TableIncomeTransaction = forwardRef((props, ref) => {
   const { id } = props;
   const [alertOpen, setAlertOpen] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
 
-  const { isLoading, data: transactionData, isError, error, refetch } = useQuery(["transactions", id], async () => {
-    const response = await getPartnerTransactions(id);
-    return response.data;
-  }, {
-    onSuccess: async (data) => {
-      let locationName = await data.data.transactions.map(async transaction => {
+  const { isLoading, data: transactionData, isError, error, refetch } = useQuery(["transactions", id],
+    async () => {
+      const { data } = await getPartnerTransactions(id);
+      const newData = await Promise.all(data.data.transactions.map(async transaction => {
         if (transaction.userOrder.location) {
           const [lng, lat] = transaction.userOrder.location.split(',')
-          const data = await getLocation(lng, lat)
-          return data
+          const location = await getLocation(lng, lat)
+          transaction.userOrder.location = await location.data[0].label
         }
-      })
-      setUserLocation(locationName)
-    }
-  });
+        return transaction
+      }))
+      return {
+        status: data.status,
+        message: data.message,
+        transactions: newData
+      };
+    });
 
   const onClickUpdate = async (id, transactionStatus) => {
     const { status, data } = await updateTransaction(id, JSON.stringify({ status: transactionStatus }));
@@ -80,7 +81,7 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
       </Typography>
     )
 
-  if (transactionData?.data.transactions.length <= 0)
+  if (transactionData?.transactions.length <= 0)
     return (
       <NotFound>
         <Typography textAlign="center" component="p">
@@ -103,7 +104,7 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {transactionData?.data.transactions.map((transaction, index) => (
+            {transactionData?.transactions.map((transaction, index) => (
               <StyledTableRow key={transaction.id}>
                 <StyledTableCell align="left">{index}</StyledTableCell>
                 <StyledTableCell>{transaction.userOrder.fullName}</StyledTableCell>

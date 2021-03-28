@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 
@@ -22,7 +23,6 @@ import EditProduct from "./pages/partner/EditProduct";
 import Loading from "./components/micro/Loading";
 
 import { checkAuth, setAuthToken } from "./api/main";
-import { StarRateOutlined } from "@material-ui/icons";
 
 const styles = {
   container: {
@@ -76,7 +76,8 @@ function App() {
   const client = new QueryClient({
     defaultOptions: {
       queries: {
-        cacheTime: 7200 * 1000 // 2 hours cache in memory 
+        cacheTime: 7200 * 1000, // 2 hours cache in memory 
+        staleTime: Infinity
       }
     }
   });
@@ -121,6 +122,7 @@ function App() {
             </Router>
           </OrderContextProvider>
         </CartContextProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </div>
   );

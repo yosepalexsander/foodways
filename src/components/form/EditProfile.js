@@ -30,7 +30,6 @@ const EditProfile = () => {
   });
   const [showMapbox, setMapboxModal] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  console.log(userContext)
   useEffect(() => {
     setValues({ ...values, location: userContext.location.name || user.location || "" })
   }, [userContext.location])
@@ -48,7 +47,6 @@ const EditProfile = () => {
   }, {
     onSuccess: async () => {
       const response = await getUserDetail(user.id);
-      console.log(response.data.data);
       dispatch({
         type: "EDIT_PROFILE",
         payload: {

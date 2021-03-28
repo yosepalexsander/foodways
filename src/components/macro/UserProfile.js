@@ -3,7 +3,7 @@ import avatar_default from "../../assets/images/avatar_default.jpeg";
 
 const UserProfile = (props) => {
   const { profile, onClickEdit } = props;
-  const userPhoto = profile.image.split("/")[-1] !== null ? profile.image : avatar_default;
+  const userPhoto = profile.image.split("/")[-1] !== undefined ? profile.image : avatar_default;
   return (
     <Grid container item direction="column" spacing={2} xs={6} sm={8}>
       <Grid container item spacing={2}>

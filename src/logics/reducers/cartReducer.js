@@ -5,6 +5,8 @@ const cartReducer = (state, action) => {
   } = action;
   switch (type) {
     case "ADD_PRODUCT":
+
+      // Update product quantity if product id has already exist 
       const findProductById = state.carts.find(
         (cart) => cart.id === product.id
       );
@@ -22,6 +24,11 @@ const cartReducer = (state, action) => {
           carts: updatedProduct,
         };
       }
+
+      if (state.restaurantId !== null && restaurantId !== state.restaurantId) {
+        alert("You can just order from one restaurant at the time")
+        return state
+      }
       return {
         ...state,
         carts: [
@@ -33,6 +40,8 @@ const cartReducer = (state, action) => {
         ],
         restaurantId: restaurantId,
       };
+
+    // reject action if restaurant id is not same
     case "REMOVE_PRODUCT":
       const updatedProduct = state.carts.map((cart) =>
         cart.id === product.id
@@ -66,7 +75,7 @@ const cartReducer = (state, action) => {
       return {
         ...state,
         carts: [],
-        restaurantId: restaurantId,
+        restaurantId: null,
       };
     default:
       throw new Error("dispacth type doesn't provided");

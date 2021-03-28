@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from "react";
-import { useMutation } from "react-query";
-// import { useLocation } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 
 import { CartContext } from "../../logics/contexts/cartContext";
+
 import CartList from "../../components/macro/CartList";
 import CartEmpty from "../../components/micro/CartEmpty";
 import CartTotal from "../../components/micro/CartTotal";
@@ -34,6 +34,7 @@ const useStyles = makeStyles(
 const Cart = () => {
   const classes = useStyles();
   const { state, dispatch: cartDispatch } = useContext(CartContext);
+  const queryClient = useQueryClient();
   const { restaurantId, carts, location: userLocation } = state;
   const [show, setShow] = useState(false);
   const [isOrdered, setIsOrdered] = useState(false);
@@ -46,6 +47,9 @@ const Cart = () => {
   const makeTransaction = useMutation(createTransaction, {
     onSuccess: () => {
       setIsOrdered(true)
+      queryClient.invalidateQueries(["transactions", restaurantId]);
+      queryClient.invalidateQueries("userDetail");
+      cartDispatch({ type: "SUBMIT_CART" })
     },
     onError: (error) => {
       alert("Oopss, error occured: ", error)

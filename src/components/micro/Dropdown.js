@@ -27,7 +27,8 @@ const Dropdown = forwardRef((props, ref) => {
     addProductHandler,
     dashboardHandler
   } = props;
-  const userPhoto = photoProfile.split("/")[-1] !== null ? photoProfile : avatar_default;
+
+  const userPhoto = photoProfile.split("/")[-1] !== undefined ? photoProfile : avatar_default;
 
   return (
     <Fragment>

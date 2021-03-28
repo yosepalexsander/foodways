@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import PropTypes from "prop-types";
 import { Grid, Typography } from "@material-ui/core";
 
 import Loading from "../micro/Loading";
@@ -19,7 +20,7 @@ const UserTransaction = (props) => {
         </Grid>
       ) : (
         <Fragment>
-          {transactionData.transactions.length <= 0 ?
+          {transactionData.length <= 0 ?
             (
               <Grid item sx={{ textAlign: "center" }}>
                 <img src={icon_notfound} alt="not found" />
@@ -27,7 +28,7 @@ const UserTransaction = (props) => {
               </Grid>
             ) : (
               <Fragment>
-                {transactionData.transactions.map((transaction) => (
+                {transactionData.map((transaction) => (
                   <Grid item key={transaction.id}>
                     <CardTransaction transaction={transaction} isPartner={isPartner} />
                   </Grid>
@@ -40,4 +41,11 @@ const UserTransaction = (props) => {
   )
 }
 
-export default UserTransaction
+UserTransaction.propTypes = {
+  transactionData: PropTypes.array,
+  isLoading: PropTypes.bool,
+  isError: PropTypes.bool,
+  isPartner: PropTypes.bool
+};
+
+export default UserTransaction;

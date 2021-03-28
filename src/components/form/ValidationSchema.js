@@ -14,8 +14,8 @@ export const RegisterSchema = Yup.object({
   gender: Yup.string()
     .matches(/^(Male|male|Female|female)$/, "Gender must be male or female")
     .required('Gender is required'),
-  phone: Yup.number()
-    .min(11, 'Must be at least 8 characters')
+  phone: Yup.string()
+    .min(11, 'Must be at least 11 characters')
     .max(12, 'Must be less than 12 characters')
     .required('Phone is required'),
   role: Yup.string().required('Role is required')

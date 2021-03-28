@@ -31,7 +31,7 @@ const Register = forwardRef((props, ref) => {
       fullName: "",
       gender: "",
       phone: "",
-      role: "",
+      role: "user",
     },
     validationSchema: RegisterSchema,
     onSubmit: (value) => {
@@ -105,7 +105,7 @@ const Register = forwardRef((props, ref) => {
             <FormikInput
               id="inputRole"
               className={formik.touched.email}
-              select
+              select={true}
               name="role"
               inputProps={{ "aria-label": "role", placeholder: "Role" }}
               SelectProps={{

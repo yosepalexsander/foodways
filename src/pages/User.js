@@ -11,46 +11,35 @@ import UserProfile from "../components/macro/UserProfile";
 import UserTransaction from "../components/macro/UserTransaction";
 
 const Profile = () => {
-  const [transaction, setTransaction] = useState(null);
-  const [transactionLoading, setTransactionLoading] = useState(true);
-  const [transactionError, setTransactionError] = useState(false);
+  // const [transaction, setTransaction] = useState(null);
+  // const [transactionLoading, setTransactionLoading] = useState(true);
+  // const [transactionError, setTransactionError] = useState(false);
   const route = useHistory();
   const { url } = useRouteMatch();
   const { id } = useParams();
   const getTransactions = async (role) => {
     if (role === "partner") {
       const { status, data } = await getPartnerTransactions(id);
-      if (status !== 200) {
-        setTransaction(data.data);
-        setTransactionError(true);
-        return
-      }
-      setTransaction(data.data);
-      setTransactionLoading(false);
+      return data.data.transactions
     } else if (role === "user") {
       const { status, data } = await getCustomerTransactions();
-      if (status !== 200) {
-        setTransaction(data.data);
-        setTransactionError(true)
-        return
-      }
-      setTransaction(data.data);
-      setTransactionLoading(false);
+      return data.data.transactions
     }
   };
-  const { isLoading: userLoading, data: userData, error: userError } = useQuery(["userDetail", id],
+  const { isLoading: userLoading, data: userData, isError: userError } = useQuery(["userDetail", id],
     async () => {
-      const response = await getUserDetail(id);
-      return response.data;
-    }, {
-    onSuccess: async (data) => {
-      await getTransactions(data?.data?.user?.role);
+      const { data } = await getUserDetail(id);
+      const transactions = await getTransactions(data.data.user.role);
+      const newData = {
+        user: data.data.user,
+        transactions: transactions
+      }
+      return newData;
     }
-  }
   );
 
   const editProfile = () => {
-    route.push(`${url}/edit`, { user: userData?.data?.user });
+    route.push(`${url}/edit`, { user: userData?.user });
   };
 
   return (
@@ -81,13 +70,13 @@ const Profile = () => {
               </Typography>
             </Fragment>
           ) : (
-            <UserProfile profile={userData?.data?.user} onClickEdit={editProfile} />
+            <UserProfile profile={userData?.user} onClickEdit={editProfile} />
           )}
         <UserTransaction
-          transactionData={transaction}
-          isLoading={transactionLoading}
-          isError={transactionError}
-          isPartner={userData?.data?.user?.role === "partner" ? true : false} />
+          transactionData={userData?.transactions}
+          isLoading={userLoading}
+          isError={userError}
+          isPartner={userData?.user?.role === "partner" ? true : false} />
       </Grid>
     </div>
   );

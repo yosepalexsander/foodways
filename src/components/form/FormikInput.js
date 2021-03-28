@@ -3,7 +3,7 @@ import { useField } from "formik";
 import CustomTextField from "./CustomTextField";
 import "./styles.css";
 
-const FormikInput = ({ inputProps, ...props }) => {
+const FormikInput = ({ inputProps, children, ...props }) => {
   const [field, meta] = useField(props);
   const [didFocus, setDidFocus] = useState(false);
   const handleFocus = () => setDidFocus(true);
@@ -12,8 +12,10 @@ const FormikInput = ({ inputProps, ...props }) => {
   return (
     <Fragment>
       <CustomTextField
-        id={props.id}
-        type={props.type}
+        // id={props.id}
+        // type={props.type}
+        // select={props.select && true}
+        {...props}
         className={showFeedback ? (meta.error ? "invalid" : "valid") : ''}
         {...field}
         color="secondary"
@@ -21,7 +23,9 @@ const FormikInput = ({ inputProps, ...props }) => {
         helperText={meta.error}
         error={Boolean(meta.error)}
         InputProps={inputProps}
-      />
+      >
+        {children}
+      </CustomTextField>
     </Fragment>
   )
 }

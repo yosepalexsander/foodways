@@ -20,11 +20,15 @@
 }
 
 .valid .MuiInputBase-root input + fieldset,
+.valid .MuiInputBase-root select + svg + fieldset,
+.valid .MuiInputBase-root select:focus + svg + fieldset,
 .valid .MuiInputBase-root input:focus + fieldset {
   border-color: green;
 }
 
 .invalid .MuiInputBase-root input + fieldset,
+.invalid .MuiInputBase-root select + svg + fieldset,
+.invalid .MuiInputBase-root select:focus + svg + fieldset,
 .invalid .MuiInputBase-root input:focus + fieldset {
   border-color: red;
 }
