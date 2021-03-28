@@ -12,9 +12,6 @@ const FormikInput = ({ inputProps, children, ...props }) => {
   return (
     <Fragment>
       <CustomTextField
-        // id={props.id}
-        // type={props.type}
-        // select={props.select && true}
         {...props}
         className={showFeedback ? (meta.error ? "invalid" : "valid") : ''}
         {...field}

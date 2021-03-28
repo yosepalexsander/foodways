@@ -40,10 +40,10 @@ const Register = forwardRef((props, ref) => {
   });
   const registerUser = useMutation(formData => userRegister(formData), {
     onSuccess: ({ data }) => {
+      setAuthToken(data.data.user.token);
       dispatch({ type: "REGISTER_SUCCESS", payload: data.data.user });
       if (data.data.user.role === "partner") return history.push("/partner");
       history.push("/");
-      setAuthToken(data.data.user.token);
     },
     onError: (error) => {
       alert(error.response.data.message);

@@ -69,7 +69,7 @@ const EditProfile = () => {
       formData.set("fullName", values.fullName);
       formData.set("location", userContext.location.geolocation || values.location);
       formData.set("phone", values.phone);
-      formData.append("image", values.image);
+      formData.append("image", values.image, values.image.name);
       editUser.mutate(formData);
     } else {
       const body = {
@@ -77,7 +77,6 @@ const EditProfile = () => {
         location: userContext.location.geolocation || values.location,
         phone: values.phone
       };
-
       editUser.mutate(JSON.stringify(body));
     }
   };

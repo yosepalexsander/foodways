@@ -27,7 +27,7 @@ const AddProductForm = (props) => {
   };
   const addProduct = useMutation(createProduct, {
     onError: (error) => {
-      alert("oops, error occured: ", error);
+      alert("oops, error occured: ", error.response.data);
     },
     onSuccess: () => {
       setAlertOpen(true);
@@ -36,7 +36,7 @@ const AddProductForm = (props) => {
 
   const editProduct = useMutation(body => updateProduct(id, body), {
     onError: (error) => {
-      alert("oops, error occured: ", error);
+      alert("oops, error occured: ", error.response.data);
     },
     onSuccess: () => {
       setAlertOpen(true);
@@ -47,19 +47,18 @@ const AddProductForm = (props) => {
     event.preventDefault();
 
     // if input file empty
-    if (!values.image) {
-      isEdit
-        ? editProduct.mutate(JSON.stringify(values))
-        : addProduct.mutate(JSON.stringify(values));
-    } else {
+    if (values.image) {
       const formData = new FormData();
       formData.set("title", values.title);
       formData.set("price", values.price);
-      formData.append("image", values.image);
-
+      formData.append("image", values.image, values.image.name);
       isEdit
         ? editProduct.mutate(formData)
         : addProduct.mutate(formData);
+    } else {
+      isEdit
+        ? editProduct.mutate(JSON.stringify(values))
+        : addProduct.mutate(JSON.stringify(values));
     }
     setValues({ title: "", image: null, price: 0 });
   };
