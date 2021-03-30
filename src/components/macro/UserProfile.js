@@ -13,7 +13,7 @@ const UserProfile = (props) => {
           <img
             src={userPhoto}
             alt="user"
-            style={{ width: "180px", height: "221px", objectFit: "cover" }}
+            style={{ width: "180px", height: "221px", objectFit: "contain" }}
           />
         </Grid>
         <Grid item>

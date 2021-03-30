@@ -48,3 +48,9 @@
   overflow: auto;
   height: 235px;
 }
+
+#order-list .imgSize {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}

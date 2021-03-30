@@ -1,10 +1,8 @@
 import { useContext, useState } from "react";
 import { Box, Tab, Tabs } from "@material-ui/core";
 import { UserContext } from "../../logics/contexts/authContext";
-import TableIncomeTransaction from "../../components/table/TableIncomeTransaction";
 
-import ReceiptIcon from '@material-ui/icons/Receipt';
-import AddProductIcon from "../../components/icons/AddProductIcon";
+import Transactions from "./Transactions";
 import ProductList from "../../components/macro/ProductList";
 
 
@@ -44,11 +42,11 @@ const Partner = () => {
         indicatorColor="secondary"
         aria-label="navigation tabs"
       >
-        <Tab label="Transactions" icon={<ReceiptIcon />} sx={{ fontSize: "1.2rem" }} aria-label="transactions" />
-        <Tab label="Products" icon={<AddProductIcon viewBox="0 0 40 40" />} sx={{ fontSize: "1.2rem" }} aria-label="products" />
+        <Tab label="Transactions" sx={{ fontSize: "1.2rem" }} aria-label="transactions" />
+        <Tab label="Products" sx={{ fontSize: "1.2rem" }} aria-label="products" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <TableIncomeTransaction id={user.id} />
+        <Transactions id={user.id} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ProductList id={user.id} />

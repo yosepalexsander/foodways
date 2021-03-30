@@ -14,16 +14,7 @@ const Profile = () => {
   const route = useHistory();
   const { url } = useRouteMatch();
   const { id } = useParams();
-  const getTransactions = async (role) => {
-    if (role === "partner") {
-      const { data } = await getPartnerTransactions(id);
-      return data.data.transactions
-    } else if (role === "user") {
-      const { data } = await getCustomerTransactions();
-      return data.data.transactions
-    }
-  };
-  const { isLoading: userLoading, data: userData, isError: userError } = useQuery(["userDetail", id],
+  const { isLoading: userLoading, data: userData, isError: userError } = useQuery(["userDetail", parseInt(id)],
     async () => {
       const { data } = await getUserDetail(id);
       const transactions = await getTransactions(data.data.user.role);
@@ -34,9 +25,18 @@ const Profile = () => {
       return newData;
     }
   );
+  const getTransactions = async (role) => {
+    if (role === "partner") {
+      const { data } = await getPartnerTransactions(id);
+      return data.data.transactions
+    } else if (role === "user") {
+      const { data } = await getCustomerTransactions();
+      return data.data.transactions
+    }
+  };
 
   const editProfile = () => {
-    route.push(`${url}/edit`, { user: userData?.user });
+    route.push(`${url}/edit`);
   };
 
   return (
@@ -73,7 +73,8 @@ const Profile = () => {
           transactionData={userData?.transactions}
           isLoading={userLoading}
           isError={userError}
-          isPartner={userData?.user?.role === "partner" ? true : false} />
+          isPartner={userData?.user?.role === "partner" ? true : false}
+          route={route} />
       </Grid>
     </div>
   );

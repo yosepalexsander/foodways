@@ -10,6 +10,7 @@ import CartEmpty from "../../components/micro/CartEmpty";
 import CartTotal from "../../components/micro/CartTotal";
 import CartSearchLocation from "../../components/micro/CartSearchLocation";
 import MapboxModal from "../../components/modal/MapboxModal";
+import MapBoxSetLocation from "../../components/map/MapBoxSetLocation";
 
 import { createTransaction } from "../../api/main";
 
@@ -22,11 +23,6 @@ const useStyles = makeStyles(
     },
     container: {
       marginTop: theme.spacing(2),
-    },
-    divider: {
-      width: "100%",
-      borderTop: `2px solid ${theme.palette.secondary.main}`,
-      borderRadius: 2,
     },
   }),
   { name: "Cart" }
@@ -48,9 +44,9 @@ const Cart = () => {
 
   const makeTransaction = useMutation(createTransaction, {
     onSuccess: () => {
-      setIsOrdered(true)
       queryClient.invalidateQueries(["transactions", restaurantId]);
       queryClient.invalidateQueries(["userDetail", user.id]);
+      setIsOrdered(true)
       cartDispatch({ type: "SUBMIT_CART" })
     },
     onError: (error) => {
@@ -97,14 +93,18 @@ const Cart = () => {
               handleChange={(e) => setLocation(e.target.value)} />
             <p className={classes.font}>Review Your Order</p>
             <Grid container justifyContent="space-between">
-              <CartList cart={carts} dispatchAction={cartDispatch} />
+              <CartList
+                cart={carts}
+                dispatchAction={cartDispatch} />
               <CartTotal
                 total={totalAmount}
                 qty={totalQty}
                 submitOrder={submitTransaction}
               />
             </Grid>
-            <MapboxModal show={show} modalControl={() => setShow(false)} page="cart" />
+            <MapboxModal show={show} modalControl={() => setShow(false)}>
+              <MapBoxSetLocation page="cart" />
+            </MapboxModal>
           </>
         )}
       </div>

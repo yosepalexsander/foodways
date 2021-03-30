@@ -8,7 +8,7 @@ const SectionNear = ({ near }) => {
         <Typography variant="h4" sx={{ py: 3 }} gutterBottom>
           Restaurant Near You
         </Typography>
-        <Grid container item spacing={2} justifyContent="space-between">
+        <Grid container item spacing={2}>
           {near.map((item) => (
             <Grow key={item.id} in={Boolean(item)}
               style={{ transformOrigin: '0 0 0' }}

@@ -4,7 +4,7 @@ import "./styles.css";
 import priceFormatter from "../../helpers/priceFormatter";
 
 const CartTotal = (props) => {
-  const { total, qty, submitOrder } = props;
+  const { total, qty, submitOrder, page } = props;
   return (
     <Grid
       id="cart-total"

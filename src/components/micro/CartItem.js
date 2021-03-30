@@ -14,7 +14,7 @@ const CartItem = (props) => {
   return (
     <Grid id="cart-item" item xs container justifyContent="space-between" spacing={2}>
       <Grid item>
-        <img src={item.image} alt={item.name} className="imgSize" />
+        <img src={item.image} alt={item.title} className="imgSize" />
       </Grid>
       <Grid item container xs={12} sm>
         <Grid item container direction="column" justifyContent="space-evenly">
@@ -23,7 +23,7 @@ const CartItem = (props) => {
               variant="body1"
               sx={{ fontFamily: "Abhaya Libre, serif" }}
             >
-              {item.name}
+              {item.title}
             </Typography>
           </Grid>
           <Grid item container spacing={1} alignItems="center">

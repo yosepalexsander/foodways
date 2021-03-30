@@ -29,7 +29,7 @@ const RegisterModal = forwardRef((props, ref) => {
           timeout: 500,
         }}
       >
-        <Slide in={show} direction="up">
+        <Slide in={show} direction="up" unmountOnExit>
           <Register switchForm={switcher} />
         </Slide>
       </Modal>

@@ -1,27 +1,17 @@
-import { useRef, useEffect, useState, forwardRef } from "react";
-
+import { useRef, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
 
-import { Paper } from "@material-ui/core";
-import getLocation from "../../api/mapApi";
-import "./mapbox.css";
+import { getLocation } from "../../api/mapApi";
 import DeliveryBar from "./infobar/DeliveryBar";
+import "./mapbox.css";
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
-const styles = {
-  paper: {
-    position: "relative",
-    mt: "10rem",
-    mx: "auto",
-    p: 2,
-    width: "60%",
-    height: "60%",
-  }
-};
-const MapBox = forwardRef((props, ref) => {
+
+const MapBoxSetLocation = (props) => {
   const { page } = props
   const mapContainer = useRef(null);
   const [lng, setLng] = useState(106.774124);
@@ -53,13 +43,14 @@ const MapBox = forwardRef((props, ref) => {
     });
     const nav = new mapboxgl.NavigationControl();
     map.addControl(nav);
+
     const marker = new mapboxgl.Marker({ color: "red", draggable: true })
       .setLngLat(center)
       .addTo(map);
 
     marker.on("dragend", async () => {
-      const markLng = marker.getLngLat().lng.toFixed(5);
-      const markLat = marker.getLngLat().lat.toFixed(5);
+      const markLng = marker.getLngLat().lng;
+      const markLat = marker.getLngLat().lat;
       setLng(markLng);
       setLat(markLat);
       const data = await getLocation(markLng, markLat);
@@ -69,11 +60,15 @@ const MapBox = forwardRef((props, ref) => {
     return map
   }
   return (
-    <Paper ref={ref} tabIndex={-1} sx={styles.paper}>
+    <>
       <DeliveryBar location={location} geolocation={[lng, lat]} page={page} />
       <div className="mapContainer" ref={mapContainer}></div>
-    </Paper>
+    </>
   );
-});
+};
 
-export default MapBox;
+MapBoxSetLocation.propTypes = {
+  page: PropTypes.string
+};
+
+export default MapBoxSetLocation;

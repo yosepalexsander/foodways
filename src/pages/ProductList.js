@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import {
   Grid,
   Typography,
@@ -19,7 +19,7 @@ const ProductList = () => {
   const restaurant = location.state && location.state.restaurant
 
 
-  const { isLoading, data: productData, error } = useQuery(["products", id], async () => {
+  const { isLoading, data: productData, error } = useQuery(["products", parseInt(id)], async () => {
     const response = await getPartnerProducts(id);
     return response.data.data;
   });
@@ -27,7 +27,7 @@ const ProductList = () => {
   const addProductToCart = (product) => {
     dispatch({
       type: "ADD_PRODUCT",
-      payload: { ...product, restaurantId: id },
+      payload: { ...product, restaurantId: parseInt(id) },
     });
   };
   if (error) return (<h1>Error occured: {error.response.data.message}</h1>)
@@ -43,12 +43,15 @@ const ProductList = () => {
           </Typography>
           {productData?.products.length <= 0 ? (
             <NotFound>
-              <Typography textAlign="center" component="p">
+              <Typography textAlign="center" gutterButtom>
                 This Restaurant Hasn't Add Any Product
+              </Typography>
+              <Typography variant="h6" textAlign="center" sx={{ fontFamily: "Cabin, sans-serif" }}>
+                <Link to="/">Go Home</Link>
               </Typography>
             </NotFound>
           ) : (
-            <Grid container spacing={4} justifyContent="space-evenly" sx={{ pb: 3 }}>
+            <Grid container spacing={4} sx={{ pb: 3 }}>
               {productData?.products.map((item, index) => (
                 <Grow key={item.id} in={!isLoading}
                   style={{ transformOrigin: '0 0 0' }}

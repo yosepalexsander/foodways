@@ -1,11 +1,12 @@
 import { forwardRef, Fragment, useState } from "react";
-import { useQuery } from "react-query";
 import {
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   Paper,
   Button,
@@ -15,12 +16,10 @@ import { withStyles } from "@material-ui/core/styles";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import Loading from '../micro/Loading';
-import NotFound from "../micro/NotFound";
-import ToastAlert from "../micro/ToastAlert";
 
-import { getPartnerTransactions, updateTransaction } from "../../api/main";
-import getLocation from "../../api/mapApi";
+import NotFound from "../micro/NotFound";
+import TablePaginationActions from "./TablePaginationActions";
+
 
 const StyledTableRow = withStyles({
   root: {
@@ -34,54 +33,35 @@ const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: "rgb(229,229,229)",
     color: theme.palette.common.black,
+    fontSize: "16px",
+    fontWeight: 800
   },
   body: {
-    fontSize: 14,
-    fontFamily: "Inter, sans-serif",
+    fontSize: "14px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    fontFamily: "Inter, sans-serif"
   },
 }))(TableCell);
 
 const TableIncomeTransaction = forwardRef((props, ref) => {
-  const { id } = props;
-  const [alertOpen, setAlertOpen] = useState(false);
+  const { transactionData, onClickUpdate } = props;
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const { isLoading, data: transactionData, isError, error, refetch } = useQuery(["transactions", id],
-    async () => {
-      const { data } = await getPartnerTransactions(id);
-      const newData = await Promise.all(data.data.transactions.map(async transaction => {
-        if (transaction.userOrder.location) {
-          const [lng, lat] = transaction.userOrder.location.split(',')
-          const location = await getLocation(lng, lat)
-          transaction.userOrder.location = await location.data[0].label
-        }
-        return transaction
-      }))
-      return {
-        status: data.status,
-        message: data.message,
-        transactions: newData
-      };
-    });
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, transactionData.transactions.length - page * rowsPerPage);;
 
-  const onClickUpdate = async (id, transactionStatus) => {
-    const { status, data } = await updateTransaction(id, JSON.stringify({ status: transactionStatus }));
-    if (status !== 200) {
-      alert("Oops error occured", data.message);
-      return;
-    };
-    setAlertOpen(true);
-    refetch();
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  if (isLoading) return <Loading />
-  if (isError)
-    return (
-      <Typography textAlign="center" variant="h5">
-        {error.response.data.message}
-      </Typography>
-    )
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
-  if (transactionData?.transactions.length <= 0)
+  if (transactionData?.transactions?.length <= 0)
     return (
       <NotFound>
         <Typography textAlign="center" component="p">
@@ -104,62 +84,61 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {transactionData?.transactions.map((transaction, index) => (
+            {(rowsPerPage > 0
+              ? transactionData?.transactions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : transactionData?.transactions
+            ).map((transaction, index) => (
               <StyledTableRow key={transaction.id}>
-                <StyledTableCell align="left">{index}</StyledTableCell>
-                <StyledTableCell>{transaction.userOrder.fullName}</StyledTableCell>
-                <StyledTableCell align="left">{transaction.userOrder.location || ""}</StyledTableCell>
-                <StyledTableCell align="left">
-                  <Typography variant="body2" noWrap color="inherit">
-                    {transaction.orders.map(order => order.title).join(', ')}
-                  </Typography>
+                <StyledTableCell align="left" sx={{ width: 45 }}>
+                  {index}
+                </StyledTableCell>
+                <StyledTableCell align="left" sx={{ width: 100 }}>
+                  {transaction.userOrder.fullName}
+                </StyledTableCell>
+                <StyledTableCell align="left" style={{ maxWidth: 250 }}>
+                  {transaction.userOrder.location || ""}
+                </StyledTableCell>
+                <StyledTableCell align="left" style={{ maxWidth: 200 }}>
+                  {transaction.orders.map(order => order.title).join(', ')}
                 </StyledTableCell>
                 {transaction.status === "success" ? (
                   <>
-                    <StyledTableCell align="left">
-                      <Typography variant="body2" color="success.main">
-                        {transaction.status}
-                      </Typography>
+                    <StyledTableCell align="left" style={{ width: 130, color: "#4caf50" }}>
+                      {transaction.status}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell align="center" style={{ width: 230 }}>
                       <CheckCircleIcon sx={{ color: "success.main" }} />
                     </StyledTableCell>
                   </>
                 ) : transaction.status === "cancel" ? (
                   <>
-                    <StyledTableCell align="left">
-                      <Typography variant="body2" color="error">
-                        {transaction.status}
-                      </Typography>
+                    <StyledTableCell align="left" style={{ width: 130, color: "#f44336" }}>
+                      {transaction.status}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell align="center" style={{ width: 230 }}>
                       <CancelIcon color="error" />
                     </StyledTableCell>
                   </>
                 ) : transaction.status === "on the way" ? (
                   <>
-                    <StyledTableCell align="left">
-                      <Typography variant="body2" color="inherit">
-                        {transaction.status}
-                      </Typography>
+                    <StyledTableCell align="left" style={{ width: 130, color: "blue" }}>
+                      {transaction.status}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
-                      <AccessTimeIcon color="inherit" />
+                    <StyledTableCell align="center" style={{ width: 230 }}>
+                      <AccessTimeIcon sx={{ color: "blue" }} />
                     </StyledTableCell>
                   </>
                 ) : (
                   <>
-                    <StyledTableCell align="left">
-                      <Typography variant="body2" color="primary">
-                        {transaction.status}
-                      </Typography>
+                    <StyledTableCell align="left" style={{ width: 130, color: "#ff9800" }}>
+                      {transaction.status}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
-                      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                    <StyledTableCell align="center" style={{ width: 230 }}>
+                      <div style={{ display: "flex", justifyContent: "space-evenly", padding: "5px 0" }}>
                         <Button
                           variant="contained"
                           color="error"
-                          sx={{ width: 80, height: 20 }}
+                          sx={{ width: 80, height: 20, fontSize: 14, fontWeight: 400 }}
                           onClick={() => onClickUpdate(transaction.id, "cancel")}
                         >
                           Cancel
@@ -167,7 +146,7 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
                         <Button
                           variant="contained"
                           color="success"
-                          onClick={() => onClickUpdate(transaction.id, "success")}
+                          onClick={() => onClickUpdate(transaction.id, "on the way")}
                           sx={{ width: 80, height: 20, fontSize: 14, fontWeight: 400 }}
                         >
                           Approve
@@ -178,12 +157,32 @@ const TableIncomeTransaction = forwardRef((props, ref) => {
                 )}
               </StyledTableRow>
             ))}
+            {emptyRows > 0 && (
+              <StyledTableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </StyledTableRow>
+            )}
           </TableBody>
+          <TableFooter>
+            <StyledTableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                colSpan={6}
+                count={transactionData?.transactions?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: { 'aria-label': 'rows per page' },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </StyledTableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
-      <ToastAlert alertOpen={alertOpen} alertControl={() => setAlertOpen(false)}>
-        Transaction has succesfully updated!
-      </ToastAlert>
     </Fragment>
   );
 });

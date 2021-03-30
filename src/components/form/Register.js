@@ -39,11 +39,30 @@ const Register = forwardRef((props, ref) => {
     }
   });
   const registerUser = useMutation(formData => userRegister(formData), {
-    onSuccess: ({ data }) => {
+    onSuccess: async ({ data }) => {
       setAuthToken(data.data.user.token);
-      dispatch({ type: "REGISTER_SUCCESS", payload: data.data.user });
-      if (data.data.user.role === "partner") return history.push("/partner");
-      history.push("/");
+      if (data.data.user.location) {
+        const [lng, lat] = data.data.user.location.split(',')
+        const locationData = await getLocation(lng, lat)
+        return dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: {
+            ...data.data.user,
+            location: {
+              geolocation: data.data.user.location,
+              name: locationData.features[0].place_name
+            }
+          }
+        });
+      }
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: {
+          ...data.data.user,
+          location: {}
+        }
+      });
+      data.data.user.role === "partner" ? history.push("/partner") : history.push("/")
     },
     onError: (error) => {
       alert(error.response.data.message);

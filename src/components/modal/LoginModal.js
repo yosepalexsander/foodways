@@ -29,7 +29,7 @@ const LoginModal = forwardRef((props, ref) => {
           timeout: 500,
         }}
       >
-        <Slide in={show} direction="up">
+        <Slide in={show} direction="up" unmountOnExit>
           <Login switchForm={switcher} />
         </Slide>
       </Modal>

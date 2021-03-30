@@ -1,9 +1,19 @@
-import { Backdrop, Modal, Slide } from "@material-ui/core";
+import PropTypes from "prop-types";
 import { forwardRef } from "react";
-import MapBox from "../map/MapBox";
+import { Backdrop, Modal, Paper, Slide } from "@material-ui/core";
 
+const styles = {
+  paper: {
+    position: "relative",
+    mt: "10rem",
+    mx: "auto",
+    p: 2,
+    width: "60%",
+    height: "60%",
+  }
+};
 const MapboxModal = forwardRef((props, ref) => {
-  const { show, modalControl, page } = props;
+  const { children, show, modalControl } = props;
   return (
     <div>
       <Modal
@@ -21,11 +31,18 @@ const MapboxModal = forwardRef((props, ref) => {
         }}
       >
         <Slide in={show} direction="up" unmountOnExit>
-          <MapBox ref={ref} page={page} />
+          <Paper sx={styles.paper} tabIndex={-1}>
+            {children}
+          </Paper>
         </Slide>
       </Modal>
     </div>
   );
 });
 
+MapboxModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  modalControl: PropTypes.func.isRequired,
+  page: PropTypes.string
+}
 export default MapboxModal;

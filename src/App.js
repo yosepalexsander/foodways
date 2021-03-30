@@ -16,6 +16,7 @@ import User from "./pages/User";
 import EditUser from "./pages/EditUser";
 import ProductList from "./pages/ProductList";
 import Cart from "./pages/customer/Cart";
+import TransactionDetail from "./pages/customer/TransactionDetail";
 import Partner from "./pages/partner/Partner";
 import AddProduct from "./pages/partner/AddProduct";
 import EditProduct from "./pages/partner/EditProduct";
@@ -37,7 +38,7 @@ const styles = {
       px: 8,
     },
     "@media (min-width: 1200px)": {
-      px: 15,
+      px: 10,
     },
   },
 };
@@ -65,9 +66,26 @@ function App() {
       let payload = data.data.user;
       payload.token = localStorage.getItem("token");
 
+      if (data.data.user.location) {
+        const [lng, lat] = data.data.user.location.split(',')
+        const locationData = await getLocation(lng, lat)
+        return dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: {
+            ...data.data.user,
+            location: {
+              geolocation: data.data.user.location,
+              name: locationData.features[0].place_name
+            }
+          }
+        });
+      }
       dispatch({
         type: "LOGIN_SUCCESS",
-        payload,
+        payload: {
+          ...payload,
+          location: {}
+        }
       });
     } catch (error) {
       dispatch({ type: "AUTH_ERROR" });
@@ -77,7 +95,6 @@ function App() {
     defaultOptions: {
       queries: {
         cacheTime: 7200 * 1000, // 2 hours cache in memory 
-        staleTime: Infinity
       }
     }
   });
@@ -111,6 +128,7 @@ function App() {
                   <PrivateRoute exact path="/user/:id" component={User} />
                   <PrivateRoute exact path="/user/:id/edit" component={EditUser} />
                   <PrivateRoute exact path="/user/:id/cart" component={Cart} />
+                  <PrivateRoute exact path="/user/transaction/:id" component={TransactionDetail} />
                   <PrivateRoute exact path="/partner" component={Partner} />
                   <PrivateRoute exact path="/partner/:id" component={User} />
                   <PrivateRoute exact path="/partner/:id/edit" component={EditUser} />

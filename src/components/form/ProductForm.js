@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { Button, Input, Grid } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { createProduct, updateProduct } from "../../api/main";
@@ -11,14 +11,17 @@ import "./styles.css";
 
 const AddProductForm = (props) => {
   const { isEdit } = props;
-  const [alertOpen, setAlertOpen] = useState(false);
-  const queryClient = useQueryClient();
   const { id } = useParams();
+  const routeLocation = useLocation();
+  const queryClient = useQueryClient();
+  const initialProductState = routeLocation.state && routeLocation.state?.product;
+  const [alertOpen, setAlertOpen] = useState(false);
   const [values, setValues] = useState({
-    title: "",
+    title: isEdit ? initialProductState.title : "",
     image: null,
-    price: "",
+    price: isEdit ? initialProductState.price : "",
   });
+
   const handleChange = (e) => {
     setValues({
       ...values,
@@ -26,13 +29,14 @@ const AddProductForm = (props) => {
         ? e.target.files[0] : e.target.value
     });
   };
+
   const addProduct = useMutation(createProduct, {
     onError: (error) => {
       alert("oops, error occured: ", error.response.data);
     },
     onSuccess: () => {
       setAlertOpen(true);
-      queryClient.invalidateQueries(["products", id]);
+      queryClient.invalidateQueries("products");
     }
   });
 
@@ -40,30 +44,31 @@ const AddProductForm = (props) => {
     onError: (error) => {
       alert("oops, error occured: ", error.response.data);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       setAlertOpen(true);
-      queryClient.invalidateQueries(["products", id]);
+      queryClient.invalidateQueries("products");
     }
   });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // if input file empty
+
     if (values.image) {
       const formData = new FormData();
       formData.set("title", values.title);
       formData.set("price", values.price);
       formData.append("image", values.image, values.image.name);
-      isEdit
-        ? editProduct.mutate(formData)
-        : addProduct.mutate(formData);
+      if (isEdit) {
+        return editProduct.mutate(formData)
+      }
+      addProduct.mutate(formData);
     } else {
-      isEdit
-        ? editProduct.mutate(JSON.stringify(values))
-        : addProduct.mutate(JSON.stringify(values));
+      if (isEdit) {
+        return editProduct.mutate(JSON.stringify(values))
+      }
+      addProduct.mutate(JSON.stringify(values));
     }
-    setValues({ title: "", image: null, price: 0 });
   };
   return (
     <div>

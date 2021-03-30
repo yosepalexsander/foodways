@@ -9,7 +9,7 @@ const SectionPopular = ({ popular }) => {
         <Typography variant="h4" className="title" gutterBottom>
           Popular Restaurant
         </Typography>
-        <Grid container item spacing={2} justifyContent="space-between">
+        <Grid container item spacing={2}>
           {popular.map((item) => (
             <Grow key={item.id} in={Boolean(item)}
               style={{ transformOrigin: '0 0 0' }}

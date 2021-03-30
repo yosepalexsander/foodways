@@ -11,6 +11,7 @@ const styles = {
   padding: {
     mt: 4,
     mb: 2,
+    px: 4
   },
 };
 
@@ -21,10 +22,10 @@ const Landing = () => {
       const popular = data.data.users.filter(user => user.role === "partner");
       return popular;
     }
-  )
+  );
 
   if (isLoading) return <Loading />
-  if (isError) return <h4>{error.response.data.message}</h4>
+  if (isError) return <h4><pre>{error.message}</pre></h4>
   return (
     <div>
       <SectionHero />

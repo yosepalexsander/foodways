@@ -1,19 +1,34 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Card, CardContent, CardMedia, Typography } from "@material-ui/core";
 
-import avatar_default from "../../assets/images/avatar_default.jpeg";
+import restaurant_photo_default from "../../assets/images/restaurant_photo_default.jpg";
+import { getLocation } from "../../api/mapApi";
 import priceFormatter from "../../helpers/priceFormatter";
 
+const initialState = null;
 const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
   const history = useHistory();
+  const [location, setLocation] = useState(initialState);
   const imgUrlArr = item.image.split('/')
-  const userPhoto = imgUrlArr[imgUrlArr.length - 1] !== "null" ? item.image : avatar_default;
+  const userPhoto = imgUrlArr[imgUrlArr.length - 1] !== "null" ? item.image : restaurant_photo_default;
+
+  const getPartnerLocation = async () => {
+    if (item.location) {
+      const [lng, lat] = item.location.split(',');
+      const data = await getLocation(lng, lat);
+      return setLocation(data.features[0].text);
+    };
+    setLocation("unknown");
+  }
+  useEffect(() => {
+    getPartnerLocation()
+  }, [])
   const pushToProductList = (id) => {
     history.push(`/restaurant/${id}`, { restaurant: item.fullName });
   };
   const editProduct = (id) => {
-    history.push(`/product/${id}/edit`)
+    history.push(`/product/${id}/edit`, { product: item })
   }
   return (
     <Fragment>
@@ -31,10 +46,10 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
         elevation={0}
       >
         <CardMedia
-          sx={{ height: 134, p: 1 }}
+          sx={{ height: 134, p: 1, objectFit: "cover" }}
           component="img"
           src={userPhoto}
-          title={isFromProduct ? item.title : item.name}
+          title={isFromProduct ? item.title : item.fullName}
         />
         <CardContent>
           {isFromProduct ?
@@ -71,8 +86,8 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
                 <Typography variant="h6" gutterBottom>
                   {item.fullName}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {item.location || "unknown"}
+                <Typography variant="body2" color="textSecondary" noWrap>
+                  {location}
                 </Typography>
               </>
             )}

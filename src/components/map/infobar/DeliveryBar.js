@@ -12,17 +12,7 @@ const SelectDelivery = (props) => {
 
   const submitLocation = () => {
     if (page === "cart") {
-      cartDispatch({
-        type: "ADD_LOCATION",
-        payload: {
-          location: {
-            geolocation: geolocation.join(','),
-            name: location.features[0].place_name
-          }
-        }
-      })
-    } else {
-      userDispatch({
+      return cartDispatch({
         type: "ADD_LOCATION",
         payload: {
           location: {
@@ -32,6 +22,15 @@ const SelectDelivery = (props) => {
         }
       })
     }
+    userDispatch({
+      type: "ADD_LOCATION",
+      payload: {
+        location: {
+          geolocation: geolocation.join(','),
+          name: location.features[0].place_name
+        }
+      }
+    })
   }
 
   return (

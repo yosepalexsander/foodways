@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { getLocation } from "../../api/mapApi";
 
 const Login = forwardRef((props, ref) => {
   const { switchForm } = props;
@@ -27,14 +28,33 @@ const Login = forwardRef((props, ref) => {
   const history = useHistory();
 
   const loginUser = useMutation(userLogin, {
-    onSuccess: ({ data }) => {
-      dispatch({ type: "LOGIN_SUCCESS", payload: data.data.user });
+    onSuccess: async ({ data }) => {
       setAuthToken(data.data.user.token);
-      data.data.user.role === "partner" ?
-        history.push("/partner") : history.push("/")
+      if (data.data.user.location) {
+        const [lng, lat] = data.data.user.location.split(',')
+        const locationData = await getLocation(lng, lat)
+        return dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: {
+            ...data.data.user,
+            location: {
+              geolocation: data.data.user.location,
+              name: locationData.features[0].place_name
+            }
+          }
+        });
+      }
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: {
+          ...data.data.user,
+          location: {}
+        }
+      });
+      data.data.user.role === "partner" ? history.push("/partner") : history.push("/")
     },
     onError: (error) => {
-      alert(error.response.data.message);
+      alert("Error occured: ", error.message);
     }
   })
   const handleSubmit = async (event) => {
@@ -111,6 +131,7 @@ const Login = forwardRef((props, ref) => {
             variant="contained"
             color="secondary"
             type="submit"
+            disabled={values.email || values.password ? false : true}
           >
             Login
           </Button>

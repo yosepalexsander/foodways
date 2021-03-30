@@ -1,6 +1,8 @@
 import { Card, CardContent, CardMedia, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
+import restaurant_photo_default from "../../assets/images/restaurant_photo_default.jpg";
+
 const styles = {
   root: {
     display: "flex",
@@ -20,6 +22,9 @@ const styles = {
   },
   cover: {
     width: "65px",
+    height: "65px",
+    objectFit: "cover",
+    borderRadius: "50%",
   },
   title: {
     fontSize: "24px !important",
@@ -29,7 +34,7 @@ const styles = {
 const CardHorizontal = ({ item }) => {
   const history = useHistory();
   const imgUrlArr = item.image.split('/')
-  const userPhoto = imgUrlArr[imgUrlArr.length - 1] !== "null" ? item.image : avatar_default;
+  const userPhoto = imgUrlArr[imgUrlArr.length - 1] !== "null" ? item.image : restaurant_photo_default;
   const handleClick = () => {
     history.push(`/restaurant/${item.id}`, { restaurant: item.fullName });
   };

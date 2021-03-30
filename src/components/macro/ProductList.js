@@ -31,7 +31,7 @@ const ProductList = ({ id }) => {
                   style={{ transformOrigin: '0 0 0' }}
                   {...(isLoading ? {} : { timeout: 400 * index })}>
                   <Grid item>
-                    <CardVertical item={item} isFromProduct isPartner />
+                    <CardVertical item={item} isFromProduct isPartner partnerId={id} />
                   </Grid>
                 </Grow>
               ))}

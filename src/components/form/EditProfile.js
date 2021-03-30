@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useLocation } from "react-router-dom";
 
 import { UserContext } from "../../logics/contexts/authContext";
 import {
@@ -10,10 +9,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
+import { updateUser, getUserDetail } from "../../api/main";
 import CustomMapIcon from "../icons/CustomMapIcon";
 
 import MapboxModal from "../modal/MapboxModal";
-import { updateUser, getUserDetail } from "../../api/main";
+import MapBoxSetLocation from "../map/MapBoxSetLocation";
 import ToastAlert from "../micro/ToastAlert";
 import CustomTextField from "./CustomTextField";
 
@@ -21,18 +21,16 @@ import "./styles.css"
 
 const EditProfile = () => {
   const queryClient = useQueryClient();
-  const location = useLocation();
-  const user = location.state && location.state.user;
   const { dispatch, state: { user: userContext } } = useContext(UserContext);
   const [values, setValues] = useState({
     ...user,
     image: null,
-    location: userContext.location.name || ""
+    location: userContext.location.name || userContext.location.geolocation
   });
   const [showMapbox, setMapboxModal] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   useEffect(() => {
-    setValues({ ...values, location: userContext.location.name || user.location || "" })
+    setValues({ ...values, location: userContext.location.name || values.location || "" })
   }, [userContext.location])
 
   const handleChange = (e) => {
@@ -47,21 +45,23 @@ const EditProfile = () => {
     return updateUser(user.id, formData)
   }, {
     onSuccess: async () => {
-      const response = await getUserDetail(user.id);
-      dispatch({
-        type: "EDIT_PROFILE",
-        payload: {
-          id: user.id,
-          image: response.data.data.user.image,
-          role: response.data.data.user.role,
-          location: userContext.location || values.location
-        }
-      });
-      setAlertOpen(true);
-      queryClient.invalidateQueries(["userDetail", user.id]);
+      try {
+        const { data } = await getUserDetail(user.id);
+        dispatch({
+          type: "EDIT_PROFILE",
+          payload: {
+            ...data.data.user,
+            location: userContext.location || values.location
+          }
+        });
+        setAlertOpen(true);
+        queryClient.invalidateQueries(["userDetail", user.id]);
+      } catch (error) {
+        console.log(error)
+      }
     },
     onError: (error) => {
-      alert("ERROR: ", error)
+      alert("ERROR: ", error.message)
     }
   })
   const handleSubmit = (event) => {
@@ -175,8 +175,9 @@ const EditProfile = () => {
                 <MapboxModal
                   show={showMapbox}
                   modalControl={() => setMapboxModal(false)}
-                  page="user"
-                />
+                >
+                  <MapBoxSetLocation page="user" />
+                </MapboxModal>
               </Grid>
             </Grid>
             <Grid container item justifyContent="flex-end" sx={{ mt: 8 }}>
