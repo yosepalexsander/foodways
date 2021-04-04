@@ -29,9 +29,9 @@ const CartList = (props) => {
           <Grid container item>
             <CartItem
               item={product}
-              incrementQty={isFromCart && incrementProduct}
-              decrementQty={isFromCart && decrementProduct}
-              removeItem={isFromCart && removeProduct}
+              incrementQty={incrementProduct}
+              decrementQty={decrementProduct}
+              removeItem={removeProduct}
             />
           </Grid>
           <hr className="divider" />

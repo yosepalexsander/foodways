@@ -7,7 +7,7 @@ const OrderTotal = (props) => {
   const { total, qty } = props;
   return (
     <Fragment>
-      <Grid item container justifyContent="flex-end" spacing={2} sx={{ marginBottom: "50px" }}>
+      <Grid item container justifyContent="flex-end" spacing={2} sx={{ paddingBottom: "16px" }}>
         <Grid item>
           <Typography variant="body1" color="error" sx={{ fontWeight: 800 }}>
             Total

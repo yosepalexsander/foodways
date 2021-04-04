@@ -18,7 +18,7 @@ const MapboxRoute = (props) => {
   const [duration, setDuration] = useState(null);
 
   const getStartLocation = async () => {
-    const data = await getLocation(locationStart[0], locationStart[1]);
+    const data = await getLocation(locationEnd[0], locationEnd[1]);
     setLocation({
       name: data.features[0].text,
       address: data.features[0].place_name
@@ -38,10 +38,13 @@ const MapboxRoute = (props) => {
     setDuration(route.duration)
     return geojson
   }
-  useEffect(async () => {
-    const geojson = await directions()
+  useEffect(() => {
+    let maps;
+    directions()
+      .then(geojson => {
+        maps = setupMap(locationStart, locationEnd, geojson)
+      })
     getStartLocation()
-    const maps = setupMap(locationStart, locationEnd, geojson)
     return () => maps.remove();
   }, []);
 
@@ -50,7 +53,7 @@ const MapboxRoute = (props) => {
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
       center: loc1,
-      zoom: 13
+      zoom: 12
     });
     map.on("load", () => {
       map.addSource("routes", {

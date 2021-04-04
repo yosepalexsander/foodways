@@ -7,7 +7,7 @@ const Alert = forwardRef((props, ref) => {
 });
 
 const ToastAlert = (props) => {
-  const { alertOpen, alertControl, children } = props;
+  const { alertOpen, alertControl, children, severity } = props;
   return (
     <div>
       <Snackbar
@@ -21,7 +21,7 @@ const ToastAlert = (props) => {
         onClose={alertControl}
         autoHideDuration={3000}
       >
-        <Alert severity="success" onClose={alertControl}>
+        <Alert severity={severity} onClose={alertControl}>
           {children}
         </Alert>
       </Snackbar>

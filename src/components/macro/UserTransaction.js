@@ -1,13 +1,12 @@
 import { Fragment } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography } from "@material-ui/core";
 
 import Loading from "../micro/Loading";
 import CardTransaction from "../card/CardTransaction";
-import icon_notfound from "../../assets/icons/icon_notfound.svg";
+import icon_nodata from "../../assets/icons/icon_nodata.svg";
 
 const UserTransaction = (props) => {
-  const { transactionData, isLoading, isError, isPartner, route } = props;
+  const { transactionData, isLoading, isPartner, route } = props;
 
   const toTransactionDetail = (id) => {
     route.push(`transaction/${id}`)
@@ -16,18 +15,12 @@ const UserTransaction = (props) => {
     <Grid id="user-transaction" container item direction="column" spacing={2} xs={6} sm={4}>
       {isLoading ? (
         <Loading />
-      ) : isError ? (
-        <Grid item>
-          <Typography variant="h4" color="inherit">
-            {transactionData.message}
-          </Typography>
-        </Grid>
       ) : (
         <Fragment>
-          {transactionData.length <= 0 ?
+          {transactionData?.length <= 0 ?
             (
               <Grid item sx={{ textAlign: "center" }}>
-                <img src={icon_notfound} alt="not found" />
+                <img src={icon_nodata} alt="not found" />
                 <Typography>You don't have any transaction history</Typography>
               </Grid>
             ) : (
@@ -47,12 +40,5 @@ const UserTransaction = (props) => {
     </Grid>
   )
 }
-
-UserTransaction.propTypes = {
-  transactionData: PropTypes.array,
-  isLoading: PropTypes.bool,
-  isError: PropTypes.bool,
-  isPartner: PropTypes.bool
-};
 
 export default UserTransaction;

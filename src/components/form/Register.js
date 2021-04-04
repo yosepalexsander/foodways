@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
 import { forwardRef, Fragment, useContext } from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import { Button, Link, Typography, Paper } from "@material-ui/core";
 import { setAuthToken, userRegister } from "../../api/main";
+import { getLocation } from "../../api/mapApi";
 import { FormikProvider, Form, useFormik } from "formik";
 import { UserContext } from "../../logics/contexts/authContext";
 import { RegisterSchema } from "./ValidationSchema";
@@ -164,7 +164,4 @@ const Register = forwardRef((props, ref) => {
   );
 });
 
-Register.propTypes = {
-  switchForm: PropTypes.func
-};
 export default Register;

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Backdrop, Fade, Modal, Paper } from "@material-ui/core";
 
 const styles = {
@@ -40,9 +39,4 @@ const ConfirmModal = (props) => {
   )
 }
 
-ConfirmModal.propTypes = {
-  childrean: PropTypes.node,
-  show: PropTypes.bool.isRequired,
-  modalControl: PropTypes.func.isRequired
-}
 export default ConfirmModal;

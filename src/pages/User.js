@@ -1,39 +1,44 @@
-import { Fragment } from "react";
-import { useHistory, useRouteMatch, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useEffect, useState, useContext } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 import { Grid, Typography } from "@material-ui/core";
-import { getCustomerTransactions, getPartnerTransactions, getUserDetail } from "../api/main";
+import { UserContext } from "../logics/contexts/authContext";
+import { getCustomerTransactions, getPartnerTransactions } from "../api/main";
 
-import Loading from "../components/micro/Loading";
 import UserProfile from "../components/macro/UserProfile";
 
 import UserTransaction from "../components/macro/UserTransaction";
 
 const Profile = () => {
   const route = useHistory();
+  const { state: { user } } = useContext(UserContext);
+  const [transactions, setTransactions] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { url } = useRouteMatch();
-  const { id } = useParams();
-  const { isLoading: userLoading, data: userData, isError: userError } = useQuery(["userDetail", parseInt(id)],
-    async () => {
-      const { data } = await getUserDetail(id);
-      const transactions = await getTransactions(data.data.user.role);
-      const newData = {
-        user: data.data.user,
-        transactions: transactions
-      }
-      return newData;
-    }
-  );
+
   const getTransactions = async (role) => {
     if (role === "partner") {
-      const { data } = await getPartnerTransactions(id);
-      return data.data.transactions
+      const { data } = await getPartnerTransactions(user.id);
+      return data.data.transactions;
     } else if (role === "user") {
       const { data } = await getCustomerTransactions();
-      return data.data.transactions
+      return data.data.transactions;
     }
   };
+  useEffect(() => {
+    let isMounted = true
+    getTransactions(user.role)
+      .then(data => {
+        if (isMounted) {
+          setTransactions(data)
+          setLoading(false)
+        }
+      })
+    return () => {
+      isMounted = false
+    }
+  }, []);
+
 
   const editProfile = () => {
     route.push(`${url}/edit`);
@@ -54,26 +59,11 @@ const Profile = () => {
         </Grid>
       </Grid>
       <Grid container justifyContent="space-between">
-        {userLoading ?
-          (
-            <Loading />
-          ) : userError ? (
-            <Fragment>
-              <Typography
-                variant="h4"
-                color="inherit"
-                textAlign="center">
-                {userError.response.data.message}
-              </Typography>
-            </Fragment>
-          ) : (
-            <UserProfile profile={userData?.user} onClickEdit={editProfile} />
-          )}
+        <UserProfile profile={user} onClickEdit={editProfile} />
         <UserTransaction
-          transactionData={userData?.transactions}
-          isLoading={userLoading}
-          isError={userError}
-          isPartner={userData?.user?.role === "partner" ? true : false}
+          transactionData={transactions}
+          isLoading={loading}
+          isPartner={user.role === "partner" ? true : false}
           route={route} />
       </Grid>
     </div>

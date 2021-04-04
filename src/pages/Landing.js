@@ -9,7 +9,7 @@ import { getPartnerUsers } from "../api/main";
 
 const styles = {
   padding: {
-    mt: 4,
+    mt: 3,
     mb: 2,
     px: 4
   },

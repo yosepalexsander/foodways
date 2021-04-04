@@ -1,8 +1,7 @@
 import { useContext, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 
 import { UserContext } from "./logics/contexts/authContext";
@@ -24,6 +23,7 @@ import EditProduct from "./pages/partner/EditProduct";
 import Loading from "./components/micro/Loading";
 
 import { checkAuth, setAuthToken } from "./api/main";
+import { getLocation } from "./api/mapApi";
 
 const styles = {
   container: {
@@ -38,7 +38,7 @@ const styles = {
       px: 8,
     },
     "@media (min-width: 1200px)": {
-      px: 10,
+      px: 12,
     },
   },
 };
@@ -50,6 +50,7 @@ if (localStorage.getItem("token")) {
 
 function App() {
   const { state, dispatch } = useContext(UserContext);
+  const location = useLocation()
   useEffect(() => {
     checkUserAuthentication();
   }, []);
@@ -65,14 +66,13 @@ function App() {
 
       let payload = data.data.user;
       payload.token = localStorage.getItem("token");
-
       if (data.data.user.location) {
         const [lng, lat] = data.data.user.location.split(',')
         const locationData = await getLocation(lng, lat)
         return dispatch({
           type: "LOGIN_SUCCESS",
           payload: {
-            ...data.data.user,
+            ...payload,
             location: {
               geolocation: data.data.user.location,
               name: locationData.features[0].place_name
@@ -95,6 +95,7 @@ function App() {
     defaultOptions: {
       queries: {
         cacheTime: 7200 * 1000, // 2 hours cache in memory 
+        refetchOnWindowFocus: false
       }
     }
   });
@@ -116,28 +117,25 @@ function App() {
 
   return (
     <div>
-      <CssBaseline />
       <QueryClientProvider client={client}>
         <CartContextProvider>
           <OrderContextProvider>
-            <Router>
-              <Header />
-              <Container maxWidth="lg" sx={styles.container}>
-                <Switch>
-                  <Route exact path="/" component={Landing} />
-                  <PrivateRoute exact path="/user/:id" component={User} />
-                  <PrivateRoute exact path="/user/:id/edit" component={EditUser} />
-                  <PrivateRoute exact path="/user/:id/cart" component={Cart} />
-                  <PrivateRoute exact path="/user/transaction/:id" component={TransactionDetail} />
-                  <PrivateRoute exact path="/partner" component={Partner} />
-                  <PrivateRoute exact path="/partner/:id" component={User} />
-                  <PrivateRoute exact path="/partner/:id/edit" component={EditUser} />
-                  <PrivateRoute exact path="/partner/:id/add-product" component={AddProduct} />
-                  <PrivateRoute exact path="/product/:id/edit" component={EditProduct} />
-                  <PrivateRoute exact path="/restaurant/:id" component={ProductList} />
-                </Switch>
-              </Container>
-            </Router>
+            <Header />
+            <Container maxWidth="lg" sx={styles.container}>
+              <Switch>
+                <Route exact path="/" component={Landing} />
+                <PrivateRoute exact path="/user/:id" component={User} />
+                <PrivateRoute exact path="/user/:id/edit" component={EditUser} />
+                <PrivateRoute exact path="/user/:id/cart" component={Cart} />
+                <PrivateRoute exact path="/user/transaction/:id" component={TransactionDetail} />
+                <PrivateRoute exact path="/partner" component={Partner} />
+                <PrivateRoute exact path="/partner/:id" component={User} />
+                <PrivateRoute exact path="/partner/:id/edit" component={EditUser} />
+                <PrivateRoute exact path="/partner/:id/add-product" component={AddProduct} />
+                <PrivateRoute exact path="/product/:id/edit" component={EditProduct} />
+                <PrivateRoute exact path="/restaurant/:id" component={ProductList} />
+              </Switch>
+            </Container>
           </OrderContextProvider>
         </CartContextProvider>
         <ReactQueryDevtools initialIsOpen={false} />

@@ -50,12 +50,12 @@ const Transactions = (props) => {
       </Typography>
     )
   return (
-    <div>
+    <section id="transactions">
       <TableIncomeTransaction transactionData={transactionData} onClickUpdate={handleUpdate} />
       <ToastAlert alertOpen={alertOpen} alertControl={() => setAlertOpen(false)}>
         Transaction has succesfully updated!
       </ToastAlert>
-    </div>
+    </section>
   )
 }
 

@@ -10,85 +10,103 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import OrderList from "../../components/macro/OrderList";
 import OrderTotal from "../../components/micro/OrderTotal";
 
-import ConfirmModal from "../../components/modal/ConfirmModal";
 import MapboxModal from "../../components/modal/MapboxModal";
 import MapBoxRoute from "../../components/map/MapboxRoute";
 import Loading from "../../components/micro/Loading";
 
 import { getTransactionDetail, updateTransaction } from "../../api/main";
+import { getLocation } from "../../api/mapApi";
+import icon_credit_card from "../../assets/icons/icon_credit_card.svg";
 
 const initialState = false;
-const TransactionDetail = (props) => {
+const TransactionDetail = () => {
   const { id } = useParams();
-  const [showConfirmModal, setShowConfirmModal] = useState(initialState);
-  const [show, setShowMapModal] = useState(initialState)
+  const [showMapModal, setShowMapModal] = useState(initialState)
 
   const { isLoading, data: transactionData, error, refetch } = useQuery(["transaction", parseInt(id)], async () => {
-    const response = await getTransactionDetail(id);
-    return response.data.data;
+    const { data } = await getTransactionDetail(id);
+    const [lng, lat] = data.data.transaction.deliveryLocation.split(',');
+    const locationData = await getLocation(lng, lat);
+    return {
+      ...data.data.transaction,
+      deliveryLocation: {
+        coordinates: [lng, lat],
+        address: locationData.features[0].place_name
+      }
+    }
   });
-  const totalAmount = transactionData?.transaction?.orders.reduce((amount, item) => {
+  const totalAmount = transactionData?.orders.reduce((amount, item) => {
     const totalAmountPerProduct = item.price * item.qty;
     return amount + totalAmountPerProduct;
   }, 0);
-  const totalQty = transactionData?.transaction?.orders.reduce((qty, item) => {
+  const totalQty = transactionData?.orders.reduce((qty, item) => {
     return qty + item.qty;
   }, 0);
-
   const transactionMutation = useMutation(body => updateTransaction(id, body), {
     onSuccess: () => {
       refetch()
     }
   })
-
   const handleUpdate = (status) => {
     const data = { status: status };
     transactionMutation.mutate(JSON.stringify(data))
-  }
+  };
+
   if (isLoading) return <Loading />
   if (error) return <h1>{error.message}</h1>
   return (
     <>
-      <Grid container justifyContent="space-between" spacing={2}>
-        <Grid item container direction="column" spacing={2} xs={5}>
-          <Grid item>
-            <Typography variant="h5" component="p">
-              {transactionData?.transaction?.restaurant?.fullName}
-              {transactionData?.transaction?.status === "success" ? (
-                <CheckCircleIcon sx={{ color: "success.main" }} />
-              ) : transactionData?.transaction?.status === "on the way" ? (
-                <AccessTimeIcon sx={{ color: "blue" }} />
-              ) : transactionData?.transaction?.status === "waiting approve" ? (
-                <HourglassEmptyIcon sx={{ color: "warning.main" }} />
-              ) : (
-                <CancelIcon color="error" />
-              )}
-            </Typography>
+      <Grid container direction="column">
+        <Grid item container spacing={2} alignItems="center">
+          <Grid item xs={2}>
+            <img src={icon_credit_card} alt="credit card icon" style={{ width: "100%", maxWidth: "150px" }} />
+          </Grid>
+          <Grid item xs={10} container direction="column" spacing={2}>
+            <Grid item>
+              <Typography variant="h5" component="p">
+                {transactionData?.restaurant?.fullName}
+                {transactionData?.status === "success" ? (
+                  <CheckCircleIcon sx={{ color: "success.main" }} />
+                ) : transactionData?.status === "on the way" ? (
+                  <AccessTimeIcon sx={{ color: "blue" }} />
+                ) : transactionData?.status === "waiting approve" ? (
+                  <HourglassEmptyIcon sx={{ color: "warning.main" }} />
+                ) : (
+                  <CancelIcon color="error" />
+                )}
+              </Typography>
+            </Grid>
+            <Grid item container spacing={2}>
+              <Grid item xs={8} >
+                <Typography>
+                  Delivery Location: {transactionData?.deliveryLocation?.address}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  onClick={() => setShowMapModal(true)}
+                  variant="contained"
+                  fullWidth
+                  color="secondary">
+                  See How Far
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item container direction="column" xs={7} spacing={2}>
-          <OrderList orders={transactionData?.transaction?.orders} />
+        <Grid item container direction="column" spacing={2} xs={7}>
+          <OrderList orders={transactionData?.orders} />
           <OrderTotal
             total={totalAmount}
             qty={totalQty}
           />
-          <Grid item container justifyContent="flex-end" xs={5}>
-            <Grid item>
-              <Button
-                onClick={() => setShowMapModal(true)}
-                variant="contained"
-                color="secondary">
-                See How Far
-              </Button>
-            </Grid>
-          </Grid>
         </Grid>
       </Grid>
-      <MapboxModal show={show} modalControl={() => setShowMapModal(false)}>
+      <MapboxModal show={showMapModal} modalControl={() => setShowMapModal(false)}>
         <MapBoxRoute page="transaction"
-          locationStart={transactionData?.transaction?.restaurant?.location.split(',')}
-          locationEnd={transactionData?.transaction?.userOrder?.location.split(',')}
-          deliveryStatus={transactionData?.transaction?.status}
+          locationEnd={transactionData?.deliveryLocation?.coordinates}
+          locationStart={transactionData?.restaurant?.location.split(',')}
+          deliveryStatus={transactionData?.status}
           handleUpdate={() => handleUpdate("success")} />
       </MapboxModal>
     </>

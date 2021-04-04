@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Box, Tab, Tabs } from "@material-ui/core";
+import { Box, Grid, Tab, Tabs, Typography } from "@material-ui/core";
 import { UserContext } from "../../logics/contexts/authContext";
 
 import Transactions from "./Transactions";
@@ -35,6 +35,19 @@ const Partner = () => {
   };
   return (
     <div>
+      <Grid container spacing={2} justifyContent="center" alignItems="center" sx={{ margin: '0 0 8px' }}>
+        <Grid item xs={3}>
+          <img src={user.image} alt={user.fullName} style={{ width: "100%", maxWidth: "200px", height: "auto" }} />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant="h5" gutterBottom component="p">
+            {user.fullName}
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom component="p">
+            {user.location.name}
+          </Typography>
+        </Grid>
+      </Grid>
       <Tabs
         value={value}
         onChange={handleChange}

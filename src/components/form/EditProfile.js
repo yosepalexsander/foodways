@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 
 import { UserContext } from "../../logics/contexts/authContext";
 import {
@@ -19,19 +19,20 @@ import CustomTextField from "./CustomTextField";
 
 import "./styles.css"
 
+const initialState = false
 const EditProfile = () => {
-  const queryClient = useQueryClient();
-  const { dispatch, state: { user: userContext } } = useContext(UserContext);
+  const { dispatch, state: { user } } = useContext(UserContext);
   const [values, setValues] = useState({
     ...user,
     image: null,
-    location: userContext.location.name || userContext.location.geolocation
+    location: user.location.name || user.location.geolocation || ""
   });
-  const [showMapbox, setMapboxModal] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
+  const [showMapbox, setMapboxModal] = useState(initialState);
+  const [alertSuccessOpen, setAlertSuccessOpen] = useState(initialState);
+  const [alertErrorOpen, setAlertErrorOpen] = useState(initialState);
   useEffect(() => {
-    setValues({ ...values, location: userContext.location.name || values.location || "" })
-  }, [userContext.location])
+    setValues({ ...values, location: user.location.name || values.location || "" })
+  }, [user.location])
 
   const handleChange = (e) => {
     setValues({
@@ -45,23 +46,18 @@ const EditProfile = () => {
     return updateUser(user.id, formData)
   }, {
     onSuccess: async () => {
-      try {
-        const { data } = await getUserDetail(user.id);
-        dispatch({
-          type: "EDIT_PROFILE",
-          payload: {
-            ...data.data.user,
-            location: userContext.location || values.location
-          }
-        });
-        setAlertOpen(true);
-        queryClient.invalidateQueries(["userDetail", user.id]);
-      } catch (error) {
-        console.log(error)
-      }
+      const { data } = await getUserDetail(user.id);
+      dispatch({
+        type: "EDIT_PROFILE",
+        payload: {
+          ...data.data.user,
+          location: user.location || values.location
+        }
+      });
+      setAlertSuccessOpen(true);
     },
-    onError: (error) => {
-      alert("ERROR: ", error.message)
+    onError: () => {
+      setAlertErrorOpen(true)
     }
   })
   const handleSubmit = (event) => {
@@ -69,14 +65,14 @@ const EditProfile = () => {
     if (values.image) {
       const formData = new FormData();
       formData.set("fullName", values.fullName);
-      formData.set("location", userContext.location.geolocation || values.location || "");
+      formData.set("location", user.location.geolocation || null);
       formData.set("phone", values.phone);
       formData.append("image", values.image, values.image.name);
       editUser.mutate(formData);
     } else {
       const body = {
         fullName: values.fullName,
-        location: userContext.location.geolocation || values.location,
+        location: user.location.geolocation || null,
         phone: values.phone
       };
       editUser.mutate(JSON.stringify(body));
@@ -195,8 +191,11 @@ const EditProfile = () => {
           </Grid>
         </Grid>
       </form>
-      <ToastAlert alertOpen={alertOpen} alertControl={() => setAlertOpen(false)}>
+      <ToastAlert alertOpen={alertSuccessOpen} severity="success" alertControl={() => setAlertSuccessOpen(false)}>
         Your profile has been updated
+      </ToastAlert>
+      <ToastAlert alertOpen={alertErrorOpen} severity="error" alertControl={() => setAlertErrorOpen(false)}>
+        Your profile hasn't been updated, it's because of error in response
       </ToastAlert>
     </div>
   );

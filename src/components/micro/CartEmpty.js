@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Grid, Typography } from "@material-ui/core";
 import Loading from "../micro/Loading";
 import empty_cart from "../../assets/images/empty_cart.png";
-import order_success from "../../assets/images/order-success.png";
+import order_success from "../../assets/icons/icon_order_success.svg";
 
 const CartEmpty = (props) => {
   const { isOrdered, isProcess } = props

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import { Backdrop, Modal, Paper, Slide } from "@material-ui/core";
 
@@ -8,8 +7,8 @@ const styles = {
     mt: "10rem",
     mx: "auto",
     p: 2,
-    width: "60%",
-    height: "60%",
+    width: "80%",
+    height: "70%",
   }
 };
 const MapboxModal = forwardRef((props, ref) => {
@@ -40,9 +39,4 @@ const MapboxModal = forwardRef((props, ref) => {
   );
 });
 
-MapboxModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  modalControl: PropTypes.func.isRequired,
-  page: PropTypes.string
-}
 export default MapboxModal;

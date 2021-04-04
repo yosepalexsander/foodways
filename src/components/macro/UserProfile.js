@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Button, Grid, Typography } from "@material-ui/core";
 import avatar_default from "../../assets/images/avatar_default.jpeg";
 
@@ -13,7 +12,7 @@ const UserProfile = (props) => {
           <img
             src={userPhoto}
             alt="user"
-            style={{ width: "180px", height: "221px", objectFit: "contain" }}
+            style={{ width: "180px", height: "221px", objectFit: "cover" }}
           />
         </Grid>
         <Grid item>
@@ -98,8 +97,4 @@ const UserProfile = (props) => {
   )
 }
 
-UserProfile.propTypes = {
-  profile: PropTypes.object.isRequired,
-  onClickEdit: PropTypes.func.isRequired
-}
 export default UserProfile;

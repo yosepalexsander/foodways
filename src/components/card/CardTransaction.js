@@ -71,9 +71,11 @@ const CardTransaction = (props) => {
     year: "numeric",
     month: "long",
     day: "numeric",
+    hour: 'numeric', minute: 'numeric',
   };
 
-  const transactionDate = new Date(transaction.createdAt).toLocaleDateString('id-ID', options);
+  let transactionDate = new Date(transaction.createdAt);
+  transactionDate = new Intl.DateTimeFormat('default', options).format(transactionDate);
   const totalOrder = transaction.orders.reduce((total, order) => {
     const totalPerProduct = order.price * order.qty;
     return total + totalPerProduct;

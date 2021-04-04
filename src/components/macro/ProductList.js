@@ -25,7 +25,7 @@ const ProductList = ({ id }) => {
               </Typography>
             </NotFound>
           ) : (
-            <Grid container spacing={3} justifyContent="space-evenly" sx={{ pb: 3 }}>
+            <Grid container spacing={3} sx={{ pb: 3 }}>
               {productData?.products.map((item, index) => (
                 <Grow key={item.id} in={!isLoading}
                   style={{ transformOrigin: '0 0 0' }}

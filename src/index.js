@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import App from "./App";
 import theme from "./assets/theme/customTheme";
 import { UserContextProvider } from "./logics/contexts/authContext";
@@ -9,7 +11,10 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <UserContextProvider>
-        <App />
+        <CssBaseline />
+        <Router>
+          <App />
+        </Router>
       </UserContextProvider>
     </ThemeProvider>
   </React.StrictMode>,

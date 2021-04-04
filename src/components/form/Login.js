@@ -1,12 +1,9 @@
-import PropTypes from "prop-types";
 import { forwardRef, Fragment, useState, useContext } from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
-import { UserContext } from "../../logics/contexts/authContext";
-import { setAuthToken, userLogin } from "../../api/main";
-import CustomTextField from "./CustomTextField";
-
 import {
+  Alert,
+  AlertTitle,
   Button,
   IconButton,
   InputAdornment,
@@ -15,7 +12,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+
+import { UserContext } from "../../logics/contexts/authContext";
+
+import { setAuthToken, userLogin } from "../../api/main";
 import { getLocation } from "../../api/mapApi";
+
+import CustomTextField from "./CustomTextField";
+
 
 const Login = forwardRef((props, ref) => {
   const { switchForm } = props;
@@ -43,7 +47,8 @@ const Login = forwardRef((props, ref) => {
             }
           }
         });
-      }
+      };
+
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: {
@@ -52,9 +57,6 @@ const Login = forwardRef((props, ref) => {
         }
       });
       data.data.user.role === "partner" ? history.push("/partner") : history.push("/")
-    },
-    onError: (error) => {
-      alert("Error occured: ", error.message);
     }
   })
   const handleSubmit = async (event) => {
@@ -83,6 +85,12 @@ const Login = forwardRef((props, ref) => {
         >
           Login
         </Typography>
+        {loginUser.isError && (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            Your Email or Password is Incorrect!
+          </Alert>
+        )}
         <form
           id="login-modal-description"
           className="_form"
@@ -131,7 +139,7 @@ const Login = forwardRef((props, ref) => {
             variant="contained"
             color="secondary"
             type="submit"
-            disabled={values.email || values.password ? false : true}
+            disabled={values.email && values.password ? false : true}
           >
             Login
           </Button>
@@ -152,7 +160,4 @@ const Login = forwardRef((props, ref) => {
   );
 });
 
-Login.propTypes = {
-  switchForm: PropTypes.func
-};
 export default Login;

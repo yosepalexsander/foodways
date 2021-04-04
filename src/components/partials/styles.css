@@ -15,6 +15,12 @@
   padding: 0 64px;
 }
 
+@media screen and (max-width: 600px) {
+  .header-padding {
+    padding: 0 12px;
+  }
+}
+
 .header-button {
   width: 100px;
   height: 30px;

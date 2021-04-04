@@ -134,7 +134,7 @@ const AddProductForm = (props) => {
           </Grid>
         </Grid>
       </form>
-      <ToastAlert alertOpen={alertOpen} alertControl={() => setAlertOpen(false)}>
+      <ToastAlert alertOpen={alertOpen} severity="success" alertControl={() => setAlertOpen(false)}>
         Product has successfully {isEdit ? <>updated</> : <>created</>} - check it out!
       </ToastAlert>
     </div>

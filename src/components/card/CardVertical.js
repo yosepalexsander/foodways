@@ -17,7 +17,11 @@ const CardVertical = ({ item, isFromProduct, isPartner, ...props }) => {
     if (item.location) {
       const [lng, lat] = item.location.split(',');
       const data = await getLocation(lng, lat);
-      return setLocation(data.features[0].text);
+      if (data.features.length < 1) {
+        return setLocation("unknown");
+      }
+      setLocation(data.features[0].text);
+      return;
     };
     setLocation("unknown");
   }

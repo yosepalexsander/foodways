@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 
 import { CartContext } from "../../logics/contexts/cartContext";
@@ -12,6 +12,7 @@ import CartSearchLocation from "../../components/micro/CartSearchLocation";
 import MapboxModal from "../../components/modal/MapboxModal";
 import MapBoxSetLocation from "../../components/map/MapBoxSetLocation";
 
+import ToastAlert from "../../components/micro/ToastAlert"
 import { createTransaction } from "../../api/main";
 
 const useStyles = makeStyles(
@@ -28,24 +29,23 @@ const useStyles = makeStyles(
   { name: "Cart" }
 );
 
+const initialState = false;
 const Cart = () => {
   const classes = useStyles();
-  const queryClient = useQueryClient();
   const { state: cartState, dispatch: cartDispatch } = useContext(CartContext);
-  const { state: { user } } = useContext(UserContext);
-  const { restaurantId, carts, location: userLocation } = cartState;
-  const [show, setShow] = useState(false);
-  const [isOrdered, setIsOrdered] = useState(false);
-  const [location, setLocation] = useState(userLocation.name || "");
+  const { state: { user: { location: userLocation } } } = useContext(UserContext);
+  const { restaurantId, carts, location: deliveryLocation } = cartState;
+  const [show, setShow] = useState(initialState);
+  const [isOrdered, setIsOrdered] = useState(initialState);
+  const [alertOpen, setAlertOpen] = useState(initialState);
+  const [location, setLocation] = useState(deliveryLocation.name || userLocation.name);
 
   useEffect(() => {
-    setLocation(userLocation.name)
-  }, [userLocation.name]);
+    setLocation(deliveryLocation.name || userLocation.name)
+  }, [deliveryLocation.name]);
 
   const makeTransaction = useMutation(createTransaction, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["transactions", restaurantId]);
-      queryClient.invalidateQueries(["userDetail", user.id]);
       setIsOrdered(true)
       cartDispatch({ type: "SUBMIT_CART" })
     },
@@ -62,19 +62,23 @@ const Cart = () => {
   }, 0);
 
   const submitTransaction = () => {
-    const body = {
-      restaurant_id: restaurantId,
-      products: carts.map(product => ({
-        id: product.id,
-        qty: product.qty
-      }))
+    if (location) {
+      const body = {
+        restaurant_id: restaurantId,
+        deliveryLocation: deliveryLocation.geolocation || userLocation.geolocation,
+        products: carts.map(product => ({
+          id: product.id,
+          qty: product.qty
+        }))
+      }
+      makeTransaction.mutate(JSON.stringify(body, null, 2))
+      cartDispatch({
+        type: "SUBMIT_CART",
+        payload: { restaurantId: null, location: "" },
+      });
+      return;
     }
-
-    makeTransaction.mutate(JSON.stringify(body, null, 2))
-    cartDispatch({
-      type: "SUBMIT_CART",
-      payload: { restaurantId: null, location: "" },
-    });
+    setAlertOpen(true);
   };
   return (
     <div>
@@ -108,6 +112,9 @@ const Cart = () => {
           </>
         )}
       </div>
+      <ToastAlert alertOpen={alertOpen} severity="error" alertControl={() => setAlertOpen(false)}>
+        Delivery location must not be empty
+      </ToastAlert>
     </div>
   );
 };

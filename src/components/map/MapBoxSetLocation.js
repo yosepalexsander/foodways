@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
@@ -16,7 +15,6 @@ const MapBoxSetLocation = (props) => {
   const mapContainer = useRef(null);
   const [lng, setLng] = useState(106.774124);
   const [lat, setLat] = useState(-6.121435);
-  const [zoom] = useState(14);
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
@@ -39,7 +37,7 @@ const MapBoxSetLocation = (props) => {
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
       center: center,
-      zoom: zoom,
+      zoom: 12,
     });
     const nav = new mapboxgl.NavigationControl();
     map.addControl(nav);
@@ -49,8 +47,8 @@ const MapBoxSetLocation = (props) => {
       .addTo(map);
 
     marker.on("dragend", async () => {
-      const markLng = marker.getLngLat().lng;
-      const markLat = marker.getLngLat().lat;
+      const markLng = marker.getLngLat().lng.toFixed(5);
+      const markLat = marker.getLngLat().lat.toFixed(5);
       setLng(markLng);
       setLat(markLat);
       const data = await getLocation(markLng, markLat);
@@ -65,10 +63,6 @@ const MapBoxSetLocation = (props) => {
       <div className="mapContainer" ref={mapContainer}></div>
     </>
   );
-};
-
-MapBoxSetLocation.propTypes = {
-  page: PropTypes.string
 };
 
 export default MapBoxSetLocation;

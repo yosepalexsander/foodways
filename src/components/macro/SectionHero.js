@@ -12,13 +12,14 @@ const SectionHero = () => {
           display="flex"
           flexDirection="row"
           justifyContent="space-evenly"
+          alignItems="center"
           className="background"
         >
-          <Box display="block" pt={8}>
-            <Typography variant="h1" color="secondary">
+          <Box>
+            <Typography variant="h2" color="secondary">
               Are You Hungry ?
             </Typography>
-            <Typography variant="h1" color="secondary">
+            <Typography variant="h2" color="secondary">
               Express Home Delivery
             </Typography>
             <Box
@@ -39,8 +40,10 @@ const SectionHero = () => {
               </Typography>
             </Box>
           </Box>
-          <img src={pizza} alt="pizza"
-            className="image" />
+          <Box>
+            <img src={pizza} alt="pizza"
+              className="image" />
+          </Box>
         </Box>
       </section>
     </Fragment>
