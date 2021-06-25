@@ -1,10 +1,10 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import clsx from "clsx";
-import "./styles.css";
 import priceFormatter from "../../helpers/priceFormatter";
 
+import "./styles.css";
 const CartTotal = (props) => {
-  const { total, qty, submitOrder, page } = props;
+  const { total, qty, submitOrder } = props;
   return (
     <Grid
       id="cart-total"
@@ -50,7 +50,7 @@ const CartTotal = (props) => {
         <Grid item>
           <Typography variant="body1" color="error" sx={{ fontWeight: 800 }}>
             Total
-            </Typography>
+          </Typography>
         </Grid>
         <Grid item>
           <Typography variant="body1" color="error" sx={{ fontWeight: 800 }}>
@@ -67,7 +67,7 @@ const CartTotal = (props) => {
             onClick={submitOrder}
           >
             Order
-            </Button>
+          </Button>
         </Grid>
       </Grid>
     </Grid>

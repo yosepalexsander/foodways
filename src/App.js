@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Container from "@material-ui/core/Container";
@@ -50,9 +50,9 @@ if (localStorage.getItem("token")) {
 
 function App() {
   const { state, dispatch } = useContext(UserContext);
-  const location = useLocation()
   useEffect(() => {
     checkUserAuthentication();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const checkUserAuthentication = async () => {
     try {
@@ -67,25 +67,25 @@ function App() {
       let payload = data.data.user;
       payload.token = localStorage.getItem("token");
       if (data.data.user.location) {
-        const [lng, lat] = data.data.user.location.split(',')
-        const locationData = await getLocation(lng, lat)
+        const [lng, lat] = data.data.user.location.split(",");
+        const locationData = await getLocation(lng, lat);
         return dispatch({
           type: "LOGIN_SUCCESS",
           payload: {
             ...payload,
             location: {
               geolocation: data.data.user.location,
-              name: locationData.features[0].place_name
-            }
-          }
+              name: locationData.features[0].place_name,
+            },
+          },
         });
       }
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: {
           ...payload,
-          location: {}
-        }
+          location: {},
+        },
       });
     } catch (error) {
       dispatch({ type: "AUTH_ERROR" });
@@ -94,26 +94,29 @@ function App() {
   const client = new QueryClient({
     defaultOptions: {
       queries: {
-        cacheTime: 7200 * 1000, // 2 hours cache in memory 
-        refetchOnWindowFocus: false
-      }
-    }
+        cacheTime: 7200 * 1000, // 2 hours cache in memory
+      },
+    },
   });
 
-  if (state.isLoading) return (
-    <div style={{
-      position: "absolute",
-      display: "flex",
-      alignItems: "center",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      zIndex: 1100,
-      background: "#e5e5e5"
-    }}>
-      <Loading />
-    </div>)
+  if (state.isLoading)
+    return (
+      <div
+        style={{
+          position: "absolute",
+          display: "flex",
+          alignItems: "center",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 1100,
+          background: "#e5e5e5",
+        }}
+      >
+        <Loading />
+      </div>
+    );
 
   return (
     <div>
@@ -125,15 +128,39 @@ function App() {
               <Switch>
                 <Route exact path="/" component={Landing} />
                 <PrivateRoute exact path="/user/:id" component={User} />
-                <PrivateRoute exact path="/user/:id/edit" component={EditUser} />
+                <PrivateRoute
+                  exact
+                  path="/user/:id/edit"
+                  component={EditUser}
+                />
                 <PrivateRoute exact path="/user/:id/cart" component={Cart} />
-                <PrivateRoute exact path="/user/transaction/:id" component={TransactionDetail} />
+                <PrivateRoute
+                  exact
+                  path="/user/transaction/:id"
+                  component={TransactionDetail}
+                />
                 <PrivateRoute exact path="/partner" component={Partner} />
                 <PrivateRoute exact path="/partner/:id" component={User} />
-                <PrivateRoute exact path="/partner/:id/edit" component={EditUser} />
-                <PrivateRoute exact path="/partner/:id/add-product" component={AddProduct} />
-                <PrivateRoute exact path="/product/:id/edit" component={EditProduct} />
-                <PrivateRoute exact path="/restaurant/:id" component={ProductList} />
+                <PrivateRoute
+                  exact
+                  path="/partner/:id/edit"
+                  component={EditUser}
+                />
+                <PrivateRoute
+                  exact
+                  path="/partner/:id/add-product"
+                  component={AddProduct}
+                />
+                <PrivateRoute
+                  exact
+                  path="/product/:id/edit"
+                  component={EditProduct}
+                />
+                <PrivateRoute
+                  exact
+                  path="/restaurant/:id"
+                  component={ProductList}
+                />
               </Switch>
             </Container>
           </OrderContextProvider>

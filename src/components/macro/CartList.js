@@ -6,7 +6,7 @@ import CartItem from "../micro/CartItem";
 import "./styles.css";
 
 const CartList = (props) => {
-  const { cart, dispatchAction, isFromCart } = props;
+  const { cart, dispatchAction } = props;
 
   /** Logic to handle product in cart context
    * @param  product

@@ -10,18 +10,19 @@ const SelectDelivery = (props) => {
   const { dispatch: cartDispatch } = useContext(CartContext);
   const { dispatch: userDispatch } = useContext(UserContext);
 
-  const submitLocation = () => {
-    if (page === "cart") {
-      return cartDispatch({
-        type: "ADD_LOCATION",
-        payload: {
-          location: {
-            geolocation: geolocation.join(','),
-            name: location.features[0].place_name
-          }
+  const submitLocationCart = () => {
+    cartDispatch({
+      type: "ADD_LOCATION",
+      payload: {
+        location: {
+          geolocation: geolocation.join(','),
+          name: location.features[0].place_name
         }
-      })
-    }
+      }
+    })
+  }
+
+  const submitLocationUser = () => {
     userDispatch({
       type: "ADD_LOCATION",
       payload: {
@@ -64,7 +65,7 @@ const SelectDelivery = (props) => {
           variant="contained"
           color="secondary"
           className="submit-button"
-          onClick={submitLocation}
+          onClick={page === "cart" ? submitLocationCart : submitLocationUser}
         >
           Confirm Location
         </Button>

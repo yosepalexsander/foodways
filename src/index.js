@@ -10,12 +10,12 @@ import { UserContextProvider } from "./logics/contexts/authContext";
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <UserContextProvider>
-        <CssBaseline />
-        <Router>
+      <CssBaseline />
+      <Router>
+        <UserContextProvider>
           <App />
-        </Router>
-      </UserContextProvider>
+        </UserContextProvider>
+      </Router>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")

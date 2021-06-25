@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Typography, Grid, Grow } from "@material-ui/core";
 import CardVertical from "../card/CardVertical";
+
 const SectionNear = ({ near }) => {
   return (
     <Fragment>

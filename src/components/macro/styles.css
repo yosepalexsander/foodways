@@ -62,7 +62,7 @@
 }
 
 #user-transaction {
-  overflow: auto;
+  overflow: hidden;
   max-height: 393px;
   flex-wrap: nowrap;
 }

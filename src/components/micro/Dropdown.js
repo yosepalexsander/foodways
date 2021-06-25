@@ -1,5 +1,4 @@
-import PropTypes from "prop-types";
-import { forwardRef, Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Avatar,
   Divider,
@@ -17,7 +16,7 @@ import LogoutIcon from "../icons/LogoutIcon";
 
 import avatar_default from "../../assets/images/avatar_default.jpeg";
 
-const Dropdown = forwardRef((props, ref) => {
+const Dropdown = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const {
     photoProfile,
@@ -90,15 +89,6 @@ const Dropdown = forwardRef((props, ref) => {
       </Menu>
     </Fragment>
   );
-});
+};
 
-
-Dropdown.propTypes = {
-  photoProfile: PropTypes.string,
-  isPartner: PropTypes.bool,
-  logoutHandler: PropTypes.func.isRequired,
-  userHandler: PropTypes.func.isRequired,
-  addProductHandler: PropTypes.func.isRequired,
-  dashboardHandler: PropTypes.func.isRequired
-}
 export default Dropdown;

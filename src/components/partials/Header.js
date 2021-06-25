@@ -19,7 +19,7 @@ import LoginModal from "../modal/LoginModal";
 
 import brand from "../../assets/icons/brand_logo.png";
 
-import "./styles.css"
+import styles from "./Header.module.css";
 
 const Header = () => {
   const history = useHistory();
@@ -28,36 +28,31 @@ const Header = () => {
   const { state: userState, dispatch } = useContext(UserContext);
   const { isAuthenticated, user } = userState;
   const { state: cartState } = useContext(CartContext);
-  const [show1, setShow1] = useState(false); //register
-  const [show2, setShow2] = useState(false); //login
+  const [showRegister, setShowRegister] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     if (!locationState) {
-      setShow2(true)
-    }
-    return () => {
-      setShow1(false)
-      setShow2(false)
+      setShowLogin(true)
     }
   }, [locationState]);
-  // Logic to handle Register and Login Modal
-  const handleClose1 = () => {
-    setShow1(false);
+
+  const handleCloseResgister = () => {
+    setShowRegister(false);
   };
-  const handleClose2 = () => {
-    setShow2(false);
+  const handleCloseLogin = () => {
+    setShowLogin(false);
   };
   const switchToModalRegister = () => {
-    setShow1(true);
-    setShow2(false);
+    setShowRegister(true);
+    setShowLogin(false);
   };
 
   const switchToModalLogin = () => {
-    setShow1(false);
-    setShow2(true);
+    setShowRegister(false);
+    setShowLogin(true);
   };
 
-  /** handle logout logic on click */
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
     setAuthToken();
@@ -80,10 +75,10 @@ const Header = () => {
   return (
     <>
       <AppBar position="fixed" elevation={0}>
-        <Toolbar className="header-padding" disableGutters>
-          <div className="header-title">
+        <Toolbar className={styles.headerPadding} disableGutters>
+          <div className={styles.headerTitle}>
             <Link to="/">
-              <img className="header-brand" src={brand} alt="brand logo" />
+              <img className={styles.headerBrand} src={brand} alt="brand logo" />
             </Link>
           </div>
           {isAuthenticated ? (
@@ -113,29 +108,29 @@ const Header = () => {
           ) : (
             <div>
               <Button
-                className="header-button"
+                className={styles.headerButton}
                 variant="contained"
                 color="secondary"
-                onClick={() => setShow1(true)}
+                onClick={() => setShowRegister(true)}
               >
                 Register
               </Button>
               <Button
-                className="header-button"
+                className={styles.headerButton}
                 variant="contained"
                 color="secondary"
-                onClick={() => setShow2(true)}
+                onClick={() => setShowLogin(true)}
               >
                 Login
               </Button>
               <RegisterModal
-                show={show1}
-                modalControl={handleClose1}
+                show={showRegister}
+                modalControl={handleCloseResgister}
                 switcher={switchToModalLogin}
               />
               <LoginModal
-                show={show2}
-                modalControl={handleClose2}
+                show={showLogin}
+                modalControl={handleCloseLogin}
                 switcher={switchToModalRegister}
               />
             </div>
